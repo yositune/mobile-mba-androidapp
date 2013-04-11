@@ -1,0 +1,4 @@
+Todo
+Settings
+	Allow keyboard input on slider options
+	

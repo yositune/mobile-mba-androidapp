@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.4.1  (Win32)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGED" CONTENT="20130207;16133396">
+	<STYLE TYPE="text/css">
+	<!--
+@font-face {font-family: 'typewriter';src: url('file:///android_asset/typewriter.ttf');}
+		BODY { font-family:arial }
+	-->
+	</STYLE>
+	<script language="javascript" type="text/javascript">
+
+function getElementsByClassName(node,classname) {
+	  if (node.getElementsByClassName) { // use native implementation if available
+	    return node.getElementsByClassName(classname);
+	  } else {
+	    return (function getElementsByClass(searchClass,node) {
+	        if ( node == null )
+	          node = document;
+	        var classElements = [],
+	            els = node.getElementsByTagName("*"),
+	            elsLen = els.length,
+	            pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)"), i, j;
+
+	        for (i = 0, j = 0; i < elsLen; i++) {
+	          if ( pattern.test(els[i].className) ) {
+	              classElements[j] = els[i];
+	              j++;
+	          }
+	        }
+	        return classElements;
+	    })(classname, node);
+	  }
+	}
+
+function showHide(className) {
+		   var elements = getElementsByClassName(document, className);
+		       n = elements.length;
+		   for (var i = 0; i < n; i++) {
+		     var e = elements[i];
+
+		     if(e.style.display == 'block') {
+		       e.style.display = 'none';
+		     } else {
+		       e.style.display = 'block';
+		     }
+
+		  }
+		}
+</script>
+	
+</HEAD>
+<BODY LANG="en-GB" DIR="LTR">
+
+<DIV ID="page_3" DIR="LTR" >
+	<P STYLE="margin-bottom: 0cm;">
+	<FONT SIZE=3><U><B>Data Consumption</B></U></FONT></P>
+	
+	<P STYLE="margin-bottom: 0cm;"><FONT SIZE=3>By default the Application is configured to use no more than 100 megabytes of data each month.  Any additional tests you initiate will also consume between 100 kB for the smallest packet loss test and 30 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the &#x201c;mobile data cap&#x201d; in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package&#x2019;s data allowance.</FONT></P>
+			
+</DIV>
+
+</BODY>
+</HTML>

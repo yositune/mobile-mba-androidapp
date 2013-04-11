@@ -1,0 +1,30 @@
+<project name="TestLibrary" default="dist" basedir=".">
+	<description>TestLibrary jar build file </description>
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="dist" />
+	
+	
+	<target name="init">
+		<!-- build directory structure used by compiling -->
+		<mkdir dir="${build}" />
+	</target>
+	
+	
+	<target name="compile" depends="init" description="compile the library sources">
+		<!-- Compile all the sources from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}" target="1.5" classpath="lib/java-json.jar" />
+	</target>
+	
+	
+	<target name="dist" depends="compile" description="generate the jar library" >
+		<!-- put everything in ${build} into the npt.jar file -->
+		<jar jarfile="${dist}/npt.jar" basedir="${build}" />
+	</target>
+	
+	<target name="clean" description="clean up">
+	    <!-- Delete the ${build} and ${dist} directory trees -->
+	    <delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+</project>
