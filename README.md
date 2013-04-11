@@ -4,7 +4,7 @@ mobile-mba-androidapp
 
 ## About
 
-This Android application source code is made available under the GNU GPL2 for testing purposes only and intended for participants in the SamKnows/FCC Measuring Broadband American program.  It is not intended for general release and this repository may be disabled at any time.
+**This Android application source code is made available under the GNU GPL2 for testing purposes only and intended for participants in the SamKnows/FCC Measuring Broadband American program.  It is not intended for general release and this repository may be disabled at any time.**
 
 
 ## Measuring Broadband America (MBA) Program's Mobile Measurement Effort
