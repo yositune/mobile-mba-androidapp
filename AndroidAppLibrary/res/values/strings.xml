@@ -6,50 +6,57 @@
 	<string name="of">of</string>
 	<string name="login_to_your_account">Login to your account</string>
 	<string name="requesting_reset_password">Requesting a reset code to reset password</string>
-	<string name="requesting_reset_password_error">There was an error requesting password code: </string>
-	<string name="requesting_reset_password_success">The system has sent you a code to reset your password</string>
-	<string name="enter_email">Enter your email and a reset code will be sent to your email."</string>
+	<string name="requesting_reset_password_error">There was an error requesting password code:
+	</string>
+	<string name="requesting_reset_password_success">The system has sent you a code to reset your
+		password</string>
+	<string name="enter_email">Enter your email and a reset code will be sent to
+		your email."</string>
 	<string name="GPS">GPS</string>
 	<string name="MobileNetwork">Mobile Network</string>
 	<string name="password_recovery">Password Recovery</string>
-	<string name="reset_password">Reset password</string>
 	<string name="request_password_recovery">Request password recovery</string>
 	<string name="request_password_reset">Request password reset</string>
 	<string name="reset_code">Reset code</string>
 	<string name="already_have_account">Already have an account?</string>
 	<string name="create_account">Create account</string>
-	<string name="understood_tc">I have read and understood the terms and conditions LINK</string>
+	<string name="understood_tc">I have read and understood the terms and conditions
+		LINK</string>
 	<string name="terms_and_condition_title">Privacy Notice &amp; Terms and Conditions</string>
-	<string name="reset_data_cap_question">Do you wish to reset the data usage manually for this month?</string>
+	<string name="reset_data_cap_question">Do you wish to reset the data usage manually for
+		this month?</string>
 	<string name="max_data_cap_message">Maximum amount limited to </string>
 	<string name="min_data_cap_message">Minimum amount limited to </string>
 	<string name="set_default">Set Default</string>
 	<string name="activation_needed">The application needs to be activated</string>
-		
+
 	<string name="version">Version </string>
 	<string name="welcome">Welcome</string>
-	<string name="welcome_intro"> ( Welcome message, Privacy Notice and Terms &amp; Conditions to be placed here )</string>
+	<string name="welcome_intro"> ( Welcome message, Privacy Notice and Terms &amp;
+		Conditions to be placed here )</string>
 	<string name="continue_text">Next</string>
-	<string name="agree">Agree</string>
+	<string name="agree">I Agree</string>
 
 	<string name="activating_complete">Activating complete</string>
 	<string name="download_complete">Download complete</string>
-	<string name="login_to_your_account">Login in to your account</string>
 	
-	
+
+
 	<string name="lost_password">Lost your password?</string>
 	<string name="dont_have_account">Need an account?</string>
 
 	<string name="password_reset_dialog">The system is resetting your password</string>
 	<string name="reset_password_success">Your password has been reset</string>
-	<string name="reset_password_error">There was an error resetting your password:</string>
+	<string name="reset_password_error">There was an error resetting your password:
+	</string>
 	<string name="logout_question">Do you want to logout?</string>
 	<string name="time_period_1week">1 Week</string>
 	<string name="time_period_2week">2 Weeks</string>
 	<string name="time_period_1month">1 Month</string>
 	<string name="time_period_3months">3 Months</string>
-	<string name="time_period_1year">1 Year</string>		
-	<string name="accept_terms">Please tick checkbox to confirm Terms and Conditions</string>	
+	<string name="time_period_1year">1 Year</string>
+	<string name="accept_terms">Please tick checkbox to confirm Terms and
+		Conditions</string>
 	<string name="none">none</string>
 	<string name="none_unknown">None or unknown</string>
 	<string name="enabled">Enabled</string>
@@ -58,21 +65,21 @@
 	<string name="false_string">False</string>
 	<string name="executing_now">Executing now</string>
 	<string name="mobile">mobile</string>
+	<string name="wifi">WiFi</string>
+	<string name="app_name">Network Performance (Beta)</string>
+	<string name="activity_logs_name">SamKnows Logs</string>
+	<string name="activity_info_name">SamKnows Info</string>
+	<string name="activity_run_test_name">SamKnows Test Executor</string>
+	<string name="activity_test_results_name">Test Results</string>
+	<string name="activity_pref_name">Settings</string>
+	<string name="activity_initial_settings_name">Data Cap</string>
+	<string name="ntf_title">SamKnows</string>
+	<string name="ntf_checking_conditions">Checking test conditions</string>
+	<string name="ntf_running_test">Running test: </string>
 	<string name="device">Device</string>
-	<string name="wifi">wifi</string>
-    <string name="app_name">Network Performance (Beta)</string>
-    <string name="activity_logs_name">SamKnows Logs</string>
-    <string name="activity_info_name">SamKnows Info</string>
-    <string name="activity_run_test_name">SamKnows Test Executor</string>
-    <string name="activity_test_results_name">Test Results</string>
-    <string name="activity_pref_name">Settings</string>
-    <string name="ntf_title">SamKnows</string>
-    <string name="ntf_checking_conditions">Checking test conditions</string>
-    <string name="ntf_running_test">Running test: </string>
-    <string name="device">Device</string>
-    
-    
-    <!-- Sk Service Info Activity -->
+
+
+	<!-- Sk Service Info Activity -->
 	<string name="sk_service_info">SamKnows Service Info</string>
 	<string name="activated">Activated</string>
 	<string name="auto_testing">Auto Testing</string>
@@ -95,18 +102,18 @@
 	<string name="longitude">Longitude</string>
 	<string name="latitude">Latitude</string>
 	<string name="accuracy">Accuracy</string>
-	<string name="cell_tower_info">Cell Tower Info</string>
+	<string name="cell_tower_info">Current Cell Tower</string>
 	<string name="type">Type</string>
 	<string name="cell_id">Cell ID</string>
 	<string name="area_code">Area Code</string>
 	<string name="signal_strength">Signal Strength</string>
-	
-	    
-    <!--passive metrics -->
-    <string name="connected">Connected</string>
-    <string name="connectivity_type">Connectivity Type</string>
-    <string name="cell_tower_id">Cell Tower ID</string>
-    <string name="cell_tower_area_location_code">Cell Tower Area Location Code</string>
+
+
+	<!--passive metrics -->
+	<string name="connected">Connected</string>
+	<string name="connectivity_type">Connectivity Type</string>
+	<string name="cell_tower_id">Cell Tower ID</string>
+	<string name="cell_tower_area_location_code">Cell Tower Area Location Code</string>
 	<string name="location_provider">Location Provider</string>
 	<string name="sim_operator_code">Sim Operator Code</string>
 	<string name="sim_operator_name">Sim Operator Name</string>
@@ -125,14 +132,14 @@
 	<string name="cdma_base_station_longitude">CDMA base station longitude</string>
 	<string name="cdma_network_id">CDMA network ID</string>
 	<string name="cdma_system_id">CDMA system ID</string>
-    <string name="bearer">Bearer</string>
-    
+	<string name="bearer">Bearer</string>
+
 	<!-- logs_layout.xml -->
 	<string name="submitted_logs">submitted logs</string>
 	<string name="not_submitted_logs">not submitted logs</string>
 	<string name="next">next</string>
-	
-	
+
+
 	<!-- main_layout.xml -->
 	<string name="system_info">System Info</string>
 	<string name="test_results">Test Results</string>
@@ -140,159 +147,209 @@
 	<string name="logs">Logs</string>
 	<string name="stats">Stats</string>
 	<string name="available_tests">Available Tests</string>
-	<string name="failed">Failed</string>
 	<string name="all">All</string>
 	<string name="result">Result</string>
 
 	<string name="activation">Refresh config</string>
 
-	<!--  main_stats.xml  -->
+	<!-- main_stats.xml -->
 	<string name="run_now">Run now</string>
 	<string name="preparing_samknows_tests">Preparing Samknows Tests...</string>
 	<string name="failed">Failed</string>
 	<string name="try_again">Try Again</string>
 	<string name="enable_now">Enable Now</string>
 	<string name="loading_please_wait">Loading. Please wait...</string>
-	
+
 	<!-- tabs_bg.xml -->
 	<string name="title">Title</string>
 
-	<!--  test_execute_layout -->
+	<!-- test_execute_layout -->
 	<string name="active_connection">Active Connection: </string>
 	<string name="downloaded">Downloaded: </string>
 	<string name="uploaded">Uploaded: </string>
 	<string name="cpu_usage">CPU usage: </string>
 	<string name="summary">Summary</string>
 	<string name="raw_result_data">Raw Result Data</string>
-	
-    <!-- dialogs -->
-    <string name="loading_config">Loading config from server...</string>
-    <string name="failed_to_load_config">Failed to load config!</string>
-    <string name="manual_test_error">Unable to run manual test!</string>
-    <string name="enable_service_question">Do you want to enable mobile testing?</string>
-     <string name="cancel_test_question">Do you want to cancel running test?</string>
-   
-    <string name="ok">ok</string>
-    <string name="ok_dialog">OK</string>
-    <string name="no_dialog">No</string>
-    <!-- Test Results -->
-    <string name="time">Time</string>
-    <string name="target">Target</string>
-    <string name="speed">Speed</string>
-    <string name="latency">Latency</string>
-    <string name="p_loss">Packet loss</string>
-    <string name="jitter">Jitter</string>
-    <string name="download">Download</string>
-    <string name="upload">Upload</string>
-    
-    <string name="download_mbps">Download</string>
-    <string name="upload_mbps">Upload</string>
-    <string name="latency_ms">Latency</string>
-    <string name="loss_percent">Packet Loss</string>
-    <string name="browsing">Browsing</string>
-    <string name="jitter_ms">Jitter</string>
-    <string name="latest">Latest</string>
-    <string name="average">Average</string>
-    <string name="average_results">Average Results</string>
-	<string name="archive_result">Archive Result</string>
+
+	<!-- dialogs -->
+	<string name="loading_config">Loading config from server...</string>
+	<string name="failed_to_load_config">Failed to load config!</string>
+	<string name="manual_test_error">Unable to launch tests, another background test is running. Please retry shortly.</string>
+	<string name="enable_service_question">Do you want to enable mobile testing?</string>
+	<string name="cancel_test_question">Do you want to cancel running test?</string>
+
+	<string name="ok">ok</string>
+	<string name="ok_dialog">OK</string>
+	<string name="no_dialog">No</string>
+	<!-- Test Results -->
+	<string name="time">Time</string>
+	<string name="target">Target</string>
+	<string name="speed">Speed</string>
+	<string name="latency">Latency</string>
+	<string name="p_loss">Packet loss</string>
+	<string name="jitter">Jitter</string>
+	<string name="download">Download</string>
+	<string name="upload">Upload</string>
+
+	<string name="download_mbps">Download</string>
+	<string name="upload_mbps">Upload</string>
+	<string name="latency_ms">Latency</string>
+	<string name="loss_percent">Packet Loss</string>
+	<string name="browsing">Browsing</string>
+	<string name="jitter_ms">Jitter</string>
+	<string name="latest">Latest</string>
+	<string name="average">Average</string>
+	<string name="average_results">Average Results</string>
+	<string name="average_results_title">Average Results</string>
+	<string name="archive_result">Archived Result</string>
 	<string name="choose_test">Choose Test?</string>
 	<string name="server">Server</string>
-    
-    
-    <!--image descriptions -->
-    <string name="paper_clip">Paper Clip</string>
-    <string name="page_turn">Page Turn</string>
-    <string name="alert_icon">Alert Icon</string>
-    
-    <string name="week">1 Wk</string>
-    <string name="month">1 Mth</string>
-    <string name="month3">3 Mth</string>
-    <string name="month6">6 Mth</string>
-    <string name="year">1 Yr</string>
-    <string name="updated">Updated</string>
-    <string name="about">About</string>
-    <string name="terms_of_use_title">Privacy &amp; Terms of Use</string>
-    <string name="settings">Settings</string>
-    <string name="username">Email address</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="login">Login</string>
-    <string name="register">Create Account</string>
-    <string name="create_user">Create user</string>
-    <string name="cancel">Cancel</string>
-    <string name="login_incorrect">Login credentials incorrect.</string>
-    <string name="error_on_registering">Ops... An error occurred: </string>
-    <string name="logging_in">Logging in. Please wait...</string>
-    <string name="registering_in">Registering. Please wait...</string>
-    <string name="loading">Loading data. Hang on...</string>
-    <string name="mobile_testing_disabled">Mobile testing disabled.</string>
-    <string name="refresh">Refresh</string>
-    <string name="empty_username_error">Username can\'t be empty!</string>
-    <string name="empty_password_error">Password can\'t be empty!</string>   
-    <string name="empty_code_error">Code can\'t be empty!</string>
-    <string name="passwords_do_not_match">Passwords do not match!</string>
-    <string name="about_download">This should be indicative of the maximum speed your broadband connection will be able to download data from the Internet. Results are recorded in Mbps (higher is better).</string>
-    <string name="about_upload">This should be indicative of the maximum speed your broadband connection will be able to transmit data to the Internet. Results are recorded in Mbps (higher is better).</string>
-    <string name="about_latency">This test measures how long it takes one packet to be sent to one of our test servers, and then returned back to you. Latency can be thought of as the responsiveness of the connection from your device and our servers on the Internet. Times are recorded here in milliseconds (lower is better).</string>
-    <string name="about_packet_loss">Packet loss occurs when the information sent by your device fails to reach its destination. When packet loss is high, you may find that time sensitive applications such as Voice over IP (VoIP) and online gaming will suffer. Packet loss is recorded here as a percentage (lower is better).</string>
-    <string name="about_browsing">Visiting a web page is one of the most common tasks people perform on the Internet. This test emulates that process and shows the average time in seconds of how long a selection of popular web sites took to load. Note that results may vary according to changes in the websites being visited. Times are recorded in seconds (lower is better).</string>
-    <string name="about_jitter">Jitter is............</string>
-    <string name="logout">Logout</string>
-    <string name="close">Close</string>
-    <string name="cant_run_test">Please wait for closest target test to finish.</string>
-    <string name="test_to_finish">Please wait for test to finish</string>
-    <string name="executing_test">Executing tests: </string>
-    <string name="finished_test">Finished test: </string>
-    
-    <string name="st_none_descr">Preparing…</string>
-    <string name="st_initialise_descr">Looking for server…</string>
-    <string name="st_activate_descr">Activating phone…</string>
-    <string name="st_assosiate_descr">Associating phone with user…</string>
-    <string name="st_check_config_version_descr">Looking for latest test config…</string>
-    <string name="st_download_config_descr">Downloading test config…</string>
-    <string name="st_run_init_test_descr">Executing startup tests…\n(may take a minute or two)</string>
-    <string name="st_execute_queue_descr">Executing scheduled for now tests…</string>
-    <string name="st_submit_results_descr">Submitting results to server…</string>
-    <string name="st_shutdown_descr">Finishing…</string>
-    
-    <!--  Test messages -->
-    <string name="download_success">The download test achieved %1$s Mbps</string> 
-    <string name="download_failed">The download test has failed</string>
-    <string name="upload_success">The upload single connection test achieved %1$s Mbps</string>
-    <string name="upload_failed">The upload test has failed</string>
-    <string name="latency_success">Latency is %1$s ms. PacketLoss is %2$s %%. Jitter is %3$s ms</string>
-    <string name="latency_failed">The latency test has failed</string>
-     
-    <!-- Intro dialog and about -->
-    <string name="intro_text">Thank you for installing the SamKnows Performance Measurement app.\n\nThis app runs in the background, measuring your mobile provider\'s network performance whilst you are not using your device. You can view results by pressing the Test Results button. Measurement results are transmitted back to Samknows or use in their projects with telecoms regulators worldwide.\n\nThe application has been optimised for efficient network usage, however it might be still too high for your data plan. If that\'s the case you may configure a monthly data cap in settings menu accessible via the Menu key.</string>
-	<string name="about_text">This app runs in the background, measuring your mobile provider\'s network performance whilst you are not using your device. You can view results by pressing the Test Results button. Measurement results are transmitted back to Samknows for use in their projects with telecoms regulators worldwide.\n\nThe application has been optimised for efficient network usage, however it might be still too high for your data plan. If that\'s the case you may configure a monthly data cap in settings menu accessible via the Menu key.\n\nFor support or queries please contact us at community@samknows.com</string>
 
 
-<!--  res/xml/preferences.xml -->
-	<string name="data_used_preference_summary">The amount of mobile data (excluding WiFi) used by this application since the start of this billing month.</string>
+	<!--image descriptions -->
+	<string name="paper_clip">Paper Clip</string>
+	<string name="page_turn">Page Turn</string>
+	<string name="alert_icon">Alert Icon</string>
+
+	<string name="week">1 Wk</string>
+	<string name="month">1 Mth</string>
+	<string name="month3">3 Mth</string>
+	<string name="month6">6 Mth</string>
+	<string name="year">1 Yr</string>
+	<string name="updated">Updated</string>
+	<string name="about">About</string>
+	<string name="terms_of_use_title">Privacy &amp; Terms of Use</string>
+	<string name="settings">Settings</string>
+	<string name="username">Email address</string>
+	<string name="password">Password</string>
+	<string name="confirm_password">Confirm Password</string>
+	<string name="login">Login</string>
+	<string name="register">Create Account</string>
+	<string name="create_user">Create user</string>
+	<string name="cancel">Cancel</string>
+	<string name="login_incorrect">Login credentials incorrect.</string>
+	<string name="error_on_registering">Ops... An error occurred: </string>
+	<string name="logging_in">Logging in. Please wait...</string>
+	<string name="registering_in">Registering. Please wait...</string>
+	<string name="loading">Loading data. Hang on...</string>
+	<string name="mobile_testing_disabled">Mobile testing disabled.</string>
+	<string name="refresh">Refresh</string>
+	<string name="empty_username_error">Username can\'t be empty!</string>
+	<string name="empty_password_error">Password can\'t be empty!</string>
+	<string name="empty_code_error">Code can\'t be empty!</string>
+	<string name="passwords_do_not_match">Passwords do not match!</string>
+	<string name="about_download">This should be indicative of the maximum speed your
+		broadband connection will be able to download data from the Internet.
+		Results are recorded in Mbps (higher is better).</string>
+	<string name="about_upload">This should be indicative of the maximum speed your
+		broadband connection will be able to transmit data to the Internet.
+		Results are recorded in Mbps (higher is better).</string>
+	<string name="about_latency">This test measures how long it takes one packet to
+		be sent to one of our test servers, and then returned back to you.
+		Latency can be thought of as the responsiveness of the connection from
+		your device and our servers on the Internet. Times are recorded here
+		in milliseconds (lower is better).</string>
+	<string name="about_packet_loss">Packet loss occurs when the information sent by
+		your device fails to reach its destination. When packet loss is high,
+		you may find that time sensitive applications such as Voice over IP
+		(VoIP) and online gaming will suffer. Packet loss is recorded here as
+		a percentage (lower is better).</string>
+	<string name="about_browsing">Visiting a web page is one of the most common tasks
+		people perform on the Internet. This test emulates that process and
+		shows the average time in seconds of how long a selection of popular
+		web sites took to load. Note that results may vary according to
+		changes in the websites being visited. Times are recorded in seconds
+		(lower is better).</string>
+	<string name="about_jitter">Jitter is............</string>
+	<string name="logout">Logout</string>
+	<string name="close">Close</string>
+	<string name="cant_run_test">Please wait for closest target test to finish.
+	</string>
+	<string name="test_to_finish">Please wait for test to finish</string>
+	<string name="executing_test">Executing tests: </string>
+	<string name="finished_test">Finished test: </string>
+
+	<string name="st_none_descr">Preparing…</string>
+	<string name="st_initialise_descr">Looking for server…</string>
+	<string name="st_activate_descr">Activating phone…</string>
+	<string name="st_assosiate_descr">Associating phone with user…</string>
+	<string name="st_check_config_version_descr">Looking for latest test config…</string>
+	<string name="st_download_config_descr">Downloading test config…</string>
+	<string name="st_run_init_test_descr">Executing startup tests…\n(may take a minute or
+		two)</string>
+	<string name="st_execute_queue_descr">Executing scheduled for now tests…</string>
+	<string name="st_submit_results_descr">Submitting results to server…</string>
+	<string name="st_shutdown_descr">Finishing…</string>
+
+	<!-- Test messages -->
+	<string name="download_success">The download test achieved %1$s Mbps</string>
+	<string name="download_failed">The download test has failed</string>
+	<string name="upload_success">The upload single connection test achieved %1$s
+		Mbps</string>
+	<string name="upload_failed">The upload test has failed</string>
+	<string name="latency_success">Latency is %1$s ms. PacketLoss is %2$s %%. Jitter
+		is %3$s ms</string>
+	<string name="latency_failed">The latency test has failed</string>
+
+	<!-- Intro dialog and about -->
+	<string name="intro_text">Thank you for installing the SamKnows Performance
+		Measurement app.\n\nThis app runs in the background, measuring your
+		mobile provider\'s network performance whilst you are not using your
+		device. You can view results by pressing the Test Results button.
+		Measurement results are transmitted back to Samknows or use in their
+		projects with telecoms regulators worldwide.\n\nThe application has
+		been optimised for efficient network usage, however it might be still
+		too high for your data plan. If that\'s the case you may configure a
+		monthly data cap in settings menu accessible via the Menu key.
+	</string>
+	<string name="about_text">This app runs in the background, measuring your
+		mobile provider\'s network performance whilst you are not using your
+		device. You can view results by pressing the Test Results button.
+		Measurement results are transmitted back to Samknows for use in their
+		projects with telecoms regulators worldwide.\n\nThe application has
+		been optimised for efficient network usage, however it might be still
+		too high for your data plan. If that\'s the case you may configure a
+		monthly data cap in settings menu accessible via the Menu key.\n\nFor
+		support or queries please contact us at community@samknows.com
+	</string>
+
+
+	<!-- res/xml/preferences.xml -->
+	<string name="data_used_preference_summary">The amount of mobile data (excluding WiFi) used by
+		this application since the start of this billing month.</string>
 	<string name="data_used_preference_title">Data Used</string>
 	<string name="preferences_title">SamKnows app control</string>
 	<string name="enable_testing_title">Enable Testing</string>
 	<string name="enable_testing_summary">Enable or disable background tests</string>
-	<string name="data_cap_summary">The maximum amount of mobile data (excluding WiFi) that this application can use in a billing month.</string>
+	<string name="data_cap_summary">The maximum amount of mobile data in Mega Bytes (excluding WiFi)
+		that this application can use in a billing month.</string>
 	<string name="data_cap_title">Mobile data cap: </string>
 	<string name="data_usage_title">Mobile data usage: </string>
-	<string name="data_cap_day_summary">Select the day of the month that the mobile data usage counter should be reset. </string>
+	<string name="data_cap_day_summary">Select the day of the month that the mobile data
+		usage counter should be reset. </string>
 	<string name="data_cap_day_title">Mobile data usage reset day: </string>
-	<string name="data_cap_exceeded">Data Cap Exceeded. Do you wish to continue anyway?</string>
+	<string name="data_cap_exceeded">Data Cap Exceeded. Do you wish to continue anyway?
+	</string>
 	<string name="day_of_month">Day of Month: </string>
 	<string name="mb">MB</string>
-	
-	<string name="enable_wakeup_summary">Enable or disable waking up device for tests</string>
+
+	<string name="enable_wakeup_summary">Enable or disable waking up device for tests
+	</string>
 	<string name="enable_wakeup_title">Enable device wake up</string>
-	<string name="location_type_summary">Select your preferred location service provider. Note that GPS will consume more battery power.</string>
+	<string name="location_type_summary">Select your preferred location service provider.
+		Note that GPS will consume more battery power.</string>
 	<string name="location_type_title">Location service</string>
-	
+	<string name="active_network_type_title">Active Network Type</string>
+
 	<!-- pop up -->
-	<string name="test_run_confirmation">This test will use some your data plan. Do you wish to continue?</string>
-	<string name="download_upload_run_confirmation">This test will use some your data plan. Do you wish to continue?</string>
-	<string name="latency_run_confirmation">This test will use some your data plan. Do you wish to continue?</string>
-	<string name="no_data_message">There is no data. Run a test to gather data.</string>
+	<string name="test_run_confirmation">This test will use some your data plan. Do you wish
+		to continue?</string>
+	<string name="download_upload_run_confirmation">This test will use some your data plan. Do you wish
+		to continue?</string>
+	<string name="latency_run_confirmation">This test will use some your data plan. Do you wish
+		to continue?</string>
+	<string name="no_data_message">There is no data. Run a test to gather data.
+	</string>
 	<string name="last_run">Test Last Run:</string>
 	<string name="passive_metrics">Passive Metrics</string>
 	<string name="active_metrics">Active Metrics</string>
@@ -305,8 +362,8 @@
 	<string name="service_info">Service Info</string>
 	<string name="reset_password">Reset Password</string>
 	<string name="choose_time">Choose Time Period</string>
-	
-	<!--  network types -->
+
+	<!-- network types -->
 	<string name="bluetooth">bluetooth</string>
 	<string name="ethernet">ethernet</string>
 	<string name="mobile_dun">mobile dun</string>
@@ -330,13 +387,15 @@
 	<string name="next_grid">Next Grid Page</string>
 	<string name="previous_grid">Previous Grid Page</string>
 	<string name="user_tag">Self Identifier</string>
-	<string name="user_tag_message">Self identify data collected from your handset. Please note that any data collected from this handset will be associated with this identifier.</string>
+	<string name="user_tag_message">Self identify data collected from your handset.
+		Please note that any data collected from this handset will be
+		associated with this identifier.</string>
 	<string name="show_measurement">Show Measurement Details?</string>
 	<string name="more">More...</string>
 	<string name="privacy_notice">Privacy Notice</string>
 	<string name="schedule_version">Schedule Version</string>
-	
-	<!--  network data connectivity type -->
+
+	<!-- network data connectivity type -->
 	<string name="unknown">unknown</string>
 	<string name="gprs">GPRS</string>
 	<string name="edge">EDGE</string>
@@ -353,8 +412,8 @@
 	<string name="lte">LTE</string>
 	<string name="ehrpd">eHRPD</string>
 	<string name="hspap">HSPA+</string>
-	
-	<!-- State machine names  -->
+
+	<!-- State machine names -->
 	<string name="state_none">Start</string>
 	<string name="state_initialise">Initialise</string>
 	<string name="state_activate">Activate</string>
@@ -365,4 +424,8 @@
 	<string name="state_execute_queue">Execute Test</string>
 	<string name="state_submit_results">Submit Results</string>
 	<string name="state_shutdown">Shutdown</string>
+	<!-- init_settings text -->
+	<string name="init_settings_title">Data Consumption</string>
+	<string name="data_cap_input_text">Please choose the amount of data (in MB) the Application should use each month:</string>
+	<string name="data_cap_explanation">By default the Application is configured to use no more than 100 megabytes of data each month.  Any tests you initiate will also consume between 100 KB for the smallest packet loss test and 30 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the \"Mobile data cap\" in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package\'s data allowance.</string>
 </resources>

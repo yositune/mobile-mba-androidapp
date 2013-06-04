@@ -1,34 +1,5 @@
-/*
-2013 Measuring Broadband America Program
-Mobile Measurement Android Application
-Copyright (C) 2012  SamKnows Ltd.
-
-The FCC Measuring Broadband America (MBA) Program's Mobile Measurement Effort developed in cooperation with SamKnows Ltd. and diverse stakeholders employs an client-server based anonymized data collection approach to gather broadband performance data in an open and transparent manner with the highest commitment to protecting participants privacy.  All data collected is thoroughly analyzed and processed prior to public release to ensure that subscribers’ privacy interests are protected.
-
-Data related to the radio characteristics of the handset, information about the handset type and operating system (OS) version, the GPS coordinates available from the handset at the time each test is run, the date and time of the observation, and the results of active test results are recorded on the handset in JSON(JavaScript Object Notation) nested data elements within flat files.  These JSON files are then transmitted to storage servers at periodic intervals after the completion of active test measurements.
-
-This Android application source code is made available under the GNU GPL2 for testing purposes only and intended for participants in the SamKnows/FCC Measuring Broadband American program.  It is not intended for general release and this repository may be disabled at any time.
-
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-
-
 package com.samknows.measurement.activity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,7 +8,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
@@ -51,7 +21,6 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,8 +39,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.samknows.measurement.AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.Constants;
@@ -205,7 +172,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		 * devices);
 		 */
 
-		this.setTitle(getString(R.string.average_results));
+		this.setTitle(getString(R.string.average_results_title));
 
 		setContentView(R.layout.page_views);
 
@@ -1034,7 +1001,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			int size = AppSettings.getInstance().getDevices().size();
 			if (size == 0 || (size == 1 && OtherUtils.isPhoneAssosiated(this))) {
 				AppSettings.getInstance().setForceDownload();
-				MainService.poke(this);
+				MainService.force_poke(this);
 			}
 			startActivity(new Intent(this, SamKnowsActivating.class));
 			finish();
@@ -1159,7 +1126,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 				archive = dbHelper.getArchiveData(i);
 
 			} catch (Exception e) {
-				Logger.e(this, "Erro in reading archive item " + i, e);
+				Logger.e(this, "Error in reading archive item " + i, e);
 				return;
 			}
 
@@ -1383,8 +1350,13 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 					}
 					if (metric.equals("activenetworktype")) { // active network
 																// type
-						views.get(i + 1).passivemetric23 = value;
-						views.get(i + 1).passivemetric23_type = type;
+						if(value.length() > 0 ){
+							String new_value = value.substring(0, 1).toUpperCase() + value.substring(1);
+							views.get(i + 1).active_network_type = "("+new_value+")";
+						}
+						
+						//views.get(i + 1).passivemetric23 = value;
+						//views.get(i + 1).passivemetric23_type = type;
 					}
 					if (metric.equals("connectionstatus")) { // connection
 																// status

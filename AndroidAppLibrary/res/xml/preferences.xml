@@ -3,7 +3,7 @@
 
 	<PreferenceCategory android:key="first_category"
 		android:title="@string/preferences_title">
-		<CheckBoxPreference android:defaultValue="true"
+		<CheckBoxPreference 
 			android:key="enable_testing" android:summary="@string/enable_testing_summary"
 			android:title="@string/enable_testing_title" />
 

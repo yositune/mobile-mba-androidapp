@@ -1,31 +1,3 @@
-/*
-2013 Measuring Broadband America Program
-Mobile Measurement Android Application
-Copyright (C) 2012  SamKnows Ltd.
-
-The FCC Measuring Broadband America (MBA) Program's Mobile Measurement Effort developed in cooperation with SamKnows Ltd. and diverse stakeholders employs an client-server based anonymized data collection approach to gather broadband performance data in an open and transparent manner with the highest commitment to protecting participants privacy.  All data collected is thoroughly analyzed and processed prior to public release to ensure that subscribers’ privacy interests are protected.
-
-Data related to the radio characteristics of the handset, information about the handset type and operating system (OS) version, the GPS coordinates available from the handset at the time each test is run, the date and time of the observation, and the results of active test results are recorded on the handset in JSON(JavaScript Object Notation) nested data elements within flat files.  These JSON files are then transmitted to storage servers at periodic intervals after the completion of active test measurements.
-
-This Android application source code is made available under the GNU GPL2 for testing purposes only and intended for participants in the SamKnows/FCC Measuring Broadband American program.  It is not intended for general release and this repository may be disabled at any time.
-
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-
-
 package com.samknows.measurement;
 
 public class Constants {
@@ -44,7 +16,7 @@ public class Constants {
 	
 	public static final int NOTIFICATION_ID = 1;
 	
-	public static final long SERVICE_RESCHEDULE_IF_ROAMING_OR_DATACAP = 24 * 3600 * 1000; //1 day
+	public static final long SERVICE_RESCHEDULE_IF_ROAMING = 24 * 3600 * 1000; //1 day
 	
 	public static final int CACHE_EXPIRATION = 12 * 3600 * 1000;// 12 hours in millis
 	
@@ -75,24 +47,25 @@ public class Constants {
 	
 	
 	//Entries in the properties file
-	public static final String PROP_ANONYMOUS = "anonymous";
-	public static final String PROP_BRAND = "brand";
-	public static final String PROP_RUN_TEST_POPUP = "run_test_pop_up";
-	public static final String PROP_DCS_URL = "DCS_Init_url";
-	public static final String PROP_REPORTING_PATH = "Reporting_path";
-	public static final String PROP_RESCHEDULE_TIME = "fail_request_reschedule_time_in_millis";
-	public static final String PROP_TEST_START_WINDOW_RTC = "test_start_window_in_millis_rtc";
-	public static final String PROP_TEST_START_WINDOW_RTC_WAKEUP = "test_start_window_in_millis_rtc_wakeup";
-	public static final String PROP_KILLED_SERVICE_RESTART_TIME_IN_MILLIS = "killed_service_restart_time_in_millis";
-	public static final String PROP_PROTOCOL_SCHEME = "protocol_scheme";
-	public static final String PROP_SUBMIT_PATH = "submit_path";
-	public static final String PROP_DOWNLOAD_CONFIG_PATH = "download_config_path";
-	public static final String INTENT_EXTRA_TD = "test_description";
-	public static final String INTENT_EXTRA_USERNAME = "username";
-	public static final String INTENT_EXTRA_DEVICE = "device";
-	public static final String INTENT_EXTRA_IS_CURRENT_DEVICE = "isCurrentDevice";
-	public static final String PROP_ENTERPRISE_ID = "enterprise_id";
-	
+	public static final String PROP_ANONYMOUS 								= "anonymous";
+	public static final String PROP_BRAND 									= "brand";
+	public static final String PROP_RUN_TEST_POPUP 							= "run_test_pop_up";
+	public static final String PROP_DCS_URL 								= "DCS_Init_url";
+	public static final String PROP_REPORTING_PATH 							= "Reporting_path";
+	public static final String PROP_RESCHEDULE_TIME 						= "fail_request_reschedule_time_in_millis";
+	public static final String PROP_TEST_START_WINDOW_RTC 					= "test_start_window_in_millis_rtc";
+	public static final String PROP_TEST_START_WINDOW_RTC_WAKEUP 			= "test_start_window_in_millis_rtc_wakeup";
+	public static final String PROP_KILLED_SERVICE_RESTART_TIME_IN_MILLIS	= "killed_service_restart_time_in_millis";
+	public static final String PROP_PROTOCOL_SCHEME						 	= "protocol_scheme";
+	public static final String PROP_SUBMIT_PATH 							= "submit_path";
+	public static final String PROP_DOWNLOAD_CONFIG_PATH 					= "download_config_path";
+	public static final String INTENT_EXTRA_TD 								= "test_description";
+	public static final String INTENT_EXTRA_USERNAME 						= "username";
+	public static final String INTENT_EXTRA_DEVICE 							= "device";
+	public static final String INTENT_EXTRA_IS_CURRENT_DEVICE 				= "isCurrentDevice";
+	public static final String PROP_ENTERPRISE_ID 							= "enterprise_id";
+	public static final String PROP_USER_SELF_IDENTIFIER					= "user_self_identifier";
+	public static final String PROP_DATA_CAP_WELCOME						= "data_cap_welcome";
 	//Preferences
 	public static final String PREF_FILE_NAME = "SK_PREFS";
 	public static final String PREF_KEY_STATE = "InitState";
@@ -127,5 +100,10 @@ public class Constants {
 	
 	//dialogs
 	public static final String RUN_TEST_DIALOG_ID = "1";
+	
+	//data cap limits
+	public static final int DATA_CAP_DEFAULT_VALUE=100;
+	public static final int DATA_CAP_MAX_VALUE=5000;
+	public static final int DATA_CAP_MIN_VALUE=1;
 	
 }
