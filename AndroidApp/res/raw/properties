@@ -8,4 +8,5 @@ protocol_scheme=http
 submit_path=mobile/submitjson
 download_config_path=mobile/getconfig
 enterprise_id=FCC_Operator_testing
+user_self_identifier=true
 anonymous=true

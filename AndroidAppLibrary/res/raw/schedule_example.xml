@@ -1,15 +1,14 @@
 <config>
 <global>
-<schedule-version value="1.0"/>
+<schedule-version value="1.1"/>
 <submit-dcs host="dcs.samknows.com"/>
 <tests-alarm-type type="WAKEUP"/>
-<location-service type="network"/>
+<location-service type="gps"/>
 <onfail-test-action type="retry" delay="60s"/>
 <init>
 <test type="closestTarget"/>
 </init>
 <hosts>
-<host dnsName="n1-the1.samknows.com" displayName="London, UK" />
 <host dnsName="samknows1.dal1.level3.net" displayName="Dallas, USA" />
 <host dnsName="samknows2.nyc2.level3.net" displayName="New York, USA" />
 <host dnsName="samknows1.nyc2.level3.net" displayName="New York, USA" />
@@ -47,7 +46,6 @@ listenerDelay describes time delay between two location updates, however it is a
 <tests>
 <test type="closestTarget" test-id="1" condition-group-id="2" displayName="Closest Target">
 <params>
-<param name="target" value="n1-the1.samknows.com" />
 <param name="target" value="samknows1.dal1.level3.net" />
 <param name="target" value="samknows2.nyc2.level3.net" />
 <param name="target" value="samknows1.nyc2.level3.net" />
@@ -68,7 +66,7 @@ listenerDelay describes time delay between two location updates, however it is a
 <param name="warmupmaxtime" value="5000000"/>
 <param name="warmupmaxbytes" value="2621440"/>
 <param name="transfermaxtime" value="15000000"/>
-<param name="transfermaxbytes" value="10485760" />
+<param name="transfermaxbytes" value="20971520" />
 <param name="buffersize" value="1048576"/>
 <param name="numberofthreads" value="3"/>
 </params>
@@ -81,7 +79,7 @@ listenerDelay describes time delay between two location updates, however it is a
 <param name="warmupmaxtime" value="5000000"/>
 <param name="warmupmaxbytes" value="2621440"/>
 <param name="transfermaxtime" value="15000000"/>
-<param name="transfermaxbytes" value="10485760" />
+<param name="transfermaxbytes" value="20971520" />
 <param name="sendDataChunk" value="512"/>
 <param name="postdatalength" value="10485760"/>
 <param name="numberofthreads" value="3"/>
@@ -102,8 +100,8 @@ listenerDelay describes time delay between two location updates, however it is a
 <scheduled-tests>
 <batch condition-group-id="1">
 <executeAt>
-<time >10:30</time>
-<time >10:35</time>
+<time random-interval="2h">07:00</time>
+<time random-interval="8h">09:00</time>
 <time random-interval="3h">17:00</time>
 </executeAt>
 <tests>

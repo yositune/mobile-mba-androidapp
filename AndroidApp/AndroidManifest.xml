@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.samknows.measurement" android:versionCode="123"
-	android:versionName="1.23">
+	package="com.samknows.measurement" android:versionCode="124"
+	android:versionName="1.24">
 
-	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15" />
+	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
@@ -33,7 +33,7 @@
 
 
 		<activity android:name="com.samknows.measurement.activity.SKPerformanceActivity"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 		<activity android:name="com.samknows.measurement.activity.SKLogsActivity"
 			android:label="@string/activity_logs_name" android:screenOrientation="portrait">
@@ -53,15 +53,18 @@
 			android:label="@string/activity_test_results_name"
 			android:screenOrientation="portrait">
 		</activity>
+		<activity android:name="com.samknows.measurement.activity.SamKnowsInitialSettings"
+			android:screenOrientation="portrait">
+		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SamKnowsWelcome"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-
+	
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -72,49 +75,45 @@
 		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SamKnowsRegister"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SamKnowsResetPassword"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 		<activity android:name="com.samknows.measurement.activity.SamKnowsRecoverPassword"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 
 		<activity
 			android:name="com.samknows.measurement.activity.SamKnowsAggregateStatViewerActivity"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 
 
 		<activity
 			android:name="com.samknows.measurement.activity.SamKnowsTestViewerActivity"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SamKnowsAbout"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 		<activity android:name="com.samknows.measurement.activity.SamKnowsTermsOfUse"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SamKnowsActivating"
-			android:label="@string/app_name" android:screenOrientation="portrait"
-			>
+			android:screenOrientation="portrait">
 		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SamKnowsMapActivity"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+			android:screenOrientation="portrait">
 		</activity>
 
 		<activity android:name="com.samknows.measurement.activity.SKPreferenceActivity"
 			android:label="@string/activity_pref_name" android:screenOrientation="portrait">
-			<intent-filter>
-				<action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
+			
 		</activity>
 
 		<service android:name="com.samknows.measurement.MainService">
