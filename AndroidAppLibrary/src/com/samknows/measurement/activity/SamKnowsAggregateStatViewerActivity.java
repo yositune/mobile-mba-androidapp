@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -1456,6 +1458,18 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 					TextView tv = (TextView) subview
 							.findViewById(R.id.no_data_message_text);
 					tv.setText(R.string.activation_needed);
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext()); // Alert about activation 
+					builder.setMessage(R.string.activation_needed_dialog)
+					       .setTitle(R.string.not_activated);
+					builder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+					AlertDialog dialog = builder.create();
+					dialog.show();
 				} else if (total_archive_records > 0) { // if no data hide no
 														// data icon
 														// & message
@@ -1949,5 +1963,4 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 
 		}
 	}
-
 }
