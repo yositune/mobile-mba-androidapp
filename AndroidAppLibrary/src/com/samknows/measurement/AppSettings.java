@@ -1,31 +1,3 @@
-/*
-2013 Measuring Broadband America Program
-Mobile Measurement Android Application
-Copyright (C) 2012  SamKnows Ltd.
-
-The FCC Measuring Broadband America (MBA) Program's Mobile Measurement Effort developed in cooperation with SamKnows Ltd. and diverse stakeholders employs an client-server based anonymized data collection approach to gather broadband performance data in an open and transparent manner with the highest commitment to protecting participants privacy.  All data collected is thoroughly analyzed and processed prior to public release to ensure that subscribers’ privacy interests are protected.
-
-Data related to the radio characteristics of the handset, information about the handset type and operating system (OS) version, the GPS coordinates available from the handset at the time each test is run, the date and time of the observation, and the results of active test results are recorded on the handset in JSON(JavaScript Object Notation) nested data elements within flat files.  These JSON files are then transmitted to storage servers at periodic intervals after the completion of active test measurements.
-
-This Android application source code is made available under the GNU GPL2 for testing purposes only and intended for participants in the SamKnows/FCC Measuring Broadband American program.  It is not intended for general release and this repository may be disabled at any time.
-
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-
-
 package com.samknows.measurement;
 
 import java.io.IOException;
@@ -59,16 +31,16 @@ public class AppSettings {
 	private Context ctx;
 	
 	//json fields to be included to each submission
-	public static final String JSON_UNIT_ID = "unit_id";
-	public static final String JSON_APP_VERSION_CODE = "app_version_code";
-	public static final String JSON_APP_VERSION_NAME = "app_version_name";
+	public static final String JSON_UNIT_ID 				= "unit_id";
+	public static final String JSON_APP_VERSION_CODE 		= "app_version_code";
+	public static final String JSON_APP_VERSION_NAME 		= "app_version_name";
 	public static final String JSON_SCHEDULE_CONFIG_VERSION = "schedule_config_version";
-	public static final String JSON_TIMEZONE = "timezone";
-	public static final String JSON_TIMESTAMP = "timestamp";
-	public static final String JSON_DATETIME = "datetime";
-	public static final String JSON_ENTERPRISE_ID = "enterprise_id";
-	public static final String JSON_SIMOPERATORCODE = "sim_operator_code";
-	public static final String JSON_USER_SELF_ID = "user_self_id";
+	public static final String JSON_TIMEZONE 				= "timezone";
+	public static final String JSON_TIMESTAMP 				= "timestamp";
+	public static final String JSON_DATETIME 				= "datetime";
+	public static final String JSON_ENTERPRISE_ID 			= "enterprise_id";
+	public static final String JSON_SIMOPERATORCODE 		= "sim_operator_code";
+	public static final String JSON_USER_SELF_ID 			= "user_self_id";
 	
 	//used for first step to obtain dcs base url
 	public String dCSInitUrl;
@@ -106,14 +78,15 @@ public class AppSettings {
 	//Enterprise id read from the properties file
 	public String enterprise_id;
 	
+	//User self identifier preference enabled
+	public boolean user_self_id;
+	
 	//static instance and initialisation
 	private static AppSettings instance;
 	
 	public static AppSettings getInstance() {
 		return instance;
 	}
-	
-	
 	
 	
 	//to be called when the app starts
@@ -128,21 +101,22 @@ public class AppSettings {
 		Properties p = new Properties();
 		try {
 			p.load(is);
-			dCSInitUrl = p.getProperty(Constants.PROP_DCS_URL);
-			reportingServerPath = p.getProperty(Constants.PROP_REPORTING_PATH);
-			rescheduleTime = Long.valueOf(p.getProperty(Constants.PROP_RESCHEDULE_TIME));
-			testStartWindow = Long.valueOf(p.getProperty(Constants.PROP_TEST_START_WINDOW_RTC));
-			testStartWindowWakeup = Long.valueOf(p.getProperty(Constants.PROP_TEST_START_WINDOW_RTC_WAKEUP));
-			rescheduleServiceTime = Long.valueOf(p.getProperty(Constants.PROP_KILLED_SERVICE_RESTART_TIME_IN_MILLIS));
-			brand = p.getProperty(Constants.PROP_BRAND);
-			anonymous = Boolean.valueOf(p.getProperty(Constants.PROP_ANONYMOUS));
-			protocol_scheme = p.getProperty(Constants.PROP_PROTOCOL_SCHEME);
-			submit_path = p.getProperty(Constants.PROP_SUBMIT_PATH);
-			download_config_path = p.getProperty(Constants.PROP_DOWNLOAD_CONFIG_PATH);
-			PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(),0);
-			app_version_code = pInfo.versionCode+"";
-			app_version_name = pInfo.versionName;
-			enterprise_id = p.getProperty(Constants.PROP_ENTERPRISE_ID);
+			dCSInitUrl 				= p.getProperty(Constants.PROP_DCS_URL);
+			reportingServerPath 	= p.getProperty(Constants.PROP_REPORTING_PATH);
+			rescheduleTime 			= Long.valueOf(p.getProperty(Constants.PROP_RESCHEDULE_TIME));
+			testStartWindow 		= Long.valueOf(p.getProperty(Constants.PROP_TEST_START_WINDOW_RTC));
+			testStartWindowWakeup 	= Long.valueOf(p.getProperty(Constants.PROP_TEST_START_WINDOW_RTC_WAKEUP));
+			rescheduleServiceTime 	= Long.valueOf(p.getProperty(Constants.PROP_KILLED_SERVICE_RESTART_TIME_IN_MILLIS));
+			brand 					= p.getProperty(Constants.PROP_BRAND);
+			anonymous 				= Boolean.valueOf(p.getProperty(Constants.PROP_ANONYMOUS));
+			protocol_scheme 		= p.getProperty(Constants.PROP_PROTOCOL_SCHEME);
+			submit_path 			= p.getProperty(Constants.PROP_SUBMIT_PATH);
+			download_config_path 	= p.getProperty(Constants.PROP_DOWNLOAD_CONFIG_PATH);
+			PackageInfo pInfo 		= c.getPackageManager().getPackageInfo(c.getPackageName(),0);
+			app_version_code 		= pInfo.versionCode+"";
+			app_version_name 		= pInfo.versionName;
+			enterprise_id 			= p.getProperty(Constants.PROP_ENTERPRISE_ID);
+			user_self_id 			= Boolean.parseBoolean(p.getProperty(Constants.PROP_USER_SELF_IDENTIFIER));
 			
 		} catch (IOException e) {
 			Logger.e(TAG, "failed to load properies!");
@@ -319,7 +293,7 @@ public class AppSettings {
 	}
 	
 	public boolean isDataCapReached(long bytesToBeUsed){
-		if(OtherUtils.isWifi(ctx)){
+		if(OtherUtils.isWifi(ctx)){	
 			return false;
 		}
 		resetDataUsageIfTime();
