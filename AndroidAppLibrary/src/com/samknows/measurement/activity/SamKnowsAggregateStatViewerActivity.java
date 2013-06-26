@@ -51,6 +51,7 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,6 +76,7 @@ import com.samknows.measurement.Constants;
 import com.samknows.measurement.DeviceDescription;
 import com.samknows.measurement.Logger;
 import com.samknows.measurement.MainService;
+import com.samknows.measurement.ManualTest;
 import com.samknows.measurement.R;
 import com.samknows.measurement.SamKnowsLoginService;
 import com.samknows.measurement.SamKnowsResponseHandler;
@@ -297,13 +299,28 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			// refresh data
-			adapter = new MyPagerAdapter(this);
-			viewPager = (ViewPager) findViewById(R.id.viewPager);
-			viewPager.setAdapter(adapter);
-			viewPager.setCurrentItem(1, false);
-			overridePendingTransition(0, 0);
+			if (requestCode > 9000) {
+				Intent intent = new Intent(
+						SamKnowsAggregateStatViewerActivity.this,
+						SamKnowsTestViewerActivity.class);
+				Bundle b = new Bundle();
+				b.putInt("testID", 4); // Loss / Latency testID
+				intent.putExtras(b);
+				startActivityForResult(intent, 9001);
+				overridePendingTransition(R.anim.transition_in,
+						R.anim.transition_out);
+			}
+			else {
+				// refresh data
+				adapter = new MyPagerAdapter(this);
+				viewPager = (ViewPager) findViewById(R.id.viewPager);
+				viewPager.setAdapter(adapter);
+				viewPager.setCurrentItem(1, false);
+				overridePendingTransition(0, 0);
+			}
 		}
+		
+
 		
 		/*
 		 * if (resultCode>0){
@@ -1730,7 +1747,14 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 				Bundle b = new Bundle();
 				b.putInt("testID", array_spinner_int[which]);
 				intent.putExtras(b);
-				startActivityForResult(intent, 1);
+				
+				AppSettings appSettings = AppSettings.getInstance();
+				if (appSettings.isContinuousEnabled() && array_spinner[which].contains("Latency") && array_spinner[which].contains("Loss")) {
+					startActivityForResult(intent, 9001);
+					Log.d("TESTING", "testID: " + array_spinner_int[which]);
+				} else {
+					startActivityForResult(intent, 1);
+				}
 				overridePendingTransition(R.anim.transition_in,
 						R.anim.transition_out);
 			}
