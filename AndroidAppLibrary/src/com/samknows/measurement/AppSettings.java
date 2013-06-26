@@ -256,6 +256,18 @@ public class AppSettings {
 		
 	}
 	
+	public boolean isContinuousEnabled(){
+		boolean ret = false;
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
+		if(p.contains(Constants.PREF_CONTINUOUS_ENABLED)){
+			ret =  p.getBoolean(Constants.PREF_CONTINUOUS_ENABLED, false);
+		}else{
+			ret = getBoolean("continuous_test",true);
+		}
+		return ret;
+		
+	}
+	
 	public void setServiceEnabled(boolean enabled) {
 		Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
 		editor.putBoolean(Constants.PREF_SERVICE_ENABLED, enabled);

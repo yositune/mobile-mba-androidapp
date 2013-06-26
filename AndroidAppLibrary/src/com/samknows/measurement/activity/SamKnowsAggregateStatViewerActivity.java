@@ -304,7 +304,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			viewPager.setCurrentItem(1, false);
 			overridePendingTransition(0, 0);
 		}
-
+		
 		/*
 		 * if (resultCode>0){
 		 * 
