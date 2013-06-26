@@ -431,4 +431,6 @@
 	<string name="activation_needed_dialog">Please check your data connection and activate by tapping the menu button and selecting \&quot;Activation\&quot;.</string>
 	<string name="not_activated">App Not Activated</string>
 	<string name="activating">Activating</string>
+	<string name="enable_continuous_testing">Enable Continuous Testing</string>
+	<string name="summary_enable_continuous_testing">This option enables continuos testing by repeating the \"Loss / Latency\" test multiple times.</string>
 </resources>

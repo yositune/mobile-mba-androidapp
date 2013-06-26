@@ -34,6 +34,7 @@
 			android:key="user_self_id" android:dialogTitle="@string/user_tag"
 			android:dialogMessage="@string/user_tag_message" android:summary="@string/user_tag_message"
 			android:singleLine="true" />
+		<CheckBoxPreference android:title="@string/enable_continuous_testing" android:summary="@string/summary_enable_continuous_testing" android:key="enable_continuous"/>
 	</PreferenceCategory>
 
 </PreferenceScreen>
