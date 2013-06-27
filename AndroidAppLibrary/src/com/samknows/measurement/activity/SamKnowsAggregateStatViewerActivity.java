@@ -36,10 +36,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -186,10 +189,13 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 	List<TestDescription> testList;
 	String array_spinner[];
 	int array_spinner_int[];
+	AlarmManager manager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
 		/*
 		 * device = (DeviceDescription) getIntent().getSerializableExtra(
@@ -295,29 +301,24 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			viewPager = (ViewPager) findViewById(R.id.viewPager);
 			viewPager.setAdapter(adapter);
 		}
+		AppSettings appSettings = AppSettings.getInstance();
+		if (appSettings.isContinuousEnabled()) {
+			PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, 9001, new Intent(
+					SamKnowsAggregateStatViewerActivity.this,
+					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+			manager.cancel(pending_intent);
+		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			if (requestCode > 9000) {
-				Intent intent = new Intent(
-						SamKnowsAggregateStatViewerActivity.this,
-						SamKnowsTestViewerActivity.class);
-				Bundle b = new Bundle();
-				b.putInt("testID", 4); // Loss / Latency testID
-				intent.putExtras(b);
-				startActivityForResult(intent, 9001);
-				overridePendingTransition(R.anim.transition_in,
-						R.anim.transition_out);
-			}
-			else {
-				// refresh data
-				adapter = new MyPagerAdapter(this);
-				viewPager = (ViewPager) findViewById(R.id.viewPager);
-				viewPager.setAdapter(adapter);
-				viewPager.setCurrentItem(1, false);
-				overridePendingTransition(0, 0);
-			}
+			// refresh data
+			adapter = new MyPagerAdapter(this);
+			viewPager = (ViewPager) findViewById(R.id.viewPager);
+			viewPager.setAdapter(adapter);
+			viewPager.setCurrentItem(1, false);
+			overridePendingTransition(0, 0);
 		}
 		
 
@@ -1740,6 +1741,8 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			public void onClick(DialogInterface dialog, int which) {
 
 				dialog.dismiss();
+				long time = 30000;
+				long millis = System.currentTimeMillis() + time;
 
 				Intent intent = new Intent(
 						SamKnowsAggregateStatViewerActivity.this,
@@ -1749,12 +1752,13 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 				intent.putExtras(b);
 				
 				AppSettings appSettings = AppSettings.getInstance();
-				if (appSettings.isContinuousEnabled() && array_spinner[which].contains("Latency") && array_spinner[which].contains("Loss")) {
-					startActivityForResult(intent, 9001);
-					Log.d("TESTING", "testID: " + array_spinner_int[which]);
-				} else {
-					startActivityForResult(intent, 1);
+				startActivityForResult(intent, 1);
+				
+				if (appSettings.isContinuousEnabled()) {
+					PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, 9001, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+					manager.setRepeating(AlarmManager.RTC, millis, time, pending_intent);
 				}
+
 				overridePendingTransition(R.anim.transition_in,
 						R.anim.transition_out);
 			}

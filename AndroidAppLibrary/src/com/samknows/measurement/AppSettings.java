@@ -47,6 +47,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.samknows.measurement.schedule.ScheduleConfig;
 import com.samknows.measurement.schedule.ScheduleConfig.LocationType;
@@ -260,10 +261,12 @@ public class AppSettings {
 		boolean ret = false;
 		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
 		if(p.contains(Constants.PREF_CONTINUOUS_ENABLED)){
+			Log.d("TESTING", "Pref contained");
 			ret =  p.getBoolean(Constants.PREF_CONTINUOUS_ENABLED, false);
 		}else{
-			ret = getBoolean("continuous_test",true);
+			ret = getBoolean("continuous_test",false);
 		}
+		Log.d("TESTING", "Continuous: " + ret);
 		return ret;
 		
 	}
