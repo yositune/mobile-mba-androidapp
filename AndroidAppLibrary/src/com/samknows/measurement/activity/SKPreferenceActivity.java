@@ -88,7 +88,10 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 	protected void updateLabels(){
 		AppSettings app = AppSettings.getInstance();
 		long configDataCap = app.getLong(Constants.PREF_DATA_CAP, -1l );
-		String s_configDataCap = configDataCap == -1l ? "": configDataCap +"";
+		String s_configDataCap = configDataCap == -1l ? "": configDataCap + "";
+		
+		long configContinuousInterval = app.getLong(Constants.PREF_CONTINUOUS_INTERVAL, -1l );
+		String s_continuousInterval = configContinuousInterval == -1l ? "" : configContinuousInterval + "";
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SKPreferenceActivity.this);
 		Preference p;
 		
@@ -96,11 +99,13 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 		p = (Preference) findPreference(Constants.PREF_DATA_CAP);
 		p.setTitle(getString(R.string.data_cap_title)+ " "+data_cap+getString(R.string.mb));	
 		
+		String continuous_interval = preferences.getString(Constants.PREF_CONTINUOUS_INTERVAL, s_continuousInterval);
+		p = (Preference) findPreference(Constants.PREF_CONTINUOUS_INTERVAL);
+		p.setTitle(getString(R.string.continuous_interval_pref)+ " "+continuous_interval+getString(R.string.sec));	
 		
 		int data_cap_day = preferences.getInt(Constants.PREF_DATA_CAP_RESET_DAY, 1);
 		p = (Preference) findPreference(Constants.PREF_DATA_CAP_RESET_DAY);
-		p.setTitle(getString(R.string.data_cap_day_title)+ TimeUtils.getDayOfMonthSuffix(data_cap_day));
-		
+		p.setTitle(getString(R.string.data_cap_day_title)+" "+ TimeUtils.getDayOfMonthSuffix(data_cap_day));
 		
 	}
 	

@@ -73,6 +73,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.samknows.measurement.AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.Constants;
@@ -308,6 +310,8 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
 			manager.cancel(pending_intent);
+			Toast remindContinuous = Toast.makeText(SamKnowsAggregateStatViewerActivity.this, "Continuous is enabled.", Toast.LENGTH_LONG);
+			remindContinuous.show();
 		}
 	}
 
