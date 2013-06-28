@@ -1741,7 +1741,9 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			public void onClick(DialogInterface dialog, int which) {
 
 				dialog.dismiss();
-				long time = 30000;
+				
+				AppSettings appSettings = AppSettings.getInstance();
+				long time = appSettings.getContinuousInterval();
 				long millis = System.currentTimeMillis() + time;
 
 				Intent intent = new Intent(
@@ -1751,10 +1753,9 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 				b.putInt("testID", array_spinner_int[which]);
 				intent.putExtras(b);
 				
-				AppSettings appSettings = AppSettings.getInstance();
 				startActivityForResult(intent, 1);
 				
-				if (appSettings.isContinuousEnabled()) {
+				if (appSettings.isContinuousEnabled() && array_spinner_int[which] == 4) {
 					PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, 9001, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					manager.setRepeating(AlarmManager.RTC, millis, time, pending_intent);
 				}

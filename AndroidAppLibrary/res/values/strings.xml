@@ -433,4 +433,6 @@
 	<string name="activating">Activating</string>
 	<string name="enable_continuous_testing">Enable Continuous Testing</string>
 	<string name="summary_enable_continuous_testing">This option enables continuous testing by repeating the \&quot;Loss / Latency\&quot; test multiple times.</string>
+	<string name="continuous_interval_pref">Continuous Testing Interval</string>
+	<string name="summary_continuous_testing_interval">This setting defines the time interval in which to perform a continuous test in seconds.</string>
 </resources>

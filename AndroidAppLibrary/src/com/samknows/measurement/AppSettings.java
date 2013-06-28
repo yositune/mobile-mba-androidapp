@@ -535,4 +535,17 @@ public class AppSettings {
 	public String getResourceString(int id){
 		return ctx.getString(id);
 	}
+	
+	public long getContinuousInterval() {
+		long ret = Long.MAX_VALUE;
+		long configInterval = getLong(Constants.PREF_CONTINUOUS_INTERVAL,-1);
+		
+		long preferenceInterval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_INTERVAL, "-1")); //in seconds
+		if(preferenceInterval>0){
+			ret = preferenceInterval * 1000;
+		}else if(configInterval > 0){
+			ret = configInterval * 1000;
+		}
+		return ret;
+	}
 }
