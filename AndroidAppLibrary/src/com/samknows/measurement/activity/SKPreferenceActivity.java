@@ -96,7 +96,7 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 		
         lp.setEntries(array_spinner);
         lp.setEntryValues(array_spinner_int);
-        if (defaultIndex >= 0) {
+        if (lp.getValue() == null && defaultIndex >= 0) { // only if not selected
         	lp.setValueIndex(defaultIndex);
         }
 }

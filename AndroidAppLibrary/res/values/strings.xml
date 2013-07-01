@@ -439,4 +439,5 @@
 	<string name="continuous_test_id_title">Continuous Test Specified</string>
 	<string name="summary_continuous_test_id">Specify a test to be performed continuously.</string>
 	<string name="continuous">Continuous</string>
+	<string name="continuous_category_title">Continuous Test Controls</string>
 </resources>

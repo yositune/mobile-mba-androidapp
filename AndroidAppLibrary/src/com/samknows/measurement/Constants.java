@@ -120,6 +120,7 @@ public class Constants {
 	public static final String PREF_CONTINUOUS_ENABLED = "enable_continuous";
 	public static final String PREF_CONTINUOUS_INTERVAL = "continuous_interval_pref";
 	public static final String PREF_CONTINUOUS_ID = "continuous_test_id";
+	public static final String PREF_CONTINUOUS_TEST_NAME = "continuous_test_name";
 	public static String PREF_DATA_CAP_RESET_DAY = "data_cap_reset_day";
 	
 	public static String STATE_MACHINE_STATUS = "state_machine_status";

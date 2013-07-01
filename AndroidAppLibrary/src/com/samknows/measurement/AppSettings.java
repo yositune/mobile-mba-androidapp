@@ -570,4 +570,8 @@ public class AppSettings {
 		}
 		return ret;
 	}
+	
+	/*public String getContinuousTestName() {
+		getString("test", "test");
+	}*/
 }

@@ -34,9 +34,11 @@
 			android:key="user_self_id" android:dialogTitle="@string/user_tag"
 			android:dialogMessage="@string/user_tag_message" android:summary="@string/user_tag_message"
 			android:singleLine="true" />
-		<CheckBoxPreference android:title="@string/enable_continuous_testing" android:summary="@string/summary_enable_continuous_testing" android:key="enable_continuous"/>
-		<EditTextPreference android:title="@string/continuous_interval_pref" android:key="continuous_interval_pref" android:summary="@string/summary_continuous_testing_interval" android:defaultValue="30" android:singleLine="true" android:numeric="integer" android:dialogMessage="@string/summary_continuous_testing_interval" android:dialogTitle="@string/continuous_interval_pref"/>
-		<ListPreference android:key="continuous_test_id" android:title="@string/continuous_test_id_title" android:summary="@string/summary_continuous_test_id"/>
+		
+		
+		
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/continuous_category_title" android:key="second_category"><CheckBoxPreference android:title="@string/enable_continuous_testing" android:summary="@string/summary_enable_continuous_testing" android:key="enable_continuous" /><EditTextPreference android:title="@string/continuous_interval_pref" android:key="continuous_interval_pref" android:summary="@string/summary_continuous_testing_interval" android:defaultValue="30" android:singleLine="true" android:numeric="integer" android:dialogMessage="@string/summary_continuous_testing_interval" android:dialogTitle="@string/continuous_interval_pref" /><ListPreference android:key="continuous_test_id" android:title="@string/continuous_test_id_title" android:summary="@string/summary_continuous_test_id" />
+</PreferenceCategory>
 
 </PreferenceScreen>

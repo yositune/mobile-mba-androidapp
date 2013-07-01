@@ -52,6 +52,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.ListPreference;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -1744,6 +1745,8 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		array_spinner_int[testList.size()] = -1;
 		
 		if (appSettings.isContinuousEnabled()) {
+			/*ListPreference lp = (ListPreference) findPreference(Constants.PREF_CONTINUOUS_ID);
+			CharSequence continuous_test_name = lp.getEntry();*/
 			array_spinner = Arrays.copyOf(array_spinner, testList.size() + 1);
 			array_spinner_int = Arrays.copyOf(array_spinner_int, testList.size() + 1);
 			array_spinner[array_spinner.length - 1] = getString(R.string.continuous);
