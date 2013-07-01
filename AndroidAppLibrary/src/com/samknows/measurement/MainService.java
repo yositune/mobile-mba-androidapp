@@ -98,12 +98,6 @@ public class MainService extends IntentService {
 			publish(UIUpdate.completed());
 			isExecuting = false;
 		}
-		if (appSettings.isContinuousEnabled()){
-			Log.d("TESTING", "Continuous is Enabled.");
-		}
-		else {
-			Log.d("TESTING", "Continuous is not Enabled.");
-		}
 	}
 
 	

@@ -203,6 +203,10 @@ public class AppSettings {
 		return ctx.getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE).getLong(key, defValue);
 	}
 	
+	public int getInt(String key, int defValue) {
+		return ctx.getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE).getInt(key, defValue);
+	}
+	
 	public String getUnitId() {
 		return getString(Constants.PREF_KEY_UNIT_ID);
 	}
@@ -260,15 +264,33 @@ public class AppSettings {
 	public boolean isContinuousEnabled(){
 		boolean ret = false;
 		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
-		if(p.contains(Constants.PREF_CONTINUOUS_ENABLED)){
-			Log.d("TESTING", "Pref contained");
+		if (p.contains(Constants.PREF_CONTINUOUS_ENABLED)){
 			ret =  p.getBoolean(Constants.PREF_CONTINUOUS_ENABLED, false);
-		}else{
+		} else{
 			ret = getBoolean("continuous_test",false);
 		}
-		Log.d("TESTING", "Continuous: " + ret);
 		return ret;
 		
+	}
+	
+	public int getContinuousTestId() {
+		int ret = Integer.MIN_VALUE;
+		String temp;
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
+		if (p.contains(Constants.PREF_CONTINUOUS_ID)){
+			temp =  p.getString(Constants.PREF_CONTINUOUS_ID, null);
+		} else{
+			temp = getString("continuous_test_id", null);
+		}
+		if (temp != null) {
+			try {
+				ret = Integer.parseInt(temp);
+			} catch (Exception e) {
+				ret = Integer.MIN_VALUE;
+			}
+		}
+		
+		return ret;
 	}
 	
 	public void setServiceEnabled(boolean enabled) {

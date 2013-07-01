@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package com.samknows.measurement.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -192,6 +193,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 	String array_spinner[];
 	int array_spinner_int[];
 	AlarmManager manager;
+	AppSettings appSettings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -310,6 +312,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
 			manager.cancel(pending_intent);
+			Log.d(this.toString(), "Continuous is Enabled.");
 			Toast remindContinuous = Toast.makeText(SamKnowsAggregateStatViewerActivity.this, "Continuous is enabled.", Toast.LENGTH_LONG);
 			remindContinuous.show();
 		}
@@ -1715,7 +1718,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 	}
 
 	private void RunChoice() {
-
+		appSettings = AppSettings.getInstance();
 		storage = CachingStorage.getInstance();
 		config = storage.loadScheduleConfig();
 		// if config == null the app is not been activate and
@@ -1739,6 +1742,13 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		}
 		array_spinner[testList.size()] = getString(R.string.all);
 		array_spinner_int[testList.size()] = -1;
+		
+		if (appSettings.isContinuousEnabled()) {
+			array_spinner = Arrays.copyOf(array_spinner, testList.size() + 1);
+			array_spinner_int = Arrays.copyOf(array_spinner_int, testList.size() + 1);
+			array_spinner[array_spinner.length - 1] = getString(R.string.continuous);
+			array_spinner_int[array_spinner_int.length - 1] = -2;
+		}
 
 		builder.setItems(array_spinner, new DialogInterface.OnClickListener() {
 			@Override
@@ -1746,20 +1756,24 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 
 				dialog.dismiss();
 				
-				AppSettings appSettings = AppSettings.getInstance();
-				long time = appSettings.getContinuousInterval();
-				long millis = System.currentTimeMillis() + time;
-
 				Intent intent = new Intent(
 						SamKnowsAggregateStatViewerActivity.this,
 						SamKnowsTestViewerActivity.class);
 				Bundle b = new Bundle();
-				b.putInt("testID", array_spinner_int[which]);
-				intent.putExtras(b);
 				
+				if (array_spinner_int[which] == -2) { // continuous should be enabled at this if statement
+					b.putInt("testID", appSettings.getContinuousTestId());
+				}
+				else {
+					b.putInt("testID", array_spinner_int[which]);
+				}
+
+				intent.putExtras(b);				
 				startActivityForResult(intent, 1);
 				
-				if (appSettings.isContinuousEnabled() && array_spinner_int[which] == 4) {
+				if (appSettings.isContinuousEnabled() && array_spinner_int[which] == -2) {
+					long time = appSettings.getContinuousInterval();
+					long millis = System.currentTimeMillis() + time;
 					PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, 9001, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					manager.setRepeating(AlarmManager.RTC, millis, time, pending_intent);
 				}
