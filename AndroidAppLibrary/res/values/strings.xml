@@ -428,4 +428,18 @@
 	<string name="init_settings_title">Data Consumption</string>
 	<string name="data_cap_input_text">Please choose the amount of data (in MB) the Application should use each month:</string>
 	<string name="data_cap_explanation">By default the Application is configured to use no more than 100 megabytes of data each month.  Any tests you initiate will also consume between 100 KB for the smallest packet loss test and 30 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the \"Mobile data cap\" in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package\'s data allowance.</string>
+	<string name="activate">Activate</string>
+	<string name="activation_needed_dialog">Please check your data connection and activate by tapping the menu button and selecting \&quot;Activation\&quot;.</string>
+	<string name="not_activated">App Not Activated</string>
+	<string name="activating">Activating</string>
+	<string name="enable_continuous_testing">Enable Continuous Testing</string>
+	<string name="summary_enable_continuous_testing">This option enables continuous testing by repeating the \&quot;Loss / Latency\&quot; test multiple times.</string>
+	<string name="continuous_interval_pref">Continuous Testing Interval</string>
+	<string name="summary_continuous_testing_interval">This setting defines the time interval in which to perform a continuous test in seconds.</string>
+	<string name="sec">sec</string>
+	<string name="continuous_test_id_title">Specify Continuous Test</string>
+	<string name="summary_continuous_test_id">Specify a test to be performed continuously.</string>
+	<string name="continuous">Continuous</string>
+	<string name="continuous_category_title">Continuous Test Controls</string>
+	<string name="negative_one">-1</string>
 </resources>
