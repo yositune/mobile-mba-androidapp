@@ -43,6 +43,7 @@ public class Constants {
 	public static long WAIT_TEST_BEFORE_ABORT = 600000; //Wait time before kill a test being executing in millis currently 10 min
 	
 	public static final int NOTIFICATION_ID = 1;
+	public static final int CONTINUOUS_REQUEST_CODE = 9001;
 	
 	public static final long SERVICE_RESCHEDULE_IF_ROAMING = 24 * 3600 * 1000; //1 day
 	

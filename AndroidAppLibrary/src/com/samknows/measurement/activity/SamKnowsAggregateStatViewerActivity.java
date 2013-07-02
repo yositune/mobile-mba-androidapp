@@ -308,7 +308,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		}
 		AppSettings appSettings = AppSettings.getInstance();
 		if (appSettings.isContinuousEnabled()) {
-			PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, 9001, new Intent(
+			PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, new Intent(
 					SamKnowsAggregateStatViewerActivity.this,
 					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -1747,9 +1747,10 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		if (appSettings.isContinuousEnabled()) {
 			/*ListPreference lp = (ListPreference) findPreference(Constants.PREF_CONTINUOUS_ID);
 			CharSequence continuous_test_name = lp.getEntry();*/
+			
 			array_spinner = Arrays.copyOf(array_spinner, testList.size() + 1);
 			array_spinner_int = Arrays.copyOf(array_spinner_int, testList.size() + 1);
-			array_spinner[array_spinner.length - 1] = getString(R.string.continuous);
+			array_spinner[array_spinner.length - 1] = getString(R.string.continuous) + " " + appSettings.getContinuousTestName();
 			array_spinner_int[array_spinner_int.length - 1] = -2;
 		}
 
@@ -1777,7 +1778,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 				if (appSettings.isContinuousEnabled() && array_spinner_int[which] == -2) {
 					long time = appSettings.getContinuousInterval();
 					long millis = System.currentTimeMillis() + time;
-					PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, 9001, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					manager.setRepeating(AlarmManager.RTC, millis, time, pending_intent);
 				}
 

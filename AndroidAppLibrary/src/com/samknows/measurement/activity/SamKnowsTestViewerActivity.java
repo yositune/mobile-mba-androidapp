@@ -49,6 +49,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.samknows.measurement.AppSettings;
 import com.samknows.measurement.CachingStorage;
+import com.samknows.measurement.Constants;
 import com.samknows.measurement.Logger;
 import com.samknows.measurement.ManualTest;
 import com.samknows.measurement.Storage;
@@ -586,7 +587,7 @@ public class SamKnowsTestViewerActivity extends BaseLogoutActivity {
 								overridePendingTransition(0, 0);
 								AppSettings appSettings = AppSettings.getInstance();
 								if (appSettings.isContinuousEnabled()) {
-									PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsTestViewerActivity.this, 9001, new Intent(
+									PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsTestViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, new Intent(
 											SamKnowsTestViewerActivity.this,
 											SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 

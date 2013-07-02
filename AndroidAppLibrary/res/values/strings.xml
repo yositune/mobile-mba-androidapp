@@ -436,8 +436,9 @@
 	<string name="continuous_interval_pref">Continuous Testing Interval</string>
 	<string name="summary_continuous_testing_interval">This setting defines the time interval in which to perform a continuous test in seconds.</string>
 	<string name="sec">sec</string>
-	<string name="continuous_test_id_title">Continuous Test Specified</string>
+	<string name="continuous_test_id_title">Specify Continuous Test</string>
 	<string name="summary_continuous_test_id">Specify a test to be performed continuously.</string>
 	<string name="continuous">Continuous</string>
 	<string name="continuous_category_title">Continuous Test Controls</string>
+	<string name="negative_one">-1</string>
 </resources>

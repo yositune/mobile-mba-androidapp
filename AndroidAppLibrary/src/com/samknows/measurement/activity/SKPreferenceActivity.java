@@ -46,7 +46,9 @@ import com.samknows.measurement.util.TimeUtils;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -58,50 +60,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 
+import android.util.Log;
 import android.widget.Toast;
 
 public class SKPreferenceActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener{
 
-    protected void setListPreferenceData(ListPreference lp) {
-    	Storage storage;
-    	ScheduleConfig config;
-
-    	List<TestDescription> testList;
-    	String array_spinner[];
-    	String array_spinner_int[];
-    	int defaultIndex = -1;
-    	
-		storage = CachingStorage.getInstance();
-		config = storage.loadScheduleConfig();
-		// if config == null the app is not been activate and
-		// no test can be run
-		if (config == null) {
-			// TODO Add an alert that the app has not been init yet
-			config = new ScheduleConfig();
-		}
-		testList = config.manual_tests;
-		array_spinner = new String[testList.size() + 1];
-		array_spinner_int = new String[testList.size() + 1];
-
-		for (int i = 0; i < testList.size(); i++) {
-			TestDescription td = testList.get(i);
-			array_spinner[i] = td.displayName;
-			array_spinner_int[i] = td.testId + "";
-			if (Integer.parseInt(array_spinner_int[i]) == StatModel.JITTER_TEST) {
-				defaultIndex = i;
-			}
-		}
-		array_spinner[testList.size()] = getString(R.string.all);
-		array_spinner_int[testList.size()] = "-1";
-		
-        lp.setEntries(array_spinner);
-        lp.setEntryValues(array_spinner_int);
-        if (lp.getValue() == null && defaultIndex >= 0) { // only if not selected
-        	lp.setValueIndex(defaultIndex);
-        }
-}
-	
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
@@ -114,7 +78,8 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 		
 		ListPreference listPreference = (ListPreference) findPreference("continuous_test_id");
 		setListPreferenceData(listPreference);
-		
+		setContinuousTestName(listPreference);
+
 		String versionName="";
 		try {
 			versionName = this.getPackageManager().getPackageInfo(this.getPackageName(), 0 ).versionName;
@@ -157,15 +122,59 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 		
 		ListPreference lp = (ListPreference) findPreference(Constants.PREF_CONTINUOUS_ID);
 		CharSequence continuous_test_name = lp.getEntry();
-		lp.setTitle(getString(R.string.continuous_test_id_title)+ ": "+continuous_test_name);
+		p = (Preference) findPreference(Constants.PREF_CONTINUOUS_TEST_NAME);
+		p.setTitle("Repeating: " + continuous_test_name);
 		
 		int data_cap_day = preferences.getInt(Constants.PREF_DATA_CAP_RESET_DAY, 1);
 		p = (Preference) findPreference(Constants.PREF_DATA_CAP_RESET_DAY);
 		p.setTitle(getString(R.string.data_cap_day_title)+" "+ TimeUtils.getDayOfMonthSuffix(data_cap_day));
-		
 	}
 	
 	
+	protected void setListPreferenceData(ListPreference lp) {
+	    	Storage storage;
+	    	ScheduleConfig config;
+	
+	    	List<TestDescription> testList;
+	    	String array_spinner[];
+	    	String array_spinner_int[];
+	    	int defaultIndex = -1;
+	    	
+			storage = CachingStorage.getInstance();
+			config = storage.loadScheduleConfig();
+			// if config == null the app is not been activate and
+			// no test can be run
+			if (config == null) {
+				// TODO Add an alert that the app has not been init yet
+				config = new ScheduleConfig();
+			}
+			testList = config.manual_tests;
+			array_spinner = new String[testList.size() + 1];
+			array_spinner_int = new String[testList.size() + 1];
+	
+			for (int i = 0; i < testList.size(); i++) {
+				TestDescription td = testList.get(i);
+				array_spinner[i] = td.displayName;
+				array_spinner_int[i] = td.testId + "";
+				if (Integer.parseInt(array_spinner_int[i]) == StatModel.JITTER_TEST) {
+					defaultIndex = i;
+				}
+			}
+			array_spinner[testList.size()] = getString(R.string.all);
+			array_spinner_int[testList.size()] = "-1";
+			
+	        lp.setEntries(array_spinner);
+	        lp.setEntryValues(array_spinner_int);
+	        if (lp.getValue() == null && defaultIndex >= 0) { // only if not selected
+	        	lp.setValueIndex(defaultIndex);
+	        }
+	}
+
+	protected void setContinuousTestName(ListPreference listPreference) {
+		EditTextPreference pref = (EditTextPreference) findPreference(Constants.PREF_CONTINUOUS_TEST_NAME);
+		pref.setText(listPreference.getEntry().toString());
+	}
+
 	@Override
 	protected void onResume(){
 		super.onResume();
@@ -211,6 +220,9 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 		    	t.show();
 		    }
 		}
+		ListPreference listPreference = (ListPreference) findPreference("continuous_test_id");
+		setContinuousTestName(listPreference);
+		
 		updateLabels();
 	}
 	

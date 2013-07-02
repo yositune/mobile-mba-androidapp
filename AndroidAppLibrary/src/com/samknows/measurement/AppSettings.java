@@ -562,7 +562,7 @@ public class AppSettings {
 		long ret = Long.MAX_VALUE;
 		long configInterval = getLong(Constants.PREF_CONTINUOUS_INTERVAL,-1);
 		
-		long preferenceInterval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_INTERVAL, "-1")); //in seconds
+		long preferenceInterval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_INTERVAL, R.string.negative_one+"")); //in seconds
 		if(preferenceInterval>0){
 			ret = preferenceInterval * 1000;
 		}else if(configInterval > 0){
@@ -571,7 +571,7 @@ public class AppSettings {
 		return ret;
 	}
 	
-	/*public String getContinuousTestName() {
-		getString("test", "test");
-	}*/
+	public String getContinuousTestName() {
+		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_TEST_NAME, null);
+	}
 }
