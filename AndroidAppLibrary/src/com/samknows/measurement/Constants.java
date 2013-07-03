@@ -58,6 +58,8 @@ public class Constants {
 	
 	public static final long SUBMITED_LOGS_MAX_SIZE = 5 * 1024 * 1024; //in bytes
 	
+	public static final long CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT = 35 * 1000; // 35 sec
+	
 	public static int RC_SCHEDULE_TEST = 0;
 	public static int RC_NOTIFICATION = 1;
 	

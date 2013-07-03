@@ -538,11 +538,13 @@ public class AppSettings {
 		long ret = Long.MAX_VALUE;
 		long configInterval = getLong(Constants.PREF_CONTINUOUS_INTERVAL,-1);
 		
-		long preferenceInterval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_INTERVAL, R.string.negative_one+"")); //in seconds
-		if(preferenceInterval>0){
-			ret = preferenceInterval * 1000;
-		}else if(configInterval > 0){
-			ret = configInterval * 1000;
+		long preferenceInterval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_INTERVAL, R.string.negative_one + "")); //in seconds
+		preferenceInterval *= 1000;
+		configInterval *= 1000;
+		if (preferenceInterval>0){
+			ret = (preferenceInterval >= Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT) ? preferenceInterval : Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT;
+		} else if (configInterval > 0){
+			ret = (configInterval >= Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT) ? configInterval : Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT;
 		}
 		return ret;
 	}

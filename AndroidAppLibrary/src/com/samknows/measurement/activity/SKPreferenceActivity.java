@@ -217,6 +217,14 @@ public class SKPreferenceActivity extends PreferenceActivity implements OnShared
 		    	t.show();
 		    }
 		}
+		EditTextPreference p = (EditTextPreference) findPreference(Constants.PREF_CONTINUOUS_INTERVAL);
+		String inputInterval = p.getText();
+		if (Long.parseLong(inputInterval) * 1000 < Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT) {
+			p.setText((Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT/1000)+"");
+			Toast t = Toast.makeText(SKPreferenceActivity.this, getString(R.string.continuous_interval_warn), Toast.LENGTH_SHORT);
+	    	t.show();
+		}
+		
 		ListPreference listPreference = (ListPreference) findPreference("continuous_test_id");
 		setContinuousTestName(listPreference);
 		

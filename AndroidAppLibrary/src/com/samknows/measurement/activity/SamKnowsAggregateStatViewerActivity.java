@@ -308,11 +308,6 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		}
 		AppSettings appSettings = AppSettings.getInstance();
 		if (appSettings.isContinuousEnabled()) {
-			PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, new Intent(
-					SamKnowsAggregateStatViewerActivity.this,
-					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-			manager.cancel(pending_intent);
 			Log.d(this.toString(), "Continuous is Enabled.");
 			Toast remindContinuous = Toast.makeText(SamKnowsAggregateStatViewerActivity.this, "Continuous is enabled.", Toast.LENGTH_LONG);
 			remindContinuous.show();
@@ -1075,7 +1070,15 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			LoginHelper.logout(this);
 			this.finish();
 			ret = true;
-		} else {
+		} else if (R.id.cancel_continuous_tests == itemId) {
+			PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, new Intent(
+					SamKnowsAggregateStatViewerActivity.this,
+					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+			manager.cancel(pending_intent);
+			ret = true;
+		}
+		else {
 			ret = super.onOptionsItemSelected(item);
 		}
 		return ret;
