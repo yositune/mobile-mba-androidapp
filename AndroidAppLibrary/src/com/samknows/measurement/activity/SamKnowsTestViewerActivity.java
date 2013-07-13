@@ -31,7 +31,10 @@ package com.samknows.measurement.activity;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,6 +49,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.samknows.measurement.AppSettings;
 import com.samknows.measurement.CachingStorage;
+import com.samknows.measurement.Constants;
 import com.samknows.measurement.Logger;
 import com.samknows.measurement.ManualTest;
 import com.samknows.measurement.Storage;
@@ -581,6 +585,15 @@ public class SamKnowsTestViewerActivity extends BaseLogoutActivity {
 								result = 0;
 								SamKnowsTestViewerActivity.this.finish();
 								overridePendingTransition(0, 0);
+								AppSettings appSettings = AppSettings.getInstance();
+								if (appSettings.isContinuousEnabled()) {
+									PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsTestViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, new Intent(
+											SamKnowsTestViewerActivity.this,
+											SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+									AlarmManager manager = (AlarmManager) (SamKnowsTestViewerActivity.this).getSystemService(Context.ALARM_SERVICE);
+									manager.cancel(pending_intent);
+								}
 							}
 						})
 				.setNegativeButton(getString(R.string.no_dialog),

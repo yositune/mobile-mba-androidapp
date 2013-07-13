@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package com.samknows.measurement.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,10 +37,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,9 +52,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.ListPreference;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -69,12 +75,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.samknows.measurement.AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.Constants;
 import com.samknows.measurement.DeviceDescription;
 import com.samknows.measurement.Logger;
 import com.samknows.measurement.MainService;
+import com.samknows.measurement.ManualTest;
 import com.samknows.measurement.R;
 import com.samknows.measurement.SamKnowsLoginService;
 import com.samknows.measurement.SamKnowsResponseHandler;
@@ -184,10 +193,14 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 	List<TestDescription> testList;
 	String array_spinner[];
 	int array_spinner_int[];
+	AlarmManager manager;
+	AppSettings appSettings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
 		/*
 		 * device = (DeviceDescription) getIntent().getSerializableExtra(
@@ -293,6 +306,17 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			viewPager = (ViewPager) findViewById(R.id.viewPager);
 			viewPager.setAdapter(adapter);
 		}
+		AppSettings appSettings = AppSettings.getInstance();
+		if (appSettings.isContinuousEnabled()) {
+			PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, new Intent(
+					SamKnowsAggregateStatViewerActivity.this,
+					SamKnowsTestViewerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+			manager.cancel(pending_intent);
+			Log.d(this.toString(), "Continuous is Enabled.");
+			Toast remindContinuous = Toast.makeText(SamKnowsAggregateStatViewerActivity.this, "Continuous is enabled.", Toast.LENGTH_LONG);
+			remindContinuous.show();
+		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -304,7 +328,9 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 			viewPager.setCurrentItem(1, false);
 			overridePendingTransition(0, 0);
 		}
+		
 
+		
 		/*
 		 * if (resultCode>0){
 		 * 
@@ -1693,7 +1719,7 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 	}
 
 	private void RunChoice() {
-
+		appSettings = AppSettings.getInstance();
 		storage = CachingStorage.getInstance();
 		config = storage.loadScheduleConfig();
 		// if config == null the app is not been activate and
@@ -1717,20 +1743,45 @@ public class SamKnowsAggregateStatViewerActivity extends BaseLogoutActivity
 		}
 		array_spinner[testList.size()] = getString(R.string.all);
 		array_spinner_int[testList.size()] = -1;
+		
+		if (appSettings.isContinuousEnabled()) {
+			/*ListPreference lp = (ListPreference) findPreference(Constants.PREF_CONTINUOUS_ID);
+			CharSequence continuous_test_name = lp.getEntry();*/
+			
+			array_spinner = Arrays.copyOf(array_spinner, testList.size() + 1);
+			array_spinner_int = Arrays.copyOf(array_spinner_int, testList.size() + 1);
+			array_spinner[array_spinner.length - 1] = getString(R.string.continuous) + " " + appSettings.getContinuousTestName();
+			array_spinner_int[array_spinner_int.length - 1] = -2;
+		}
 
 		builder.setItems(array_spinner, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 
 				dialog.dismiss();
-
+				
 				Intent intent = new Intent(
 						SamKnowsAggregateStatViewerActivity.this,
 						SamKnowsTestViewerActivity.class);
 				Bundle b = new Bundle();
-				b.putInt("testID", array_spinner_int[which]);
-				intent.putExtras(b);
+				
+				if (array_spinner_int[which] == -2) { // continuous should be enabled at this if statement
+					b.putInt("testID", appSettings.getContinuousTestId());
+				}
+				else {
+					b.putInt("testID", array_spinner_int[which]);
+				}
+
+				intent.putExtras(b);				
 				startActivityForResult(intent, 1);
+				
+				if (appSettings.isContinuousEnabled() && array_spinner_int[which] == -2) {
+					long time = appSettings.getContinuousInterval();
+					long millis = System.currentTimeMillis() + time;
+					PendingIntent pending_intent = PendingIntent.getActivity(SamKnowsAggregateStatViewerActivity.this, Constants.CONTINUOUS_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+					manager.setRepeating(AlarmManager.RTC, millis, time, pending_intent);
+				}
+
 				overridePendingTransition(R.anim.transition_in,
 						R.anim.transition_out);
 			}

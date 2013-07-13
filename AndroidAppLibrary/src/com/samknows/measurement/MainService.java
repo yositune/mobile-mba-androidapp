@@ -35,6 +35,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.util.Log;
 
 import com.samknows.measurement.activity.components.UIUpdate;
 import com.samknows.measurement.environment.TrafficStatsCollector;
@@ -97,7 +98,6 @@ public class MainService extends IntentService {
 			publish(UIUpdate.completed());
 			isExecuting = false;
 		}
-		
 	}
 
 	
