@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package com.samknows.measurement.test;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.HashMap;
 
@@ -298,10 +299,16 @@ public class TestExecutor {
 		}
 		for (BaseDataCollector collector : tc.config.dataCollectors) {
 			if (collector.isEnabled) {
+				try {
 				collector.stop(tc);
 				// TestResultsManager.saveResult(tc.getServiceContext(),
 				// collector.getOutput());
 				rc.addMetric(collector.getJSONOutput());
+				}
+				catch (ConcurrentModificationException e) {
+					Logger.e(this,
+							"Exception while stopping data collector");
+				}
 			}
 		}
 	}

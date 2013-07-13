@@ -43,6 +43,7 @@ public class Constants {
 	public static long WAIT_TEST_BEFORE_ABORT = 600000; //Wait time before kill a test being executing in millis currently 10 min
 	
 	public static final int NOTIFICATION_ID = 1;
+	public static final int CONTINUOUS_REQUEST_CODE = 9001;
 	
 	public static final long SERVICE_RESCHEDULE_IF_ROAMING = 24 * 3600 * 1000; //1 day
 	
@@ -56,6 +57,8 @@ public class Constants {
 	public static final int CONNECTION_TIMEOUT_MILLIS = 30 * 1000;//30sec
 	
 	public static final long SUBMITED_LOGS_MAX_SIZE = 5 * 1024 * 1024; //in bytes
+	
+	public static final long CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT = 35 * 1000; // 35 sec
 	
 	public static int RC_SCHEDULE_TEST = 0;
 	public static int RC_NOTIFICATION = 1;
@@ -116,6 +119,10 @@ public class Constants {
 	public static final String PREF_ENABLE_WAKEUP = "enable_wakeup";
 	public static final String PREF_LOCATION_TYPE = "location_type";
 	public static final String PREF_USER_SELF_ID = "user_self_id";
+	public static final String PREF_CONTINUOUS_ENABLED = "enable_continuous";
+	public static final String PREF_CONTINUOUS_INTERVAL = "continuous_interval_pref";
+	public static final String PREF_CONTINUOUS_ID = "continuous_test_id";
+	public static final String PREF_CONTINUOUS_TEST_NAME = "continuous_test_name";
 	public static String PREF_DATA_CAP_RESET_DAY = "data_cap_reset_day";
 	
 	public static String STATE_MACHINE_STATUS = "state_machine_status";
