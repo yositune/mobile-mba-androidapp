@@ -47,6 +47,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.samknows.measurement.schedule.ScheduleConfig;
 import com.samknows.measurement.schedule.ScheduleConfig.LocationType;
@@ -196,6 +197,10 @@ public class AppSettings {
 		return ctx.getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE).getLong(key, defValue);
 	}
 	
+	public int getInt(String key, int defValue) {
+		return ctx.getSharedPreferences(Constants.PREF_FILE_NAME, Context.MODE_PRIVATE).getInt(key, defValue);
+	}
+	
 	public String getUnitId() {
 		return getString(Constants.PREF_KEY_UNIT_ID);
 	}
@@ -240,6 +245,38 @@ public class AppSettings {
 
 	public boolean isServiceEnabled() {
 		return PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean(Constants.PREF_SERVICE_ENABLED, true);
+	}
+	
+	public boolean isContinuousEnabled(){
+		boolean ret = false;
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
+		if (p.contains(Constants.PREF_CONTINUOUS_ENABLED)){
+			ret =  p.getBoolean(Constants.PREF_CONTINUOUS_ENABLED, false);
+		} else{
+			ret = getBoolean("continuous_test",false);
+		}
+		return ret;
+		
+	}
+	
+	public int getContinuousTestId() {
+		int ret = Integer.MIN_VALUE;
+		String temp;
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
+		if (p.contains(Constants.PREF_CONTINUOUS_ID)){
+			temp =  p.getString(Constants.PREF_CONTINUOUS_ID, null);
+		} else{
+			temp = getString("continuous_test_id", null);
+		}
+		if (temp != null) {
+			try {
+				ret = Integer.parseInt(temp);
+			} catch (Exception e) {
+				ret = Integer.MIN_VALUE;
+			}
+		}
+		
+		return ret;
 	}
 	
 	public void setServiceEnabled(boolean enabled) {
@@ -495,5 +532,24 @@ public class AppSettings {
 	
 	public String getResourceString(int id){
 		return ctx.getString(id);
+	}
+	
+	public long getContinuousInterval() {
+		long ret = Long.MAX_VALUE;
+		long configInterval = getLong(Constants.PREF_CONTINUOUS_INTERVAL,-1);
+		
+		long preferenceInterval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_INTERVAL, R.string.negative_one + "")); //in seconds
+		preferenceInterval *= 1000;
+		configInterval *= 1000;
+		if (preferenceInterval>0){
+			ret = (preferenceInterval >= Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT) ? preferenceInterval : Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT;
+		} else if (configInterval > 0){
+			ret = (configInterval >= Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT) ? configInterval : Constants.CONTINUOUS_TEST_INTERVAL_LOWER_LIMIT;
+		}
+		return ret;
+	}
+	
+	public String getContinuousTestName() {
+		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(Constants.PREF_CONTINUOUS_TEST_NAME, null);
 	}
 }
