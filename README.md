@@ -13,3 +13,10 @@ The FCC Measuring Broadband America (MBA) Program's Mobile Measurement Effort de
 
 Data related to the radio characteristics of the handset, information about the handset type and operating system (OS) version, the GPS coordinates available from the handset at the time each test is run, the date and time of the observation, and the results of active test results are recorded on the handset in JSON(JavaScript Object Notation) nested data elements within flat files.  These JSON files are then transmitted to storage servers at periodic intervals after the completion of active test measurements.
 
+============================================
+
+Build Explanations:
+
+    gb  General Build: This build is the baseline application.
+    cb  Carrier Build: This build includes an option to add a self-identifier for debugging and testing purposes.
+    mt  Manual Test: This build turns off automatic testing by default. Users of this build can turn the automatic testing on themselves.
