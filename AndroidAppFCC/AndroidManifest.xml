@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.samknows.measurement" android:versionCode="124"
-	android:versionName="1.24">
-
+	package="com.samknows.measurement" android:versionCode="139"
+	android:versionName="1.39">
 	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,23 +10,22 @@
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.GET_TASKS" />
 	<uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 	<uses-permission android:name="com.samknows.measurement.permission.MAPS_RECEIVE"
 		android:protectionLevel="signature" />
-
 	<uses-permission android:name="com.samknows.measurement.permission.MAPS_RECEIVE" />
-	<uses-permission
-		android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
 
-	<uses-feature android:glEsVersion="0x00020000"
-		android:required="true" />
+	<uses-feature android:glEsVersion="0x00020000" android:required="true" />
+	
 
-	<application android:name="com.samknows.measurement.SKApplication"
+	<application android:name="FCCApplication"
 		android:icon="@drawable/icon" android:theme="@style/ApplicationStyle"
 		android:label="@string/app_name">
 
@@ -86,6 +84,7 @@
 		</activity>
 
 		<activity
+		    android:launchMode="singleTask"
 			android:name="com.samknows.measurement.activity.SamKnowsAggregateStatViewerActivity"
 			android:screenOrientation="portrait">
 		</activity>
@@ -116,8 +115,8 @@
 			
 		</activity>
 
-		<service android:name="com.samknows.measurement.MainService">
-		</service>
+		<service android:name="com.samknows.measurement.MainService" />
+		<service android:name="com.samknows.measurement.NetUsageService" />
 		<service android:name="com.samknows.measurement.SamKnowsLoginService" />
 
 		<receiver android:name="com.samknows.measurement.StartupReceiver">
@@ -134,6 +133,8 @@
 		</receiver>
 		<meta-data android:name="com.google.android.maps.v2.API_KEY"
 			android:value="AIzaSyDn7BqOmJxn6WBiao32nbrCKxpoS_tfh7w" />
+		
+		<meta-data android:name="com.crashlytics.ApiKey" android:value="dd477e7baf9c47c9aadb6e29bb7ac545c607c0a5"/>
 
 	</application>
 

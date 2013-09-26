@@ -51,3 +51,4 @@ proguard/
 # Temporary Files
 *.swp
 *~
+org.eclipse.jdt.core.prefs

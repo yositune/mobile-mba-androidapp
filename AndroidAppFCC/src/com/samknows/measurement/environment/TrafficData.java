@@ -1,0 +1,128 @@
+package com.samknows.measurement.environment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.net.TrafficStats;
+
+public class TrafficData implements DCSData {
+	public static final String JSON_TYPE_NETUSAGE	= "net_usage";
+	public static final String JSON_MOBILERXBYTES	= "mobile_rx_bytes";
+	public static final String JSON_MOBILETXBYTES	= "mobile_tx_bytes";
+	public static final String JSON_TOTALRXBYTES 	= "total_rx_bytes";
+	public static final String JSON_TOTALTXBYTES 	= "total_tx_bytes";
+	public static final String JSON_APPRXBYTES	 	= "app_rx_bytes";
+	public static final String JSON_APPTXBYTES 		= "app_tx_bytes";
+	
+	
+	public long mobileRxBytes = 0;
+	public long mobileTxBytes = 0;
+	public long totalRxBytes = 0;
+	public long totalTxBytes = 0;
+	public long appRxBytes = 0;
+	public long appTxBytes = 0;
+	public long time = 0;
+	
+	
+	public TrafficData(){}
+		
+	public static TrafficData interval(TrafficData a, TrafficData b){
+		TrafficData end = a.time > b.time ? a : b;
+		TrafficData start = a.time <= b.time ? a : b;
+		TrafficData ret = new TrafficData();
+		
+		ret.mobileRxBytes = statDiff(end.mobileRxBytes, start.mobileRxBytes);
+		ret.mobileTxBytes = statDiff(end.mobileTxBytes, start.mobileTxBytes);
+		ret.totalRxBytes = statDiff(end.totalRxBytes, start.totalRxBytes);
+		ret.totalTxBytes = statDiff(end.totalTxBytes, start.totalTxBytes);
+		ret.appRxBytes = statDiff(end.appRxBytes, start.appRxBytes);
+		ret.appTxBytes = statDiff(end.appTxBytes, start.appTxBytes);
+		ret.time = start.time;
+		return ret;
+	}
+	
+	private static long statDiff(long a, long b){
+		return (a == TrafficStats.UNSUPPORTED || b == TrafficStats.UNSUPPORTED ) ? TrafficStats.UNSUPPORTED : a - b;
+	}
+	
+	private static long statSum(long a, long b){
+		return (a == TrafficStats.UNSUPPORTED || b == TrafficStats.UNSUPPORTED ) ? TrafficStats.UNSUPPORTED : a + b;
+	}
+		
+	public void add(TrafficData td){
+		time = td.time;
+		appRxBytes = statSum(appRxBytes, td.appRxBytes);
+		appTxBytes = statSum(appTxBytes, td.appTxBytes);
+		mobileRxBytes = statSum(mobileRxBytes,td.mobileRxBytes);
+		mobileTxBytes = statSum(mobileTxBytes, td.mobileTxBytes);
+		totalRxBytes = statSum(totalRxBytes, td.totalRxBytes);
+		totalTxBytes = statSum(totalTxBytes, td.totalTxBytes);
+	}
+	
+	public boolean checkCondition(long bytesIn, long bytesOut){
+		return totalRxBytes <= bytesIn && totalTxBytes <= bytesOut;
+	}
+	
+	public static TrafficData extractList(List<TrafficData> list){
+		TrafficData ret = new TrafficData();
+		for(int i = 1; i < list.size(); i++){
+			ret.add(delta(list.get(i-1),list.get(i)));	
+		}
+		return ret;
+	}
+	
+	
+	private static TrafficData delta(TrafficData a, TrafficData b){
+		TrafficData zero = new TrafficData();
+		if(a.time >= b.time)
+			return zero;
+		if(a.appRxBytes > b.appRxBytes)
+			return zero;
+		if(a.appTxBytes > b.appTxBytes)
+			return zero;
+		if(a.mobileRxBytes > b.mobileRxBytes)
+			return zero;
+		if(a.mobileTxBytes > b.mobileTxBytes)
+			return zero;
+		if(a.totalRxBytes > b.totalRxBytes )
+			return zero;
+		if(a.totalTxBytes > b.totalTxBytes)
+			return zero;
+		return interval(a,b);
+					
+	}
+	
+	@Override
+	public List<String> convert() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<JSONObject> getPassiveMetric() {
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<JSONObject> convertToJSON() {
+		List<JSONObject> ret = new ArrayList<JSONObject>();
+		HashMap<String, Object> jo = new HashMap<String, Object>();
+		jo.put(JSON_TYPE, JSON_TYPE_NETUSAGE);
+		jo.put(JSON_TIMESTAMP, time/1000);
+		jo.put(JSON_DATETIME, new java.util.Date(time).toString());
+		jo.put(JSON_MOBILERXBYTES, mobileRxBytes);
+		jo.put(JSON_MOBILETXBYTES, mobileTxBytes);
+		jo.put(JSON_TOTALRXBYTES, totalRxBytes);
+		jo.put(JSON_TOTALTXBYTES, totalTxBytes);
+		jo.put(JSON_APPRXBYTES, appRxBytes);
+		jo.put(JSON_APPTXBYTES, appTxBytes);
+		ret.add(new JSONObject(jo));
+		return ret;
+	}
+	
+}
