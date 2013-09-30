@@ -20,7 +20,8 @@ Build Explanations:
     gb  General Build: This build is the baseline application.
     cb  Carrier Build: This build includes an option to add a self-identifier for debugging and testing purposes.
     mt  Manual Test: This build turns off automatic testing by default. Users of this build can turn the automatic testing on themselves.
-
+    rc  Release Candidate: This build is a public release candidate and a branch of the General Build source tree.
+    
 ## About Data Collected
 
 For more about the data collected see:
