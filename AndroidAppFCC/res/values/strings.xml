@@ -200,9 +200,9 @@
 	<string name="latest">Latest</string>
 	<string name="average">Average</string>
 	<string name="average_results">Average Results</string>
-	<string name="average_results_title">Average Results</string>
+	<string name="fcc_main_results_activity_title">FCC Speed Test</string>
 	<string name="archive_result">Archived Result</string>
-	<string name="choose_test">Choose Test?</string>
+	<string name="choose_test">Choose Test</string>
 	<string name="server">Server</string>
 
 
@@ -318,7 +318,7 @@
 	<string name="data_used_preference_summary">The amount of mobile data (excluding WiFi) used by
 		this application since the start of this billing month.</string>
 	<string name="data_used_preference_title">Data Used</string>
-	<string name="preferences_title">SamKnows app control</string>
+	<string name="preferences_title">FCC Speed Test Settings</string>
 	<string name="enable_testing_title">Enable Testing</string>
 	<string name="enable_testing_summary">Enable or disable background tests</string>
 	<string name="data_cap_summary">The maximum amount of mobile data in Mega Bytes (excluding WiFi)
@@ -348,9 +348,9 @@
 		to continue?</string>
 	<string name="latency_run_confirmation">This test will use some your data plan. Do you wish
 		to continue?</string>
-	<string name="no_data_message">There is no data. Run a test to gather data.
-	</string>
+	<string name="no_data_message">There is no data. Please run your first test.</string>
 	<string name="last_run">Test Last Run:</string>
+	<string name="last_run_never">Never</string>
 	<string name="passive_metrics">Passive Metrics</string>
 	<string name="active_metrics">Active Metrics</string>
 	<string name="Welcome">Welcome</string>
@@ -431,4 +431,6 @@
 	<string name="quit">Quit the application?</string>
 	<string name="really_quit">Do you really want to quit this application?</string>
 	<string name="activation_menu_string">Activation</string>
+	<!--   string name="menu_map">Map</string> -->
+	<string name="graphtoggle">Graph?</string>
 </resources>

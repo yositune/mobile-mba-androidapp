@@ -196,14 +196,14 @@ public void setPassiveMetric(int table_id,int text_view,String text, String type
     
     public void setRightPageIndicator(boolean setting)
     {
-    	ImageView iv= (ImageView) findViewById(R.id.page_right_indicater);
-		if (setting){
-			iv.setBackgroundResource(R.drawable.page_turn_right);
-		}
-		else
-		{
-			iv.setBackgroundResource(R.drawable.page_corner_blank);
-		}
+//    	ImageView iv= (ImageView) findViewById(R.id.page_right_indicater);
+//		if (setting){
+//			iv.setBackgroundResource(R.drawable.page_turn_right);
+//		}
+//		else
+//		{
+//			iv.setBackgroundResource(R.drawable.page_corner_blank);
+//		}
     }
     
 

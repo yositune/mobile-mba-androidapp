@@ -11,7 +11,7 @@ import com.samknows.libcore.SKConstants;
 public class BaseLogoutActivity extends SamKnowsBaseActivity {
 	private BroadcastReceiver receiver;
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 

@@ -3,7 +3,6 @@ package com.samknows.measurement;
 import java.io.File;
 
 import com.samknows.libcore.SKLogger;
-import com.samknows.measurement.statemachine.State;
 import com.samknows.measurement.test.TestResultsManager;
 
 import android.app.Application;

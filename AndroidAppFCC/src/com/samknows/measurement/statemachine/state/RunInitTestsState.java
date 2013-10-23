@@ -25,7 +25,7 @@ public class RunInitTestsState extends BaseState{
 			SKLogger.e(this, "There is no schedule config");
 			return StateResponseCode.FAIL;
 		}
-		TestContext testContext = TestContext.create(ctx);
+		TestContext testContext = TestContext.createBackgroundTestContext(ctx);
 		TestExecutor initTestExecutor = new TestExecutor(testContext);
 		initTestExecutor.startInBackGround();
 		for (String type : sc.initTestTypes) {

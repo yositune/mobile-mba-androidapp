@@ -1,0 +1,857 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/screenBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout1"
+            style="@style/screenBackground"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/average_results_title"
+                    style="@style/h1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:background="#ffffff"
+                    android:gravity="bottom"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/average_results"
+                    android:width="190dp" />
+
+                <TextView
+                    android:id="@+id/TextView04"
+                    style="@style/h1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:padding="10dp"
+                    android:width="800dp" />
+
+                <ImageView
+                    android:id="@+id/page_turn_right_agg"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:contentDescription="@string/page_turn"
+                    android:src="@drawable/page_turn_right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <ImageView
+                    android:id="@+id/no_data_message_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/alert_icon"
+                    android:padding="5dp"
+                    android:src="@drawable/alert_icon" />
+
+                <TextView
+                    android:id="@+id/no_data_message_text"
+                    style="@style/normal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/no_data_message"
+                    android:width="190dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/average_page"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/btnRunTest"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="8dp"
+                        android:alpha="0.8"
+                        android:background="@drawable/btn_run_now_selector"
+                        android:drawableLeft="@drawable/play"
+                        android:drawableRight="@drawable/btn_run"
+                        android:gravity="left|center_vertical"
+                        android:height="800dp"
+                        android:paddingLeft="10dp"
+                        android:text="@string/run_now"
+                        android:textColor="#ffffff" >
+                    </Button>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ImageView03"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAlignBottom="false"
+                    android:contentDescription="@string/line_break"
+                    android:cropToPadding="false"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/pagedrop" />
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp" >
+
+                    <LinearLayout
+                        android:id="@+id/last_run"
+                        android:layout_width="144dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentTop="true"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/TextView01"
+                            android:layout_width="132dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/last_run"
+                            android:textColor="#aaaaaa"
+                            android:textSize="18sp"
+                            android:width="190dp" />
+
+                        <TextView
+                            android:id="@+id/test_last_run"
+                            android:layout_width="132dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:width="190dp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_timeperiod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="2dp"
+                        android:layout_toRightOf="@+id/last_run"
+                        android:background="@drawable/btn_closed_selector"
+                        android:contentDescription="@string/open_panel"
+                        android:height="24dp"
+                        android:minHeight="30dp"
+                        android:minWidth="30dp"
+                        android:paddingBottom="6dp"
+                        android:paddingTop="6dp"
+                        android:textColor="#000000"
+                        android:width="30dp" />
+
+                    <LinearLayout
+                        android:id="@+id/timeperiod_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/btn_timeperiod"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/TextView02"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="right"
+                            android:layout_weight="0.89"
+                            android:contentDescription="@string/results_for"
+                            android:text="@string/results_for"
+                            android:textColor="#aaaaaa"
+                            android:textSize="14sp"
+                            android:width="200dp" />
+
+                        <TextView
+                            android:id="@+id/timeperiod"
+                            android:layout_width="132dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.89"
+                            android:text="@string/time_period_1week"
+                            android:textColor="#000000"
+                            android:width="190dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <TableLayout
+                    android:id="@+id/metric_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" >
+                </TableLayout>
+
+                <LinearLayout
+                    android:id="@+id/download_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/black_alpha"
+                    android:orientation="vertical" >
+
+                    <TableLayout
+                        android:id="@+id/download_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible" >
+
+                        <TableRow
+                            android:id="@+id/tableRow1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <ImageView
+                                android:id="@+id/btn_download_toggle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:background="@drawable/btn_closed_selector"
+                                android:contentDescription="@string/open_panel"
+                                android:minHeight="30dp"
+                                android:minWidth="30dp" />
+
+                            <TextView
+                                android:id="@+id/TextView05"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="3"
+                                android:padding="5dp"
+                                android:text="@string/download_mbps"
+                                android:textColor="#202020"
+                                android:textSize="18sp"
+                                android:width="140dp" />
+
+                            <TextView
+                                android:id="@+id/download_average"
+                                style="@style/column"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:layout_weight="3"
+                                android:padding="5dp"
+                                android:textSize="16sp" />
+                        </TableRow>
+                    </TableLayout>
+
+                    <LinearLayout
+                        android:id="@+id/download_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/downloadCaption"
+                            style="@style/graphCaption" />
+
+                        <WebView
+                            android:id="@+id/download_graph"
+                            style="@style/graphs"
+                            android:visibility="visible" />
+
+                        <TableLayout
+                            android:id="@+id/agggregate_test1_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:visibility="visible" >
+                        </TableLayout>
+
+                        <TableLayout
+                            android:id="@+id/download_grid_nav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="bottom"
+                            android:visibility="visible" >
+
+                            <TableRow
+                                android:id="@+id/download_grid_right"
+                                style="@style/row"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="0dp"
+                                android:gravity="bottom"
+                                android:paddingLeft="0dp" >
+
+                                <Button
+                                    android:id="@+id/btn_download_grid_left"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_left"
+                                    android:contentDescription="@string/previous_grid"
+                                    android:height="30dp"
+                                    android:minHeight="30dp"
+                                    android:minWidth="30dp"
+                                    android:textColor="#000000" />
+
+                                <TextView
+                                    android:id="@+id/download_pagenumber"
+                                    style="@style/normal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="10"
+                                    android:gravity="center_horizontal"
+                                    android:padding="5dp"
+                                    android:text="" />
+
+                                <Button
+                                    android:id="@+id/btn_download_grid_right"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_right"
+                                    android:contentDescription="@string/next_grid"
+                                    android:height="30dp"
+                                    android:minHeight="30dp"
+                                    android:minWidth="30dp"
+                                    android:textColor="#000000" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/upload_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/black_alpha"
+                    android:orientation="vertical" >
+
+                    <TableLayout
+                        android:id="@+id/upload_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TableRow
+                            android:id="@+id/TableRow12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <ImageView
+                                android:id="@+id/btn_upload_toggle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:background="@drawable/btn_closed_selector"
+                                android:contentDescription="@string/open_panel"
+                                android:minHeight="16dp"
+                                android:minWidth="16dp" />
+
+                            <TextView
+                                android:id="@+id/TextView06"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="3"
+                                android:padding="5dp"
+                                android:text="@string/upload_mbps"
+                                android:textColor="#202020"
+                                android:textSize="18sp"
+                                android:width="140dp" />
+
+                            <TextView
+                                android:id="@+id/upload_average"
+                                style="@style/column"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:layout_weight="7"
+                                android:padding="5dp"
+                                android:textSize="16sp" />
+                        </TableRow>
+                    </TableLayout>
+
+                    <LinearLayout
+                        android:id="@+id/upload_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:id="@+id/uploadCaption"
+                            style="@style/graphCaption" />
+
+                        <WebView
+                            android:id="@+id/upload_graph"
+                            style="@style/graphs" />
+
+                        <TableLayout
+                            android:id="@+id/agggregate_test2_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left" >
+                        </TableLayout>
+
+                        <TableLayout
+                            android:id="@+id/upload_grid_nav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <TableRow
+                                android:id="@+id/TableRow04"
+                                style="@style/row"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="0dp"
+                                android:paddingLeft="0dp" >
+
+                                <Button
+                                    android:id="@+id/btn_upload_grid_left"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_left"
+                                    android:contentDescription="@string/previous_grid"
+                                    android:height="30dp"
+                                    android:minHeight="30dp"
+                                    android:minWidth="30dp"
+                                    android:textColor="#000000" />
+
+                                <TextView
+                                    android:id="@+id/upload_pagenumber"
+                                    style="@style/normal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="10"
+                                    android:gravity="center_horizontal"
+                                    android:padding="5dp"
+                                    android:text="" />
+
+                                <Button
+                                    android:id="@+id/btn_upload_grid_right"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_right"
+                                    android:contentDescription="@string/next_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/latency_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/black_alpha"
+                    android:orientation="vertical" >
+
+                    <TableLayout
+                        android:id="@+id/latency_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TableRow
+                            android:id="@+id/TableRow03"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <ImageView
+                                android:id="@+id/btn_latency_toggle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:background="@drawable/btn_closed_selector"
+                                android:contentDescription="@string/open_panel"
+                                android:minHeight="16dp"
+                                android:minWidth="16dp" />
+
+                            <TextView
+                                android:id="@+id/TextView07"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="3"
+                                android:padding="5dp"
+                                android:text="@string/latency_ms"
+                                android:textColor="#202020"
+                                android:textSize="18sp"
+                                android:width="140dp" />
+
+                            <TextView
+                                android:id="@+id/latency_average"
+                                style="@style/column"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:layout_weight="7"
+                                android:padding="5dp"
+                                android:textSize="16sp" />
+                        </TableRow>
+                    </TableLayout>
+
+                    <LinearLayout
+                        android:id="@+id/latency_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:id="@+id/latencyCaption"
+                            style="@style/graphCaption" />
+
+                        <WebView
+                            android:id="@+id/latency_graph"
+                            style="@style/graphs" />
+
+                        <TableLayout
+                            android:id="@+id/agggregate_test3_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left" >
+                        </TableLayout>
+
+                        <TableLayout
+                            android:id="@+id/latency_grid_nav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="0dp" >
+
+                            <TableRow
+                                android:id="@+id/TableRow05"
+                                style="@style/row"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="0dp"
+                                android:paddingLeft="0dp" >
+
+                                <Button
+                                    android:id="@+id/btn_latency_grid_left"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_left"
+                                    android:contentDescription="@string/previous_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+
+                                <TextView
+                                    android:id="@+id/latency_pagenumber"
+                                    style="@style/normal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="10"
+                                    android:gravity="center_horizontal"
+                                    android:padding="5dp"
+                                    android:text="" />
+
+                                <Button
+                                    android:id="@+id/btn_latency_grid_right"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_right"
+                                    android:contentDescription="@string/next_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/packetloss_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/black_alpha"
+                    android:orientation="vertical" >
+
+                    <TableLayout
+                        android:id="@+id/packetloss_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TableRow
+                            android:id="@+id/TableRow02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <ImageView
+                                android:id="@+id/btn_packetloss_toggle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:background="@drawable/btn_closed_selector"
+                                android:contentDescription="@string/open_panel"
+                                android:minHeight="16dp"
+                                android:minWidth="16dp" />
+
+                            <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="3"
+                                android:padding="5dp"
+                                android:text="@string/p_loss"
+                                android:textColor="#202020"
+                                android:textSize="18sp"
+                                android:width="140dp" />
+
+                            <TextView
+                                android:id="@+id/packetloss_average"
+                                style="@style/column"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:layout_weight="7"
+                                android:padding="5dp"
+                                android:textSize="16sp" />
+                        </TableRow>
+                    </TableLayout>
+
+                    <LinearLayout
+                        android:id="@+id/packetloss_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:id="@+id/packetlossCaption"
+                            style="@style/graphCaption" />
+
+                        <WebView
+                            android:id="@+id/packetloss_graph"
+                            style="@style/graphs" />
+
+                        <TableLayout
+                            android:id="@+id/agggregate_test4_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left" >
+                        </TableLayout>
+
+                        <TableLayout
+                            android:id="@+id/packetloss_grid_nav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="0dp" >
+
+                            <TableRow
+                                android:id="@+id/TableRow06"
+                                style="@style/row"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="0dp"
+                                android:paddingLeft="0dp" >
+
+                                <Button
+                                    android:id="@+id/btn_packetloss_grid_left"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_left"
+                                    android:contentDescription="@string/previous_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+
+                                <TextView
+                                    android:id="@+id/packetloss_pagenumber"
+                                    style="@style/normal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="10"
+                                    android:gravity="center_horizontal"
+                                    android:padding="5dp"
+                                    android:text="" />
+
+                                <Button
+                                    android:id="@+id/btn_packetloss_grid_right"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_right"
+                                    android:contentDescription="@string/next_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/jitter_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/black_alpha"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+
+                    <TableLayout
+                        android:id="@+id/jitter_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TableRow
+                            android:id="@+id/TableRow01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <ImageView
+                                android:id="@+id/btn_jitter_toggle"
+                                style="?android:attr/buttonStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/btn_down"
+                                android:contentDescription="@string/open_panel"
+                                android:minHeight="16dp"
+                                android:minWidth="16dp" />
+
+                            <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="3"
+                                android:padding="5dp"
+                                android:text="@string/jitter_ms"
+                                android:textColor="#202020"
+                                android:textSize="18sp"
+                                android:width="140dp" />
+
+                            <TextView
+                                android:id="@+id/jitter_average"
+                                style="@style/column"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:layout_weight="7"
+                                android:padding="5dp"
+                                android:textSize="16sp" />
+                        </TableRow>
+                    </TableLayout>
+
+                    <LinearLayout
+                        android:id="@+id/jitter_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:id="@+id/jitterCaption"
+                            style="@style/graphCaption" />
+
+                        <WebView
+                            android:id="@+id/jitter_graph"
+                            style="@style/graphs" />
+
+                        <TableLayout
+                            android:id="@+id/agggregate_test5_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left" >
+                        </TableLayout>
+
+                        <TableLayout
+                            android:id="@+id/jitter_grid_nav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <TableRow
+                                android:id="@+id/TableRow07"
+                                style="@style/row"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="0dp"
+                                android:paddingLeft="0dp" >
+
+                                <Button
+                                    android:id="@+id/btn_jitter_grid_left"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_left"
+                                    android:contentDescription="@string/previous_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+
+                                <TextView
+                                    android:id="@+id/jitter_pagenumber"
+                                    style="@style/normal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="10"
+                                    android:gravity="center_horizontal"
+                                    android:padding="5dp"
+                                    android:text="" />
+
+                                <Button
+                                    android:id="@+id/btn_jitter_grid_right"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/btn_right"
+                                    android:contentDescription="@string/next_grid"
+                                    android:height="40dp"
+                                    android:textColor="#000000" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</ScrollView>

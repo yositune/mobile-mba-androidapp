@@ -8,7 +8,6 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;

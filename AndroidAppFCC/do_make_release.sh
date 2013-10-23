@@ -1,5 +1,6 @@
 #!/bin/bash
 
+ant clean
 ant release
 
 lVersion=`grep android.versionName *.xml | sed -e 's/^.*="//' | sed -e 's/".*//'`

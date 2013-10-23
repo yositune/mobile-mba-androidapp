@@ -24,7 +24,7 @@ public class ExecuteScheduledTestQueueState extends BaseState{
 		}
 		
 		Storage storage = CachingStorage.getInstance();
-		TestContext tc = TestContext.create(ctx);
+		TestContext tc = TestContext.createBackgroundTestContext(ctx);
 		
 		ScheduledTestExecutionQueue queue = storage.loadQueue();
 		if (queue == null) {
@@ -33,7 +33,8 @@ public class ExecuteScheduledTestQueueState extends BaseState{
 		} else {
 			queue.setTestContext(tc);
 		}
-		long testRun = queue.execute();
+		
+		long testRun = queue.executeReturnRescheduleDurationMilliseconds();
 		
 		storage.saveExecutionQueue(queue);
 		storage.saveTestParamsManager(tc.paramsManager);

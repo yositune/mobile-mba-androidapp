@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -14,9 +13,6 @@ import org.apache.commons.io.IOUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -28,8 +24,6 @@ import com.samknows.measurement.schedule.ScheduleConfig.LocationType;
 import com.samknows.measurement.schedule.ScheduleConfig.TestAlarmType;
 import com.samknows.measurement.statemachine.State;
 import com.samknows.measurement.util.TimeUtils;
-import com.samknows.measurement.schedule.ScheduleConfig;
-
 import com.samknows.measurement.util.OtherUtils;
 
 public class FCCAppSettings extends SKAppSettings {

@@ -13,9 +13,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.environment.TrafficData;
+import com.samknows.measurement.util.OtherUtils;
 
 //Helper class for accessing the data stored in the SQLite DB
 //It Exposes only the methods to populate the Interface
@@ -733,6 +735,11 @@ public class DBHelper {
 				.append("'");
 		sb.append(" AND ").append(SKSQLiteHelper.PM_COLUMN_VALUE)
 				.append("= 'mobile' ");
+		// The following line could be used as debugging hack, to allow us to display
+		// data captured on WiFi in the UI's graphs!
+		if (OtherUtils.isThisDeviceAnEmulator() == true) {
+		    sb = new StringBuilder(); sb.append("1 = 1"); Log.w(getClass().getName(), "EMULATOR : WARNING: Hack - showing WiFi data in graphs, to make testing easier!");
+		}
 		return sb.toString();
 	}
 

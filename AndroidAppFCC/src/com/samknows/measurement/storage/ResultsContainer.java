@@ -12,15 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.FCCAppSettings;
 import com.samknows.measurement.schedule.TestDescription;
 import com.samknows.measurement.schedule.condition.Condition;
-import com.samknows.measurement.schedule.condition.ConditionGroup;
-import com.samknows.measurement.test.TestContext;
-import com.samknows.tests.HttpTest;
 import com.samknows.tests.Param;
 import com.samknows.tests.TestFactory;
 

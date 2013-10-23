@@ -68,14 +68,14 @@ public class OtherUtils {
 		}
 	}
 
-	public static void reschedule(Context ctx, long time){
-		long actualTime;
+	public static void reschedule(Context ctx, long timeDurationMilliseconds){
+		long actualSystemTimeMilliseconds;
 		if(FCCAppSettings.getInstance().isWakeUpEnabled()){
-			actualTime = rescheduleWakeup(ctx, time);
+			actualSystemTimeMilliseconds = rescheduleWakeup(ctx, timeDurationMilliseconds);
 		}else{
-			actualTime = rescheduleRTC(ctx, time);
+			actualSystemTimeMilliseconds = rescheduleRTC(ctx, timeDurationMilliseconds);
 		}
-		SKLogger.d(ctx,  "Rescheduled in "+actualTime+" ms");
+		SKLogger.d(ctx,  "Rescheduled to "+ (actualSystemTimeMilliseconds - System.currentTimeMillis()) +" ms from now...");
 	}
 
 	public static long rescheduleRTC(Context ctx, long time) {
@@ -88,12 +88,12 @@ public class OtherUtils {
 		SKLogger.d(OtherUtils.class, "+++++DEBUG+++++ schedule RTC for " + time/1000 + "s from now");
 		PendingIntent intent = PendingIntent.getService(ctx, 0, new Intent(ctx, MainService.class), PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-		long millis = System.currentTimeMillis() + time;
+		long systemTimeMilliseconds = System.currentTimeMillis() + time;
 
 		// AlarmManager.RTC - This does NOT wake-up the device if it is asleep.
-		manager.set(AlarmManager.RTC, millis, intent);
-		FCCAppSettings.getInstance().saveNextRunTime(millis);
-		return millis;
+		manager.set(AlarmManager.RTC, systemTimeMilliseconds, intent);
+		FCCAppSettings.getInstance().saveNextRunTime(systemTimeMilliseconds);
+		return systemTimeMilliseconds;
 	}
 
 	public static void cancelAlarm(Context ctx){
@@ -111,19 +111,19 @@ public class OtherUtils {
 	public static long rescheduleWakeup(Context ctx, long time) {
 		SKLogger.d(OtherUtils.class, "+++++DEBUG+++++ rescheduleWakeup time=" + time);
 		time = checkRescheduleTime(time);
-		SKLogger.d(OtherUtils.class, "+++++DEBUG+++++ time immediately overridden (by) = checkRescheduleTime to" + time);
+		SKLogger.d(OtherUtils.class, "+++++DEBUG+++++ time immediately overridden (by) = checkRescheduleTime to " + time);
 
 		//time = 60000; Logger.d(OtherUtils.class, "+++++DEBUG+++++ rescheduleWakeup REMOVE ME!! forced time to time=" + time);
 
 		SKLogger.d(OtherUtils.class, "+++++DEBUG+++++ schedule RTC_WAKEUP for " + time/1000 + "s from now");
 		PendingIntent intent = PendingIntent.getService(ctx, 0, new Intent(ctx, MainService.class), PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-		long millis = System.currentTimeMillis() + time;
+		long systemTimeMilliseconds = System.currentTimeMillis() + time;
 
 		// AlarmManager.RTC_WAKEUP - This DOES wake-up the device if it is asleep.
-		manager.set(AlarmManager.RTC_WAKEUP, millis, intent);
-		FCCAppSettings.getInstance().saveNextRunTime(millis);
-		return millis;
+		manager.set(AlarmManager.RTC_WAKEUP, systemTimeMilliseconds, intent);
+		FCCAppSettings.getInstance().saveNextRunTime(systemTimeMilliseconds);
+		return systemTimeMilliseconds;
 	}
 
 	//if the reschedule time is less than the testStart window play it safe an reschedule the main service for the 

@@ -12,6 +12,7 @@ import android.app.ActivityManager.RunningTaskInfo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.util.Log;
 
 public class SamKnowsBaseActivity extends Activity {
@@ -86,5 +87,67 @@ public class SamKnowsBaseActivity extends Activity {
 
 		super.onBackPressed();
 	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		Log.d(this.getClass().toString(), ">>> onCreate " + this.getClass().toString());
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Log.d(this.getClass().toString(), ">>> onResume " + this.getClass().toString());
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		Log.d(this.getClass().toString(), ">>> onStart " + this.getClass().toString());
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		Log.d(this.getClass().toString(), ">>> onDestroy " + this.getClass().toString());
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		Log.d(this.getClass().toString(), ">>> onPause " + this.getClass().toString());
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		
+		Log.d(this.getClass().toString(), ">>> onRestart " + this.getClass().toString());
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		Log.d(this.getClass().toString(), ">>> onStop " + this.getClass().toString());
+	}
+
+	@Override
+	public void onAttachedToWindow() {
+		super.onAttachedToWindow();
+		
+		Log.d(this.getClass().toString(), ">>> onAttachedToWindow " + this.getClass().toString());
+	}
+
+	@Override
+	public void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+		
+		Log.d(this.getClass().toString(), ">>> onDetachedFromWindow " + this.getClass().toString());
+	}
 }

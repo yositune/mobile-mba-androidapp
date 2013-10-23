@@ -74,9 +74,9 @@ public class ScheduledTestExecutionQueue implements Serializable{
 	}
 	
 	/**
-	 * @return reschedule time
+	 * @return reschedule time duration in milliseconds
 	 */
-	public long execute() {
+	public long executeReturnRescheduleDurationMilliseconds() {
 		TestExecutor scheduledTestExecutor = new TestExecutor(tc);
 		long time = System.currentTimeMillis();
 		
@@ -124,7 +124,7 @@ public class ScheduledTestExecutionQueue implements Serializable{
 			}
 		} 
 		
-		return getSleepTime();
+		return getSleepTimeDurationMilliseconds();
 	}
 	
 	public boolean canExecute(long time) {
@@ -140,7 +140,7 @@ public class ScheduledTestExecutionQueue implements Serializable{
 		return FCCAppSettings.getFCCAppSettingsInstance().getTestStartWindow()/2 > Math.abs(entry.time - time);
 	}
 	
-	private long getSleepTime() {
+	private long getSleepTimeDurationMilliseconds() {
 		if (entries.isEmpty()) {
 			return TimeUtils.daysToMillis(SKConstants.TEST_QUEUE_NORMAL_SIZE_IN_DAYS);
 		} else {

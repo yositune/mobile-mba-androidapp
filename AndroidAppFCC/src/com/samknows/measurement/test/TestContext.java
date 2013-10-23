@@ -25,7 +25,7 @@ public class TestContext {
 	
 	public ResultsContainer resultsContainer = null;
 	
-	public static TestContext create(Context ctx) {
+	private static TestContext create(Context ctx, boolean PbIsManualTest) {
 		Storage storage = CachingStorage.getInstance();
 		ScheduleConfig config = storage.loadScheduleConfig();
 		if (config == null) {
@@ -36,7 +36,17 @@ public class TestContext {
 		if (paramsManager == null) {
 			paramsManager = new TestParamsManager();
 		}
-		return new TestContext(ctx, config, paramsManager);
+		return new TestContext(ctx, config, paramsManager, PbIsManualTest);
+	}
+	
+	public static TestContext createManualTestContext(Context ctx) {
+		boolean bIsManualTestTrue = true;
+		return create(ctx, bIsManualTestTrue);
+	}
+
+	public static TestContext createBackgroundTestContext(Context ctx) {
+		boolean bIsManualTestFalse = false;
+		return create(ctx, bIsManualTestFalse);
 	}
 	
 	public void addTestResult(TestResult result){
@@ -49,13 +59,18 @@ public class TestContext {
 		test_results.addAll(Conversions.testToJSON(testOutput));
 	}
 	
-	private TestContext(Context ctx, ScheduleConfig config, TestParamsManager manager) {
+	private TestContext(Context ctx, ScheduleConfig config, TestParamsManager manager, boolean PbIsManualTest) {
 		super();
 		this.ctx = ctx;
 		this.config = config;
 		this.paramsManager = manager;
+		this.mbIsManualTest = PbIsManualTest;
 	}
 	
+    private boolean mbIsManualTest = false;	
+    public boolean getIsManualTest() {
+    	return mbIsManualTest;
+    }
 	
 	
 	public Object getSystemService(String name) {

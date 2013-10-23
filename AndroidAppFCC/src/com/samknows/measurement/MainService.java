@@ -17,7 +17,6 @@ import com.samknows.measurement.schedule.ScheduleConfig;
 import com.samknows.measurement.statemachine.State;
 import com.samknows.measurement.statemachine.ScheduledTestStateMachine;
 import com.samknows.measurement.storage.DBHelper;
-import com.samknows.measurement.util.LoginHelper;
 import com.samknows.measurement.util.OtherUtils;
 
 public class MainService extends IntentService {
@@ -26,7 +25,7 @@ public class MainService extends IntentService {
 	private TrafficStatsCollector collector;
 	private FCCAppSettings appSettings;
 	private static boolean isExecuting;
-	private static Handler mHandler = null;
+	private static Handler mActivationHandler = null;
 	private static Object sync = new Object();
 	public MainService() {
 		super(MainService.class.getName());
@@ -65,7 +64,7 @@ public class MainService extends IntentService {
 			ScheduleConfig config = CachingStorage.getInstance().loadScheduleConfig();
 			onBegin();
 			
-			if (force_execution || LoginHelper.isLoggedIn()) {
+			if (force_execution ) {
 				if (!OtherUtils.isRoaming(this)) {
 					new ScheduledTestStateMachine(this).executeRoutine();
 				} else {
@@ -77,8 +76,6 @@ public class MainService extends IntentService {
 					SKLogger.d(this, "+++++DEBUG+++++ Service disabled(config file), exiting.");
 				if (!appSettings.isServiceEnabled())
 					SKLogger.d(this, "+++++DEBUG+++++ Service disabled(manual), exiting.");
-				if (!LoginHelper.isLoggedIn())
-					SKLogger.d(this, "+++++DEBUG+++++ Service disabled(login), exiting.");
 			}
 		} catch (Throwable th) {
 			//if an error happened we want to restart from State.NONE
@@ -154,32 +151,34 @@ public class MainService extends IntentService {
 		ctx.startService(intent);
 	}
 	
-	
 	//Register the handler to update the UI
-	public static boolean registerHandler(Handler handler){
+	public static boolean registerActivationHandler(Context ctx, Handler handler){
+		// The Main Service MUST be running for activation to work.
+		// However, there is a delay from the request to start the activity, to 
+		// actually registering the activity.
+		
 		synchronized(sync){
-			if(MainService.isExecuting){
-				mHandler = handler;
-				return true;
-			}
-			return false;
+			mActivationHandler = handler;
+			poke(ctx);
 		}
+		
+		return true;
 	}
 	
 	//Unregister current handler
-	public static void unregisterHandler(){
+	public static void unregisterActivationHandler(){
 		synchronized(sync){
-			mHandler = null;
+			mActivationHandler = null;
 		}
 	}
 	
 	//Send a JSONObject to the registered handler, if any
 	public void publish(JSONObject jobj){
 		synchronized(sync){
-			if(mHandler != null && jobj != null){
+			if(mActivationHandler != null && jobj != null){
 				Message msg = new Message();
 				msg.obj = jobj;
-				mHandler.sendMessage(msg);
+				mActivationHandler.sendMessage(msg);
 			}
 		}
 	}

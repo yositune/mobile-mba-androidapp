@@ -33,17 +33,25 @@ public class CpuActivityCondition extends Condition {
 
 	@Override
 	public ConditionResult doTestBefore(TestContext tc) {
-		new CpuUsageReader();
-		int cpuLoad = (int) CpuUsageReader.read(time);
-		boolean isSuccess = cpuLoad < maxAvg;
-		
-		if (!isSuccess) {
-			if (OtherUtils.isThisDeviceAnEmulator() == true) {
-				Log.d(this.getClass().getName(), "DEBUG: would have failed CPU test, but running on Emulator, so let it pass!");
-				isSuccess = true;
+
+		int cpuLoad;
+		boolean isSuccess;
+		if (tc.getIsManualTest()) {
+			isSuccess = true;
+			cpuLoad = 0;
+		} else {
+			new CpuUsageReader();
+			cpuLoad = (int) CpuUsageReader.read(time);
+			isSuccess = cpuLoad < maxAvg;
+
+			if (!isSuccess) {
+				if (OtherUtils.isThisDeviceAnEmulator() == true) {
+					Log.d(this.getClass().getName(), "DEBUG: would have failed CPU test, but running on Emulator, so let it pass!");
+					isSuccess = true;
+				}
 			}
 		}
-		
+
 		ConditionResult result = new ConditionResult(isSuccess,failQuiet);
 		result.setJSONFields(JSON_MAX_AVG,JSON_READ_AVG);
 		result.generateOut(TYPE_VALUE, maxAvg, cpuLoad);

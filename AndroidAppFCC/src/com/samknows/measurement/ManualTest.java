@@ -48,8 +48,8 @@ public class ManualTest implements Runnable {
 	 * Returns a ManualTest object that runs only the test with id test_id
 	 */
 
-	public static ManualTest create(Context ctx, Handler handler, int test_id) {
-		ManualTest ret = create(ctx, handler);
+	public static ManualTest create(Context ctx, Handler handler, int test_id, StringBuilder errorDescription) {
+		ManualTest ret = create(ctx, handler, errorDescription);
 		if (ret == null) {
 			return ret;
 		}
@@ -70,25 +70,26 @@ public class ManualTest implements Runnable {
 	 * Returns a ManualTest object if the manual_tests list of the schedule
 	 * config is not empty and the MainService is not executing
 	 */
-	public static ManualTest create(Context ctx, Handler handler) {
-		ManualTest ret = null;
+	public static ManualTest create(Context ctx, Handler handler, StringBuilder RErrorDescription) {
 		Storage storage = CachingStorage.getInstance();
 		ScheduleConfig config = storage.loadScheduleConfig();
 		if (config == null) {
-			SKLogger.e(
-					ManualTest.class,
-					"ManualTest cannot be initialized because storage does not contain the ScheduleConfig");
-		} else if (config.manual_tests.size() == 0) {
-			SKLogger.e(
-					ManualTest.class,
-					"ManualTest cannot be initialized because manual test section in the config file is empty");
-		} else if (MainService.isExecuting()) {
-			SKLogger.e(ManualTest.class,
-					"ManualTest cannot be initialized because MainService is executing");
-		} else {
-			ret = new ManualTest(ctx, handler, config.manual_tests);
+			RErrorDescription.append("ManualTest cannot be initialized because storage does not contain the ScheduleConfig");
+			SKLogger.e( ManualTest.class, RErrorDescription.toString());
+			return null;
 		}
-		return ret;
+		if (config.manual_tests.size() == 0) {
+			RErrorDescription.append("ManualTest cannot be initialized because storage does not contain the ScheduleConfig");
+			SKLogger.e( ManualTest.class, RErrorDescription.toString());
+			return null;
+		}
+		if (MainService.isExecuting()) {
+			RErrorDescription.append("ManualTest cannot be initialized because storage does not contain the ScheduleConfig");
+			SKLogger.e(ManualTest.class, RErrorDescription.toString());
+			return null;
+		}
+		
+		return new ManualTest(ctx, handler, config.manual_tests);
 	}
 
 	// returns the maximum amount of bytes used by the manual test
@@ -115,7 +116,7 @@ public class ManualTest implements Runnable {
 		// Start tests
 		long startTime = System.currentTimeMillis();
 		JSONObject batch = new JSONObject();
-		TestContext tc = TestContext.create(ctx);
+		TestContext tc = TestContext.createManualTestContext(ctx);
 		TestExecutor manualTestExecutor = new TestExecutor(tc);
 		List<JSONObject> testsResults = new ArrayList<JSONObject>();
 		List<JSONObject> passiveMetrics = new ArrayList<JSONObject>();
