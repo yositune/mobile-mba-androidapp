@@ -39,9 +39,6 @@ public class SKConstants {
 	
 	public static final long SERVICE_RESCHEDULE_IF_ROAMING_OR_DATACAP = 24 * 60 * 60 * 1000; //1 day in millis, HOURS * MINUTES * SECONDS * MILLIS
 	
-	public static final String INTENT_ACTION_LOGOUT = "com.samknows.measurement.LOGOUT";
-	public static final String INTENT_ACTION_STOP_LOGIN = "com.samknows.measurement.STOP_LOGIN";
-	
 	public static final long NET_ACTIVITY_CONDITION_WAIT_TIME = 5000;
 
 	public static final int CONNECTION_TIMEOUT_20_SECONDS_IN_MILLIS = 20 * 1000;//20sec, SECONDS * MILLIS	

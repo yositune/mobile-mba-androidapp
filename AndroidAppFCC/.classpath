@@ -8,6 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libcore"/>
 	<classpathentry kind="lib" path="/google_play_services_lib/bin/google_play_services_lib.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="libs/achartengine-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/libcore/libs/achartengine-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/google_play_services_lib/libs/google-play-services.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

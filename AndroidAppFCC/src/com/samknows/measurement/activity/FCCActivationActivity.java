@@ -85,7 +85,7 @@ public class FCCActivationActivity extends BaseLogoutActivity {
 								+ " " + total);
 
 					} else if (type == UIUpdate.JSON_COMPLETED) {
-						LoginHelper.openMainScreen(FCCActivationActivity.this);
+						LoginHelper.openMainScreen(FCCActivationActivity.this, FCCMainResultsActivity.class);
 						FCCActivationActivity.this.finish();
 					}
 
@@ -101,7 +101,7 @@ public class FCCActivationActivity extends BaseLogoutActivity {
 			SKLogger.d(this, "activation handler registered");
 		} else {
 			SKLogger.d(this, "MainService is not executing");
-			LoginHelper.openMainScreen(FCCActivationActivity.this);
+			LoginHelper.openMainScreen(FCCActivationActivity.this, FCCMainResultsActivity.class);
 			FCCActivationActivity.this.finish();
 
 		}

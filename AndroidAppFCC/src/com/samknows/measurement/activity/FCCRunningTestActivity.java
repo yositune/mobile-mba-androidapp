@@ -18,7 +18,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.samknows.libcore.SKLogger;
-import com.samknows.measurement.FCCAppSettings;
+import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.ManualTest;
 import com.samknows.measurement.Storage;
@@ -571,7 +571,7 @@ public class FCCRunningTestActivity extends BaseLogoutActivity {
 								}
 							}).show();
 
-		} else if (FCCAppSettings.getFCCAppSettingsInstance().isDataCapReached(mt.getNetUsage())) {
+		} else if (SK2AppSettings.getSK2AppSettingsInstance().isDataCapReached(mt.getNetUsage())) {
 			SKLogger.d(FCCRunningTestActivity.class, "Data cap exceeded");
 			new AlertDialog.Builder(this)
 					.setMessage(getString(R.string.data_cap_exceeded))

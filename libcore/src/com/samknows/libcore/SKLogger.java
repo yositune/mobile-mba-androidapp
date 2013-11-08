@@ -94,5 +94,19 @@ public class SKLogger {
 		t.printStackTrace(pw);
 		return sw.toString();
 	}
+	
+	public static void sAssert(Class clazz, String message, final boolean check) {
+		if (check == false) {
+			if (message.length() > 0) {
+    			SKLogger.e(clazz, "sAssertFailed (" + message + "): you can trap with a breakpoint in " + SKLogger.class.getName());
+			} else {
+    			SKLogger.e(clazz, "sAssertFailed: you can trap with a breakpoint in " + SKLogger.class.getName());
+			}
+		}
+	}
+	
+	public static void sAssert(Class clazz,  final boolean check) {
+			sAssert(clazz, "", check);
+	}
 
 }

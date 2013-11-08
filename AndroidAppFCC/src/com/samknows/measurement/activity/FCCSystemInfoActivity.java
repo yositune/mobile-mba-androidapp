@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
-import com.samknows.measurement.FCCAppSettings;
+import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.MainService;
 import com.samknows.measurement.R;
@@ -54,20 +54,20 @@ public class FCCSystemInfoActivity extends BaseLogoutActivity{
 		if (MainService.isExecuting()) {
 			value = getString(R.string.executing_now); 
 		} else {
-			if(FCCAppSettings.getInstance().isServiceActivated()){
+			if(SK2AppSettings.getInstance().isServiceActivated()){
 				value = getString(R.string.yes);
 			}else{
 				value = getString(R.string.no);
 			}
 		}
 		((TextView)findViewById(R.id.tv_service_activated_value)).setText(value);
-		if(FCCAppSettings.getInstance().isServiceEnabled()){
+		if(SK2AppSettings.getInstance().isServiceEnabled()){
 			value = getString(R.string.enabled);
 		}else{
 			value = getString(R.string.disabled);
 		}
 		((TextView)findViewById(R.id.tv_service_autotesting_value)).setText(value);
-		((TextView)findViewById(R.id.tv_service_status_value)).setText(getString(FCCAppSettings.getFCCAppSettingsInstance().getState().sId));
+		((TextView)findViewById(R.id.tv_service_status_value)).setText(getString(SK2AppSettings.getSK2AppSettingsInstance().getState().sId));
 		
 		String versionName="";
 		try {
@@ -86,7 +86,7 @@ public class FCCSystemInfoActivity extends BaseLogoutActivity{
 		if (MainService.isExecuting()) {
 			nextTestScheduled = getString(R.string.executing_now);
 		} else {
-			long nextRunTime = FCCAppSettings.getInstance().getNextRunTime();
+			long nextRunTime = SK2AppSettings.getInstance().getNextRunTime();
 			if (nextRunTime == SKConstants.NO_NEXT_RUN_TIME) {
 				nextTestScheduled = getString(R.string.none);
 			} else {
@@ -96,10 +96,10 @@ public class FCCSystemInfoActivity extends BaseLogoutActivity{
 		((TextView)findViewById(R.id.tv_scheduledFor_value)).setText(nextTestScheduled);
 
 		PhoneIdentityData phoneData = new PhoneIdentityDataCollector(this).collect();
-		if (!FCCAppSettings.getFCCAppSettingsInstance().anonymous){
+		if (!SK2AppSettings.getSK2AppSettingsInstance().anonymous){
 			((TextView)findViewById(R.id.tv_imei_value)).setText(phoneData.imei + "");
 			((TextView)findViewById(R.id.tv_imsi_value)).setText(phoneData.imsi + "");
-			((TextView)findViewById(R.id.tv_unitId_value)).setText(FCCAppSettings.getInstance().getUnitId());
+			((TextView)findViewById(R.id.tv_unitId_value)).setText(SK2AppSettings.getInstance().getUnitId());
 		}
 		
 		value = phoneData.manufacturer + "\n\r" + phoneData.model;

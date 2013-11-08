@@ -18,7 +18,8 @@
 		<link>
 			<name>test</name>
 			<type>2</type>
-			<location>../libcore/test</location>
+      <!-- http://taglist.blogspot.fi/2011/08/eclipse-tricks-relative-paths-in-linked.html -->
+			<locationURI>PARENT-1-PROJECT_LOC/libcore/test</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

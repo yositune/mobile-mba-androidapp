@@ -2,7 +2,7 @@ package com.samknows.measurement.activity;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
-import com.samknows.measurement.FCCAppSettings;
+import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.MainService;
 import com.samknows.measurement.R;
 import com.samknows.measurement.util.OtherUtils;
@@ -30,7 +30,7 @@ public class FCCPreferenceActivity extends PreferenceActivity implements OnShare
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		//Hide preference user_self_id for some versions of the app
-		if(!FCCAppSettings.getFCCAppSettingsInstance().user_self_id){
+		if(!SK2AppSettings.getSK2AppSettingsInstance().user_self_id){
 			Preference user_tag = findPreference("user_self_id");
 			PreferenceCategory pc = (PreferenceCategory) findPreference("first_category");
 			pc.removePreference(user_tag);
@@ -48,13 +48,13 @@ public class FCCPreferenceActivity extends PreferenceActivity implements OnShare
 		PreferenceCategory mCategory = (PreferenceCategory) findPreference("first_category");
 		mCategory.setTitle(mCategory.getTitle()+" "+"("+versionName+")");
 
-		long testsScheduled = FCCAppSettings.getInstance().getLong("number_of_tests_schedueld", -1);
+		long testsScheduled = SK2AppSettings.getInstance().getLong("number_of_tests_schedueld", -1);
 		CheckBoxPreference mCheckBoxPref = (CheckBoxPreference) findPreference(SKConstants.PREF_SERVICE_ENABLED);
 		if(testsScheduled <= 0){
 			mCheckBoxPref.setChecked(false);
 			mCheckBoxPref.setEnabled(false);
 		}else{
-			mCheckBoxPref.setChecked(FCCAppSettings.getInstance().isServiceEnabled());
+			mCheckBoxPref.setChecked(SK2AppSettings.getInstance().isServiceEnabled());
 		}
 		
 		updateLabels();
@@ -63,7 +63,7 @@ public class FCCPreferenceActivity extends PreferenceActivity implements OnShare
 	
 	@SuppressWarnings("deprecation")
 	protected void updateLabels(){
-		FCCAppSettings app = FCCAppSettings.getFCCAppSettingsInstance();
+		SK2AppSettings app = SK2AppSettings.getSK2AppSettingsInstance();
 		long configDataCap = app.getLong(SKConstants.PREF_DATA_CAP, -1l );
 		String s_configDataCap = configDataCap == -1l ? "": configDataCap +"";
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(FCCPreferenceActivity.this);
@@ -99,7 +99,7 @@ public class FCCPreferenceActivity extends PreferenceActivity implements OnShare
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals(SKConstants.PREF_SERVICE_ENABLED)) {
-			if (FCCAppSettings.getInstance().isServiceEnabled()) {
+			if (SK2AppSettings.getInstance().isServiceEnabled()) {
 				MainService.poke(FCCPreferenceActivity.this);
 			}else{
 				OtherUtils.cancelAlarm(this);

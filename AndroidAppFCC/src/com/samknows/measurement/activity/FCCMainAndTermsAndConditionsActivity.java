@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.crittercism.app.Crittercism;
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
-import com.samknows.measurement.FCCAppSettings;
+import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.MainService;
 import com.samknows.measurement.NetUsageService;
 import com.samknows.measurement.R;
@@ -70,7 +70,7 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 			pInfo = null;
 		}
 		version_name = pInfo != null ? pInfo.versionName : "";
-		final FCCAppSettings appSettings = FCCAppSettings.getFCCAppSettingsInstance();
+		final SK2AppSettings appSettings = SK2AppSettings.getSK2AppSettingsInstance();
 
 		final Activity ctx = this;
 		//	final Editor e = this.getPreferences(Context.MODE_PRIVATE).edit();
@@ -83,7 +83,7 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 			
 			this.setTheme(android.R.style.Theme_NoDisplay);
 			if (appSettings.isServiceActivated()) {
-				LoginHelper.openMainScreenWithNoTransitionAnimation(ctx);
+				LoginHelper.openMainScreenWithNoTransitionAnimation(ctx, FCCMainResultsActivity.class);;
 			} else {
 				MainService.poke(ctx);
 				if(appSettings.collect_traffic_data){
@@ -128,24 +128,11 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 			Util.initializeFonts(this);
 			Util.overrideFonts(this, findViewById(android.R.id.content));
 		}
-
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(SKConstants.INTENT_ACTION_STOP_LOGIN);
-		receiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				finish();
-			}
-		};
-		registerReceiver(receiver, intentFilter);
 	}
-
-	private BroadcastReceiver receiver;
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(receiver);
 	}
 
 	// Pressing back in this screen, always allows back to close the application.
@@ -176,6 +163,11 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 			if (webinterface == null) {
 				super.onBackPressed();
 			} else {
+				// If on last page, allow back to work again!
+				if (page_number >= total_pages) {
+					page_number--;
+					
+				}
 				webinterface.changePage(-1);
 			}
 		}
@@ -226,8 +218,7 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 			if (page_number > total_pages) {
 				e.putString("agreement", version_name);
 				e.commit();
-				FCCAppSettings a = FCCAppSettings.getFCCAppSettingsInstance();
-				MainService.force_poke(ctx);
+				SK2AppSettings a = SK2AppSettings.getSK2AppSettingsInstance();
 				if(a.collect_traffic_data){
 					NetUsageService.init(ctx, a.collect_traffic_data_interval);
 				}
@@ -260,8 +251,8 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 			}
 
 			if (page_number == total_pages) {
-				page_number++;
-				if(!FCCAppSettings.getFCCAppSettingsInstance().data_cap_welcome){
+				page_number = total_pages + 1;
+				if(!SK2AppSettings.getSK2AppSettingsInstance().data_cap_welcome){
 					Button btn_next = (Button) findViewById(R.id.btn_continue);
 					btn_next.setText(R.string.agree);
 				}

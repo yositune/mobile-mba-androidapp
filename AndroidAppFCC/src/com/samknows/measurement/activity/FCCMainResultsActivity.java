@@ -43,8 +43,9 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.samknows.libcore.SKCommon;
 import com.samknows.libcore.SKLogger;
-import com.samknows.measurement.FCCAppSettings;
+import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.DeviceDescription;
 import com.samknows.measurement.MainService;
@@ -123,7 +124,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 	private GestureDetector gestureDetector;
 	DeviceDescription currentDevice;
 	private View subview;
-	private boolean first_time = true;
+
 	private int total_archive_records = 0;
 	private int total_download_archive_records = 0;
 	private int total_upload_archive_records = 0;
@@ -169,7 +170,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		 * devices);
 		 */
 		
-		this.setTitle(getString(R.string.fcc_main_results_activity_title));
+		this.setTitle(getString(R.string.sk2_main_results_activity_title));
 
 		setContentView(R.layout.fcc_main_results_activity_main_page_views);
 
@@ -193,7 +194,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					on_aggregate_page = true;
 					boolean db_refresh = false;
 
-					FCCMainResultsActivity.this .setTitle(getString(R.string.fcc_main_results_activity_title));
+					FCCMainResultsActivity.this .setTitle(getString(R.string.sk2_main_results_activity_title));
 
 					TextView timestampView;
 					View v;
@@ -951,10 +952,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			startActivity(new Intent(this, FCCSystemInfoActivity.class));
 			ret = true;
 		} else if (R.id.menu_activation == itemId) {
-			int size = FCCAppSettings.getInstance().getDevices().size();
+			int size = SK2AppSettings.getInstance().getDevices().size();
 			if (size == 0 || (size == 1 && OtherUtils.isPhoneAssosiated(this))) {
-				FCCAppSettings.getInstance().setForceDownload();
-				MainService.force_poke(this);
+				SK2AppSettings.getInstance().setForceDownload();
 			}
 			
 			startActivity(new Intent(this, FCCActivationActivity.class));
@@ -1213,6 +1213,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				return;
 			}
 
+			
 			try {
 				String metric = user.getString("metric");
 				String value = user.getString("value");
@@ -1253,10 +1254,12 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					views.get(archiveItemIndex + 1).passivemetric7 = value;
 					views.get(archiveItemIndex + 1).passivemetric7_type = type;
 				} else if (metric.equals("latitude")) { // latitude
-					views.get(archiveItemIndex + 1).passivemetric8 = String.format("%1.5f", Double.valueOf(value));
+					views.get(archiveItemIndex + 1).passivemetric8 = 
+							SKCommon.sGetDecimalStringAnyLocaleAs1Pt5LocalisedString(value);
 					views.get(archiveItemIndex + 1).passivemetric8_type = type;
 				} else if (metric.equals("longitude")) { // longitude
-					views.get(archiveItemIndex + 1).passivemetric9 = String.format("%1.5f", Double.valueOf(value));
+					views.get(archiveItemIndex + 1).passivemetric9 = 
+							SKCommon.sGetDecimalStringAnyLocaleAs1Pt5LocalisedString(value);
 					views.get(archiveItemIndex + 1).passivemetric9_type = type;
 				} else if (metric.equals("accuracy")) { // accuracy
 					views.get(archiveItemIndex + 1).passivemetric10 = value;
@@ -1374,7 +1377,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 		@Override
 		public Object instantiateItem(View view, int position) {
-
+			
 			StatView sc = new StatView(FCCMainResultsActivity.this);
 			sc.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 					LayoutParams.WRAP_CONTENT));
@@ -1383,20 +1386,24 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			LayoutInflater inflater = (LayoutInflater) FCCMainResultsActivity.this
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			// subview = inflater.inflate(R.layout.individual_stat, null);
+
+
 			View subview_archive;
 
-			if (position == 0 && first_time == true) {
+			// If position is zero take care of the visibility of the messages
+			if(position == 0){
 				subview = inflater.inflate(R.layout.fcc_main_results_activity_runnow_and_graphs, null);
 				subview.setTag(position);
 
-				// first_time=false;
+
 
 				sc.addView(subview);
 
 				((ViewPager) view).addView(sc);
+				//if there is a problem with with the state machine display the 
+				//appropriate message
 
-				if (!FCCAppSettings.getFCCAppSettingsInstance().stateMachineStatus()) {
+				if (!SK2AppSettings.getSK2AppSettingsInstance().stateMachineStatus()) {
 					TextView tv = (TextView) subview
 							.findViewById(R.id.no_data_message_text);
 					tv.setText(R.string.activation_needed);
@@ -1409,7 +1416,13 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 							.findViewById(R.id.no_data_message_image);
 					tv.setVisibility(View.GONE);
 					iv.setVisibility(View.GONE);
-					// populate view
+			
+				}
+				
+				//in case there are results to display load it
+				//no matter if the state machine status
+				if(total_archive_records > 0){
+
 					adapter.readArchiveItem(position);
 				}
 
