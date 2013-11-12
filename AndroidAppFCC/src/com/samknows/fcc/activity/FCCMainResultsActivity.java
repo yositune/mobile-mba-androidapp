@@ -1,4 +1,4 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,22 +43,23 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.samknows.fcc.activity.components.StatView;
 import com.samknows.libcore.SKCommon;
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.DeviceDescription;
 import com.samknows.measurement.MainService;
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
 import com.samknows.measurement.SamKnowsLoginService;
 import com.samknows.measurement.SamKnowsResponseHandler;
 import com.samknows.measurement.Storage;
+import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.ResizeAnimation;
 import com.samknows.measurement.activity.components.SamKnowsGraph;
 import com.samknows.measurement.activity.components.ServiceStatusDisplayManager;
 import com.samknows.measurement.activity.components.StatModel;
 import com.samknows.measurement.activity.components.StatRecord;
-import com.samknows.measurement.activity.components.StatView;
 import com.samknows.measurement.activity.components.UpdatedTextView;
 import com.samknows.measurement.activity.components.Util;
 import com.samknows.measurement.schedule.ScheduleConfig;

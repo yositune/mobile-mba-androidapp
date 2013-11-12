@@ -1,4 +1,4 @@
-package com.samknows.measurement;
+package com.samknows.fcc;
 
 import com.samknows.measurement.SKApplication;
 

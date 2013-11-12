@@ -1,10 +1,10 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.MainService;
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
 import com.samknows.measurement.util.OtherUtils;
 import com.samknows.measurement.util.TimeUtils;
 

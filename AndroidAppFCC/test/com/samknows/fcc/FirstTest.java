@@ -1,6 +1,6 @@
-package com.samknows.measurement;
+package com.samknows.fcc;
 
-import com.samknows.measurement.FCCApplication;
+import com.samknows.fcc.FCCApplication;
 import com.samknows.libcore.*;
 import com.samknows.libcore.SKServiceDataCache.CachedValue;
 import com.samknows.measurement.*;

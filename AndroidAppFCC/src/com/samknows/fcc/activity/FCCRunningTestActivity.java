@@ -1,4 +1,4 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import java.util.List;
 import org.json.JSONException;
@@ -22,7 +22,8 @@ import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.ManualTest;
 import com.samknows.measurement.Storage;
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
+import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.ProgressWheel;
 import com.samknows.measurement.activity.components.Util;
 import com.samknows.measurement.schedule.ScheduleConfig;

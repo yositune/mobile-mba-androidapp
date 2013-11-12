@@ -1,4 +1,4 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -6,7 +6,8 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
+import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.Util;
 
 public class FCCAboutActivity extends BaseLogoutActivity {

@@ -1,4 +1,4 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -31,7 +31,8 @@ import com.samknows.libcore.SKConstants;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.MainService;
 import com.samknows.measurement.NetUsageService;
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
+import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.Util;
 import com.samknows.measurement.util.LoginHelper;
 import com.samknows.measurement.util.OtherUtils;

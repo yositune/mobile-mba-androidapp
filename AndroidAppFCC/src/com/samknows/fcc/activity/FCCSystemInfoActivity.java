@@ -1,4 +1,4 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
@@ -17,8 +17,9 @@ import com.samknows.libcore.SKConstants;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.MainService;
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
 
+import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.Util;
 import com.samknows.measurement.environment.CellTowersData;
 import com.samknows.measurement.environment.CellTowersDataCollector;

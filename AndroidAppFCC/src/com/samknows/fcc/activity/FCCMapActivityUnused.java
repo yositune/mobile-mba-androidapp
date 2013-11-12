@@ -1,4 +1,4 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
 import com.samknows.measurement.activity.components.GPSPlace;
 import com.samknows.measurement.activity.components.MapPopupInfoWindowAdapterUnused;
 

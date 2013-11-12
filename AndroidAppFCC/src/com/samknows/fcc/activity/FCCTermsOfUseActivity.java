@@ -1,11 +1,12 @@
-package com.samknows.measurement.activity;
+package com.samknows.fcc.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
+import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.Util;
 
 public class FCCTermsOfUseActivity extends BaseLogoutActivity {

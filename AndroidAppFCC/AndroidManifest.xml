@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.samknows.measurement"
-  android:versionCode="151"
-	android:versionName="1.51">
+	package="com.samknows.fcc"
+  android:versionCode="152"
+	android:versionName="1.52">
 	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -17,9 +17,9 @@
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="com.samknows.measurement.permission.MAPS_RECEIVE"
+	<uses-permission android:name="com.samknows.fcc.permission.MAPS_RECEIVE"
 		android:protectionLevel="signature" />
-	<uses-permission android:name="com.samknows.measurement.permission.MAPS_RECEIVE" />
+	<uses-permission android:name="com.samknows.fcc.permission.MAPS_RECEIVE" />
 	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
 
@@ -31,7 +31,7 @@
 		android:label="@string/app_name">
 
 
-		<activity android:name="com.samknows.measurement.activity.FCCSystemInfoActivity"
+		<activity android:name="com.samknows.fcc.activity.FCCSystemInfoActivity"
 			android:label="@string/activity_info_name" android:screenOrientation="portrait">
 		</activity>
 
@@ -50,7 +50,7 @@
 			android:screenOrientation="portrait">
 		</activity>
 
-		<activity android:name="com.samknows.measurement.activity.FCCMainAndTermsAndConditionsActivity"
+		<activity android:name="com.samknows.fcc.activity.FCCMainAndTermsAndConditionsActivity"
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -80,32 +80,32 @@
 
 		<activity
 		    android:launchMode="singleTask"
-			android:name="com.samknows.measurement.activity.FCCMainResultsActivity"
+			android:name="com.samknows.fcc.activity.FCCMainResultsActivity"
 			android:screenOrientation="portrait">
 		</activity>
 
 
 		<activity
-			android:name="com.samknows.measurement.activity.FCCRunningTestActivity"
+			android:name="com.samknows.fcc.activity.FCCRunningTestActivity"
 			android:screenOrientation="portrait">
 		</activity>
 
-		<activity android:name="com.samknows.measurement.activity.FCCAboutActivity"
+		<activity android:name="com.samknows.fcc.activity.FCCAboutActivity"
 			android:screenOrientation="portrait">
 		</activity>
-		<activity android:name="com.samknows.measurement.activity.FCCTermsOfUseActivity"
-			android:screenOrientation="portrait">
-		</activity>
-
-		<activity android:name="com.samknows.measurement.activity.FCCActivationActivity"
+		<activity android:name="com.samknows.fcc.activity.FCCTermsOfUseActivity"
 			android:screenOrientation="portrait">
 		</activity>
 
-		<activity android:name="com.samknows.measurement.activity.FCCMapActivityUnused"
+		<activity android:name="com.samknows.fcc.activity.FCCActivationActivity"
 			android:screenOrientation="portrait">
 		</activity>
 
-		<activity android:name="com.samknows.measurement.activity.FCCPreferenceActivity"
+		<activity android:name="com.samknows.fcc.activity.FCCMapActivityUnused"
+			android:screenOrientation="portrait">
+		</activity>
+
+		<activity android:name="com.samknows.fcc.activity.FCCPreferenceActivity"
 			android:label="@string/activity_pref_name" android:screenOrientation="portrait">
 			<!--  the preferences theme looks wrong in the top area for Android 2.3.3 - so rely on the preferences style supplied by the system... -->
 			<!--   android:theme="@style/PreferencesTheme"> -->

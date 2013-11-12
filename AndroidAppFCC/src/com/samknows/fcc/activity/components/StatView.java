@@ -1,6 +1,7 @@
-package com.samknows.measurement.activity.components;
+package com.samknows.fcc.activity.components;
 
-import com.samknows.measurement.R;
+import com.samknows.fcc.R;
+import com.samknows.measurement.activity.components.StatRecord;
 
 import android.content.Context;
 import android.graphics.Color;
