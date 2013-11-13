@@ -25,7 +25,7 @@ We collect information about your cellular phone performance, such as your servi
 
 The Application tests your mobile broadband upload and download rate, round trip latency, and packet loss measured between your handset and our servers managed by the FCC, the FCC contractor, and other project partners.
 
-This data is stored on your phone in the Application's sandbox (a protected private area for the Application) for you to review, and periodically uploaded to our servers.  This data is encrypted and stored on your phone for you to review, and periodically uploaded to our servers. Older data is also periodically deleted from your phone. You can find more detail in the FCC’s technical summary of this program. http://www.fcc.gov/measuring-broadband-america/mobile/technical-summary.html
+This data is stored on your phone in the Application's sandbox (a protected private area for the Application) for you to review, and periodically uploaded to our servers.  Older data is also periodically deleted from your phone. You can find more detail in the FCC’s technical summary of this program. http://www.fcc.gov/measuring-broadband-america/mobile/technical-summary.html
 
 ### Third Party Data Sharing
 
