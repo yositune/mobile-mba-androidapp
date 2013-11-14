@@ -190,42 +190,60 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 			@Override
 			public void onPageSelected(int page) {
+
 				tvHeader.setText(getString(R.string.page) + " " + (page + 1));
+
 				if (page == 0) {
 					on_aggregate_page = true;
 					boolean db_refresh = false;
 
-					FCCMainResultsActivity.this .setTitle(getString(R.string.sk2_main_results_activity_title));
+					FCCMainResultsActivity.this.setTitle(getString(R.string.sk2_main_results_activity_title));
 
-					TextView timestampView;
-					View v;
-					v = viewPager.findViewWithTag(page);
+					View v = viewPager.findViewWithTag(page);
 
-					timestampView = (TextView) v.findViewById(R.id.average_results_title);
+					if (v == null) {
+						// ... we should trap this where possible in the debugger...
+						SKLogger.sAssert(getClass(), false);
+					} else {
+						TextView timestampView = (TextView) v.findViewById(R.id.average_results_title);
 
-					timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+						if (timestampView == null) {
+							// ... we should trap this where possible in the debugger...
+							SKLogger.sAssert(getClass(), false);
+						} else {
 
-					if (setTotalArchiveRecords()) {
-						adapter = new MyPagerAdapter(
-								FCCMainResultsActivity.this);
-						viewPager = (ViewPager) findViewById(R.id.viewPager);
-						viewPager.setAdapter(adapter);
+							timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+
+							if (setTotalArchiveRecords()) {
+								viewPager = (ViewPager) findViewById(R.id.viewPager);
+								if (viewPager == null) {
+									// ... we should trap this where possible in the debugger...
+									SKLogger.sAssert(getClass(), false);
+								} else {
+									adapter = new MyPagerAdapter(FCCMainResultsActivity.this);
+									viewPager.setAdapter(adapter);
+								}
+							}
+						}
 					}
 
 				} else {
-					TextView timestamp;
-					View v;
-					v = viewPager.findViewWithTag(page);
-
-					timestamp = (TextView) v.findViewById(R.id.timestamp);
-					timestamp
-							.setContentDescription(getString(R.string.archive_result)
-									+ " " + timestamp.getText());
-					timestamp
-							.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
-					on_aggregate_page = false;
-					FCCMainResultsActivity.this
-							.setTitle(getString(R.string.archive_result));
+					View v = viewPager.findViewWithTag(page);
+					if (v == null) {
+						// ... we should trap this where possible in the debugger...
+						SKLogger.sAssert(getClass(), false);
+					} else {
+						TextView timestampView = (TextView) v.findViewById(R.id.timestamp);
+						if (timestampView == null) {
+							// ... we should trap this where possible in the debugger...
+							SKLogger.sAssert(getClass(), false);
+						} else {
+							timestampView.setContentDescription(getString(R.string.archive_result) + " " + timestampView.getText());
+							timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+							on_aggregate_page = false;
+							FCCMainResultsActivity.this.setTitle(getString(R.string.archive_result));
+						}
+					}
 				}
 			}
 

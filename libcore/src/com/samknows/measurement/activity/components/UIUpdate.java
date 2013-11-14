@@ -3,6 +3,7 @@ package com.samknows.measurement.activity.components;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.samknows.libcore.SKCommon;
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.statemachine.State;
 import com.samknows.measurement.storage.TestResult;
@@ -148,14 +149,22 @@ public class UIUpdate {
 			ret.put(JSON_TYPE, JSON_INITTESTS);
 			ret.put(JSON_TOTAL, res.total);
 			ret.put(JSON_FINISHED, res.completed);
-			if(res.currbest_target.equals("")){
+			
+			// MPC 13/05/2013 - on rare occasions, currbest_target can be null
+			// ... we should trap this where possible in the debugger...
+			SKLogger.sAssert(UIUpdate.class, (res.currbest_target != null));
+			
+			if ( (res.currbest_target == null) ||
+				 (res.currbest_target.equals(""))
+			   )
+			{
 				ret.put(JSON_CURRENTBEST, "-");
 				ret.put(JSON_BESTTIME, "-");
-			}else{
+			} else {
 				ret.put(JSON_CURRENTBEST, res.currbest_target);
 				ret.put(JSON_BESTTIME, TestResult.timeToString(res.curr_best_time));
 			}
-		}catch(JSONException je){
+		} catch(JSONException je){
 			SKLogger.e(UIUpdate.class,"Error in creating JSONObject: "+ je.getMessage());
 			ret = null;
 		}

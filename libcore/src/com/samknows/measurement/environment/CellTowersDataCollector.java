@@ -6,6 +6,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
+import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.util.LooperThread;
 
 public class CellTowersDataCollector extends BaseDataCollector{
@@ -20,7 +21,12 @@ public class CellTowersDataCollector extends BaseDataCollector{
 		final CellTowersData data = new CellTowersData();
 		data.time = System.currentTimeMillis();
 		data.cellLocation = manager.getCellLocation();
+		
+		// Note: the following call might return NULL
 		data.neighbors = manager.getNeighboringCellInfo();
+		// ... we should trap this where possible in the debugger...
+		SKLogger.sAssert(getClass(), (data.neighbors != null));
+		
 		// getAllCellInfo only supported in API version 17 and in some 
 		// devices running the that version returns null
 		/*  List<CellInfo> cellInfoList = manager.getAllCellInfo();

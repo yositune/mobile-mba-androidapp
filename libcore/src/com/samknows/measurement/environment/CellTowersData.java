@@ -56,7 +56,10 @@ public class CellTowersData implements DCSData{
 	public SignalStrength signal;
 	/** time in milis */
 	public long time;
-	public List<NeighboringCellInfo> neighbors;
+	
+	// Note that this value might remain null...
+	public List<NeighboringCellInfo> neighbors = null;
+	
 	public int network_type;
 	@Override
 	public List<String> convert() {
