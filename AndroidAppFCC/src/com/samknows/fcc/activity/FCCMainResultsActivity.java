@@ -85,6 +85,11 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 	int packetloss_page_index = 0;
 	int jitter_page_index = 0;
 
+	// For mock testing...
+	public SamKnowsGraph getDownloadGraphHandler () {
+        return graphHandlerDownload;
+	}
+
 	private static final String TAG = FCCMainResultsActivity.class
 			.getSimpleName();
 	public static final String SETTINGS = "SamKnows";

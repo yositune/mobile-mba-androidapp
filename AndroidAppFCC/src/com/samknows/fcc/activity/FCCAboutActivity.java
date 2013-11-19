@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.samknows.fcc.R;
 import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.Util;
+import com.samknows.libcore.SKLogger;
 
 public class FCCAboutActivity extends BaseLogoutActivity {
 
@@ -23,12 +24,11 @@ public class FCCAboutActivity extends BaseLogoutActivity {
 		try {
 			versionName = this.getPackageManager().getPackageInfo(this.getPackageName(), 0 ).versionName;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+      SKLogger.sAssert(getClass(), false);
 		}
 		
 		TextView tv=(TextView) findViewById(R.id.version);
-		tv.setText(getString(R.string.version)+versionName);
+		tv.setText(getString(R.string.version)+ " " + versionName);
 		
 		Util.initializeFonts(this);
 		Util.overrideFonts(this, findViewById(android.R.id.content));

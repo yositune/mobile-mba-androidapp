@@ -52,3 +52,4 @@ proguard/
 *.swp
 *~
 org.eclipse.jdt.core.prefs
+fcc.keystore

@@ -15,6 +15,7 @@ import android.telephony.SignalStrength;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 
+import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.storage.PassiveMetric;
 import com.samknows.measurement.util.DCSConvertorUtil;
 import com.samknows.measurement.util.DCSStringBuilder;
@@ -57,16 +58,37 @@ public class CellTowersData implements DCSData{
 	/** time in milis */
 	public long time;
 	
-	// Note that this value might remain null...
-	public List<NeighboringCellInfo> neighbors = null;
+	// Note that this value is NEVER allowed to be set null.
+	private List<NeighboringCellInfo> neighbors = new ArrayList<NeighboringCellInfo>(); // TODO - remove me, for testing only!
+	
+	public void setNeighbors(List<NeighboringCellInfo> inNeighbors) {
+		
+		// We NEVER allow the neighbors member to be set null.
+		// Otherwise, tests might be mis-reported as failing.
+		// If we're supplied a null value, set to use an empty list.
+		if (inNeighbors == null) {
+			// ... we should trap this where possible in the debugger...
+			SKLogger.sAssert(getClass(), false);
+            neighbors =	new ArrayList<NeighboringCellInfo>();
+		} else {
+			neighbors = inNeighbors;
+		}
+	}
+	public List<NeighboringCellInfo> getNeighbors() {
+		return neighbors;
+	}
 	
 	public int network_type;
 	@Override
 	public List<String> convert() {
 		List<String> list = new ArrayList<String>();
 		addCellData(list);
-		for (NeighboringCellInfo cellInfo : neighbors) {
-			addCellData(list, cellInfo);
+		
+		SKLogger.sAssert(getClass(), (neighbors != null));
+		if (neighbors != null) {
+			for (NeighboringCellInfo cellInfo : neighbors) {
+				addCellData(list, cellInfo);
+			}
 		}
 		return list;
 	}
@@ -155,38 +177,40 @@ public class CellTowersData implements DCSData{
 	@Override
 	public List<JSONObject> convertToJSON() {
 		List<JSONObject> ret = new ArrayList<JSONObject>();
-		
+
 		if(cellLocation instanceof GsmCellLocation){
-				GsmCellLocation l = (GsmCellLocation) cellLocation;
-				Map<String, Object> gsm = new HashMap<String, Object>();				gsm.put(JSON_TYPE, JSON_TYPE_GSM_CELL_LOCATION);
-				gsm.put(JSON_TIMESTAMP, time/1000);
-				gsm.put(JSON_DATETIME, new java.util.Date(time).toString());
-				gsm.put(JSON_CELL_TOWER_ID, l.getCid());
-				gsm.put(JSON_LOCATION_AREA_CODE, l.getLac());
-				gsm.put(JSON_UMTS_PSC, Build.VERSION.SDK_INT >= 9 ? l.getPsc() : -1);
-				if(signal.isGsm()){
-					gsm.put(JSON_SIGNAL_STRENGTH, SKGsmSignalStrength.getGsmSignalStrength(signal));
-				}
-				ret.add(new JSONObject(gsm));
-				
-			}else if(cellLocation instanceof CdmaCellLocation){
-				CdmaCellLocation l = (CdmaCellLocation) cellLocation;
-				Map<String, Object> cdma = new HashMap<String, Object>();
-				cdma.put(JSON_TYPE,JSON_TYPE_CDMA_CELL_LOCATION);
-				cdma.put(JSON_TIMESTAMP, time/1000);
-				cdma.put(JSON_DATETIME, new java.util.Date(time).toString());
-				cdma.put(JSON_BASE_STATION_ID, l.getBaseStationId());
-				cdma.put(JSON_BASE_STATION_LATITUDE, l.getBaseStationLatitude());
-				cdma.put(JSON_BASE_STATION_LONGITUDE, l.getBaseStationLongitude());
-				cdma.put(JSON_SYSTEM_ID, l.getSystemId());
-				cdma.put(JSON_NETWORK_ID, l.getNetworkId());
-				if(!signal.isGsm()){
-					cdma.put(JSON_DBM, signal.getCdmaDbm());
-					cdma.put(JSON_ECIO, signal.getCdmaEcio());
-				}
-				ret.add(new JSONObject(cdma));
+			GsmCellLocation l = (GsmCellLocation) cellLocation;
+			Map<String, Object> gsm = new HashMap<String, Object>();				gsm.put(JSON_TYPE, JSON_TYPE_GSM_CELL_LOCATION);
+			gsm.put(JSON_TIMESTAMP, time/1000);
+			gsm.put(JSON_DATETIME, new java.util.Date(time).toString());
+			gsm.put(JSON_CELL_TOWER_ID, l.getCid());
+			gsm.put(JSON_LOCATION_AREA_CODE, l.getLac());
+			gsm.put(JSON_UMTS_PSC, Build.VERSION.SDK_INT >= 9 ? l.getPsc() : -1);
+			if(signal.isGsm()){
+				gsm.put(JSON_SIGNAL_STRENGTH, SKGsmSignalStrength.getGsmSignalStrength(signal));
 			}
-			
+			ret.add(new JSONObject(gsm));
+
+		}else if(cellLocation instanceof CdmaCellLocation){
+			CdmaCellLocation l = (CdmaCellLocation) cellLocation;
+			Map<String, Object> cdma = new HashMap<String, Object>();
+			cdma.put(JSON_TYPE,JSON_TYPE_CDMA_CELL_LOCATION);
+			cdma.put(JSON_TIMESTAMP, time/1000);
+			cdma.put(JSON_DATETIME, new java.util.Date(time).toString());
+			cdma.put(JSON_BASE_STATION_ID, l.getBaseStationId());
+			cdma.put(JSON_BASE_STATION_LATITUDE, l.getBaseStationLatitude());
+			cdma.put(JSON_BASE_STATION_LONGITUDE, l.getBaseStationLongitude());
+			cdma.put(JSON_SYSTEM_ID, l.getSystemId());
+			cdma.put(JSON_NETWORK_ID, l.getNetworkId());
+			if(!signal.isGsm()){
+				cdma.put(JSON_DBM, signal.getCdmaDbm());
+				cdma.put(JSON_ECIO, signal.getCdmaEcio());
+			}
+			ret.add(new JSONObject(cdma));
+		}
+
+		SKLogger.sAssert(getClass(), (neighbors != null));
+		if (neighbors != null) {
 			for (NeighboringCellInfo cellInfo : neighbors) {
 				Map<String, Object> neighbour = new HashMap<String, Object>();
 				neighbour.put(JSON_TYPE, JSON_TYPE_CELL_TOWER_NEIGHBOUR);
@@ -200,7 +224,8 @@ public class CellTowersData implements DCSData{
 				neighbour.put(JSON_LOCATION_AREA_CODE, cellInfo.getLac());
 				ret.add(new JSONObject(neighbour));
 			}
-			
+		}
+
 		return ret;
 	}
 }

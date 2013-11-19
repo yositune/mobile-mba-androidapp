@@ -27,20 +27,26 @@ public class SamKnowsBaseActivity extends Activity {
 			return true;
 		}
 		
-        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<RunningTaskInfo> tasks = am.getRunningTasks(2);
+		try {
 
-        RunningTaskInfo currentTask = tasks.get(0);
-        RunningTaskInfo nextTask = tasks.get(1);
+			ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+			List<RunningTaskInfo> tasks = am.getRunningTasks(2);
 
-        // if we're looking at this application's base/launcher Activity,
-        // and the next task is the Android home screen, then we know we're
-        // about to close the app...
-        if (currentTask.topActivity.equals(currentTask.baseActivity)
-                && nextTask.baseActivity.getPackageName().startsWith("com.android.launcher")) {
-        	Log.d(this.getClass().toString(), "This activity is the top activity, and will return us to the Home screen");
-        	return true;
-        }
+			RunningTaskInfo currentTask = tasks.get(0);
+			RunningTaskInfo nextTask = tasks.get(1);
+
+			// if we're looking at this application's base/launcher Activity,
+			// and the next task is the Android home screen, then we know we're
+			// about to close the app...
+			if (currentTask.topActivity.equals(currentTask.baseActivity)
+					&& nextTask.baseActivity.getPackageName().startsWith("com.android.launcher")) {
+				Log.d(this.getClass().toString(), "This activity is the top activity, and will return us to the Home screen");
+				return true;
+			}
+		} catch (java.lang.NullPointerException ex) {
+			// Seen on some devices!
+			SKLogger.sAssert(getClass(),  false);
+		}
         
         Log.d(this.getClass().toString(), "This activity is not the top activity, and will not return us to the Home screen");
         

@@ -5,7 +5,7 @@ public class SKConstants {
 	public static final int CACHE_EXPIRATION = 12 * 60 * 60 * 1000;// 12 hours in millis, HOURS * MINUTES * SECONDS * MILLIS
 	public static final String RESULT_LINE_SEPARATOR = ";";
 	
-	public static final boolean LOG_TO_FILE = true;
+	public static boolean LOG_TO_FILE = true;
 	
 	public static final String ENABLE_MULTIPLE_TABS = "enable_multiple_tabs";
 
