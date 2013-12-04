@@ -1,12 +1,21 @@
 package com.samknows.fcc;
 
+import java.util.Date;
+
 import com.samknows.fcc.FCCApplication;
+import com.samknows.fcc.activity.FCCMainResultsActivity;
 import com.samknows.libcore.*;
 import com.samknows.libcore.SKServiceDataCache.CachedValue;
 import com.samknows.measurement.*;
 
 
-import com.xtremelabs.robolectric.RobolectricTestRunner;
+import org.robolectric.Robolectric;
+import org.robolectric.Robolectric.*;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowIntent;
+
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
@@ -38,5 +47,14 @@ public class FirstTest {
 		assertEquals(SKConstants.PREF_KEY_USED_BYTES,  "used_bytes");
 		assertEquals(SKConstants.PREF_DATA_CAP,  "data_cap_pref");
 		assertEquals(SKConstants.PROP_TEST_START_WINDOW_RTC,  "test_start_window_in_millis_rtc");
+	}
+    
+
+    @Test
+    public void testGraphHandlerAssigned() throws Exception {
+    	// http://robolectric.org/activity-lifecycle.html
+    	FCCMainResultsActivity activity = (FCCMainResultsActivity) Robolectric.buildActivity(FCCMainResultsActivity.class).create().get();
+      
+        assert(activity.getDownloadGraphHandler() != null);
 	}
 }

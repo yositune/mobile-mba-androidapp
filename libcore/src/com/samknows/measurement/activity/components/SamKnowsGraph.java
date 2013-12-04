@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.samknows.libcore.SKCommon;
+import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.util.SKDateFormat;
 
 import android.content.Context;
@@ -103,6 +104,11 @@ public class SamKnowsGraph {
         multipleSeriesRenderer.setAxisTitleTextSize(16);
         multipleSeriesRenderer.setMargins(new int[]{20,40,15,5}); // Pixels: top/left/bottom/right
         multipleSeriesRenderer.setChartTitleTextSize(20);
+        
+        // The next two lines prevent the Y axis zero from being suppressed!
+        multipleSeriesRenderer.setYAxisMin(0.0);
+        multipleSeriesRenderer.setYAxisMax(this.corePlotMaxValue);
+        
         //multipleSeriesRenderer.setYTitle(mYAxisTitle);
         //multipleSeriesRenderer.setSelectableBuffer(20);
         
@@ -142,7 +148,18 @@ public class SamKnowsGraph {
 	double corePlotMaxValue;
 	String mYAxisTitle = "Mbps";
 	
+	// For Mock Testing...
+	public ArrayList<Double> getCorePlotDataPoints() {
+		return mpCorePlotDataPoints;
+	}
+	
+	// For Mock Testing...
+	public ArrayList<Date> getCorePlotDates() {
+		return mpCorePlotDates;
+	}
+	
 	private void extractCorePlotData() {
+		
 		ArrayList<Double> theNewArray = new ArrayList<Double>();
 		ArrayList<Date> theDateArray =  new ArrayList<Date>();
 		
@@ -374,7 +391,9 @@ public class SamKnowsGraph {
 			//Log.d(this.getClass().getName(), "All values extracted!");
 
 		} catch (JSONException e) {
-			e.printStackTrace();
+			SKLogger.sAssert(getClass(), false);
+		} catch (NullPointerException e) {
+			SKLogger.sAssert(getClass(), false);
 		}
 
 		mpCorePlotDataPoints = theNewArray;
@@ -406,6 +425,7 @@ public class SamKnowsGraph {
 	}
     
     private void attachAchartEngine(Context context, ViewGroup inContainerViewGroup) {
+    	
     	// If the chart already exists, remove it!
     	if (mGraphicalView != null) {
     		inContainerViewGroup.removeView(mGraphicalView);
@@ -435,6 +455,7 @@ public class SamKnowsGraph {
     //
     
     private void updateGraphAndCaption(Context context, ViewGroup inContainerViewGroup) {
+    	
     	// Update the graph...
     	attachAchartEngine(context, inContainerViewGroup);
      
@@ -466,15 +487,7 @@ public class SamKnowsGraph {
 		
 		this.tag=inTag;
 	}
-	
-	/**
-	 * Set the currently active button
-	 * @param btn Button
-	 */
-	public void setActiveButton(Button btn){
-		Log.v(TAG, "setActiveButton()");
-		update();
-	}
+
 	
 	/**
 	 * Set the data to display
@@ -482,6 +495,7 @@ public class SamKnowsGraph {
 	 * @param data JSONObject
 	 */
 	public void setData(JSONObject data){
+    	
 		Log.v(TAG, "setData()");
 		json = data.toString();
 		jsonData = data;
@@ -494,6 +508,7 @@ public class SamKnowsGraph {
 	 * Re-create/update the graph!
 	 */
 	public void update(){
+    	
 		// Attach a new, updated graph!
 		updateGraphAndCaption(mContext, containerViewCroup);
 	}

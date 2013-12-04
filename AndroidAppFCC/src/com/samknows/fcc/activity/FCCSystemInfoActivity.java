@@ -168,8 +168,8 @@ public class FCCSystemInfoActivity extends BaseLogoutActivity{
 	
 		((TextView) findViewById(R.id.tv_signal_value)).setText(value);
 		// Note: neighbors might be NULL...
-		if (cellData.neighbors != null) {
-			for (NeighboringCellInfo info : cellData.neighbors) {
+		if (cellData.getNeighbors() != null) {
+			for (NeighboringCellInfo info : cellData.getNeighbors()) {
 				appendNeighborCellInfo(info);
 			}
 		}

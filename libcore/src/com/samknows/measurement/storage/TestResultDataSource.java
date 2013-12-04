@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -93,26 +94,26 @@ public class TestResultDataSource {
 	
 	//Returns all the TestResult stored in the db for a given test type
 	public List<TestResult> getAllTestResultsByType(String type){
-		String selection = String.format("%s = '%s'",SKSQLiteHelper.TR_COLUMN_TYPE, type );
+		String selection = String.format(Locale.US, "%s = '%s'",SKSQLiteHelper.TR_COLUMN_TYPE, type );
 		return getTestResults(selection);
 	}
 	
 	//Returns all the TestResult stored in the db run in an interval
 	public List<TestResult> getAllTestResultsInterval(long starttime, long endtime){
-		String selection = String.format("%s BETWEEN %d AND %d", SKSQLiteHelper.TR_COLUMN_DTIME, starttime, endtime);
+		String selection = String.format(Locale.US, "%s BETWEEN %d AND %d", SKSQLiteHelper.TR_COLUMN_DTIME, starttime, endtime);
 		return getTestResults(selection);
 	}
 	
 	//Returns n TestResult from the database for a given type after a specific time
 	public List<TestResult> getTestResults(String type, long starttime, int n){
-		String selection = String.format("%s = '%s' AND %s >= %d", SKSQLiteHelper.TR_COLUMN_TYPE, type,
+		String selection = String.format(Locale.US, "%s = '%s' AND %s >= %d", SKSQLiteHelper.TR_COLUMN_TYPE, type,
 				SKSQLiteHelper.TR_COLUMN_DTIME, starttime);
 		return getTestResults(selection, n+"");
 	}
 	
 	//Returns n TestResult the ith result for a given tpe
 	public List<TestResult> getTestResults(String type, int startindex, int n){
-		String selection = String.format("%s = '%s'", SKSQLiteHelper.TR_COLUMN_TYPE, type);
+		String selection = String.format(Locale.US, "%s = '%s'", SKSQLiteHelper.TR_COLUMN_TYPE, type);
 		String limit = String.format("%d,%d",startindex, n );
 		return getTestResults(selection, limit);
 	}
@@ -120,7 +121,7 @@ public class TestResultDataSource {
 	
 	public List<AggregateTestResult> getAverageResults(long starttime, long endtime){
 		List<AggregateTestResult> ret = new ArrayList<AggregateTestResult>();
-		String selection= String.format("dtime BETWEEN %d AND %d AND success <> 0", starttime, endtime);
+		String selection= String.format(Locale.US, "dtime BETWEEN %d AND %d AND success <> 0", starttime, endtime);
 		String averageColumn = String.format("AVG(%s)",SKSQLiteHelper.TR_COLUMN_RESULT);
 		
 		String[] columns = {SKSQLiteHelper.TR_COLUMN_TYPE, averageColumn, "COUNT(*)" }; 

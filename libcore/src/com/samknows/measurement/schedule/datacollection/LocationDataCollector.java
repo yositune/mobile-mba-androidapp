@@ -51,11 +51,17 @@ public class LocationDataCollector extends BaseDataCollector implements Location
 		locationType = SK2AppSettings.getSK2AppSettingsInstance().getLocationServiceType();
 		//if the provider in the settings is gps but the service is not enable fail over to network provider
 		if(locationType == LocationType.gps &&!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-			locationType = LocationType.network;
+			if (manager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+				locationType = LocationType.network;
+			}
 		}
 		
 		if(locationType != LocationType.gps && locationType != LocationType.network){
-			throw new RuntimeException("unknown location type: " + locationType);
+			// throw new RuntimeException("unknown location type: " + locationType);
+			
+			// Rather than simply crashing the app with an exception - stick to Network type, which will
+			// be handled benignly...
+			locationType = LocationType.network;
 		}
 		
 		String provider = locationType == LocationType.gps ? LocationManager.GPS_PROVIDER : LocationManager.NETWORK_PROVIDER;
@@ -68,9 +74,22 @@ public class LocationDataCollector extends BaseDataCollector implements Location
 			}
 		}
 		gotLastLocation = false;
-		manager.requestLocationUpdates(provider, 0, 0,
-				LocationDataCollector.this, Looper.getMainLooper());
-		SKLogger.d(this, "start collecting location data from: " + provider);
+		
+		// On some devices, this can throw an exception, of the form:
+		//   java.lang.IllegalArgumentException: provider doesn't exist: network
+		// or (sic!):
+		//   java.lang.IllegalArgumentException: provider doesn't exisit: null
+		// We must not allow that behavior to cause the app to crash.
+		try {
+			manager.requestLocationUpdates(provider, 0, 0,
+					LocationDataCollector.this, Looper.getMainLooper());
+			SKLogger.d(this, "start collecting location data from: " + provider);
+			
+		} catch (java.lang.IllegalArgumentException ex) {
+			
+			SKLogger.sAssert(getClass(),  false);
+			
+		}
 		
 		try {
 			SKLogger.d(this, "sleeping: " + time);

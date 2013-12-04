@@ -3,6 +3,7 @@ package com.samknows.measurement.storage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -557,7 +558,7 @@ public class DBHelper {
 	public boolean isTrafficDataAvailable(long millis){
 		boolean ret = false;
 		long start = System.currentTimeMillis() - millis;
-		String selection = String.format("%s < %d", SKSQLiteHelper.DC_COLUMN_DTIME, start);
+		String selection = String.format(Locale.US, "%s < %d", SKSQLiteHelper.DC_COLUMN_DTIME, start);
 		synchronized(sync){
 			open();
 			Cursor cursor = database.query(SKSQLiteHelper.TABLE_DATACONSUMPTION, SKSQLiteHelper.TABLE_DATA_CONSUMPTION_ALLCOLUMNS, selection, null, null, null, null);
@@ -603,14 +604,14 @@ public class DBHelper {
 
 	// Returns all the TestResult stored in the db for a given test type
 	public List<JSONObject> getAllTestResultsByType(String type) {
-		String selection = String.format("%s = '%s'",
+		String selection = String.format(Locale.US, "%s = '%s'",
 				SKSQLiteHelper.TR_COLUMN_TYPE, type);
 		return getTestResults(selection);
 	}
 
 	public List<JSONObject> getTestResultByTypeAndInterval(String type,
 			long starttime, long endtime) {
-		String selection = String.format("%s = '%s' AND %s BETWEEN %d AND %d",
+		String selection = String.format(Locale.US, "%s = '%s' AND %s BETWEEN %d AND %d",
 				SKSQLiteHelper.TR_COLUMN_TYPE, type,
 				SKSQLiteHelper.TR_COLUMN_DTIME, starttime, endtime);
 		List<Integer> batches = getTestBatchesByPassiveMetric(getPassiveMetricsFilter());
@@ -625,7 +626,7 @@ public class DBHelper {
 	// Returns all the TestResult stored in the db run in an interval
 	public List<JSONObject> getAllTestResultsInterval(long starttime,
 			long endtime) {
-		String selection = String.format("%s BETWEEN %d AND %d",
+		String selection = String.format(Locale.US, "%s BETWEEN %d AND %d",
 				SKSQLiteHelper.TR_COLUMN_DTIME, starttime, endtime);
 		return getTestResults(selection);
 	}
@@ -634,7 +635,7 @@ public class DBHelper {
 	// time
 	/*
 	 * public List<JSONObject> getTestResults(String type, long starttime, int
-	 * n) { String selection = String.format("%s = '%s' AND %s >= %d",
+	 * n) { String selection = String.format(Locale.US, "%s = '%s' AND %s >= %d",
 	 * SKSQLiteHelper.TR_COLUMN_TYPE, type, SKSQLiteHelper.TR_COLUMN_DTIME,
 	 * starttime); return getTestResults(selection, n + ""); }
 	 */
@@ -642,9 +643,9 @@ public class DBHelper {
 	// Returns n TestResult the i-th result for a given type
 	public List<JSONObject> getFilteredTestResults(String type, int startindex,
 			int n) {
-		String selection = String.format("%s = '%s'",
+		String selection = String.format(Locale.US, "%s = '%s'",
 				SKSQLiteHelper.TR_COLUMN_TYPE, type);
-		String limit = String.format("%d,%d", startindex, n);
+		String limit = String.format(Locale.US, "%d,%d", startindex, n);
 		List<Integer> batches = getTestBatchesByPassiveMetric(getPassiveMetricsFilter());
 		if (batches == null || batches.size() == 0) {
 			return new ArrayList<JSONObject>();
@@ -662,7 +663,7 @@ public class DBHelper {
 		synchronized (sync) {
 			open();
 			JSONArray ret = new JSONArray();
-			String selection = String.format(
+			String selection = String.format(Locale.US,
 					"dtime BETWEEN %d AND %d AND success <> 0", starttime,
 					endtime);
 			if (test_batches != null && test_batches.size() == 0) {
@@ -673,7 +674,7 @@ public class DBHelper {
 						+ getInClause(SKSQLiteHelper.TR_COLUMN_BATCH_ID,
 								test_batches);
 			}
-			String averageColumn = String.format("AVG(%s)",
+			String averageColumn = String.format(Locale.US, "AVG(%s)",
 					SKSQLiteHelper.TR_COLUMN_RESULT);
 
 			String[] columns = { SKSQLiteHelper.TR_COLUMN_TYPE, averageColumn,
@@ -766,7 +767,7 @@ public class DBHelper {
 	public List<Integer> getTestBatchesByPassiveMetric(long start_time,
 			long end_time) {
 
-		String selection = String.format(SKSQLiteHelper.PM_COLUMN_DTIME
+		String selection = String.format(Locale.US, SKSQLiteHelper.PM_COLUMN_DTIME
 				+ " BETWEEN %d AND %d", start_time, end_time);
 		selection += " AND " + getPassiveMetricsFilter();
 		return getTestBatchesByPassiveMetric(selection);

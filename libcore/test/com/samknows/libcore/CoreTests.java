@@ -6,7 +6,12 @@ import com.samknows.libcore.*;
 import com.samknows.libcore.SKServiceDataCache.CachedValue;
 import com.samknows.measurement.*;
 
-import com.xtremelabs.robolectric.RobolectricTestRunner;
+import org.robolectric.Robolectric;
+import org.robolectric.Robolectric.*;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowIntent;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;

@@ -23,9 +23,7 @@ public class CellTowersDataCollector extends BaseDataCollector{
 		data.cellLocation = manager.getCellLocation();
 		
 		// Note: the following call might return NULL
-		data.neighbors = manager.getNeighboringCellInfo();
-		// ... we should trap this where possible in the debugger...
-		SKLogger.sAssert(getClass(), (data.neighbors != null));
+		data.setNeighbors(manager.getNeighboringCellInfo());
 		
 		// getAllCellInfo only supported in API version 17 and in some 
 		// devices running the that version returns null

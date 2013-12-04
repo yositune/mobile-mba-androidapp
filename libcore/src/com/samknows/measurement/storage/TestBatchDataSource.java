@@ -44,7 +44,7 @@ public class TestBatchDataSource {
 		values.put(SKSQLiteHelper.TG_COLUMN_DTIME, dtime);
 		values.put(SKSQLiteHelper.TG_COLUMN_RESULT, result);
 		long insertId = database.insert(SKSQLiteHelper.TABLE_TESTGROUP, null, values);
-		String where = String.format("%s = %d", SKSQLiteHelper.TG_COLUMN_ID, insertId);
+		String where = String.format(Locale.US, "%s = %d", SKSQLiteHelper.TG_COLUMN_ID, insertId);
 		Cursor cursor = database.query(SKSQLiteHelper.TABLE_TESTGROUP, allColumns,
 				where, null, null, null, null);
 		TestBatch ret = cursorToTestGroup(cursor);
@@ -73,7 +73,7 @@ public class TestBatchDataSource {
 	//in ascendic order
 	public List<TestBatch> getTestGroupsInterval(long starttime, long endtime){
 		List<TestBatch> ret = new ArrayList<TestBatch>();
-		String where = String.format("%s BETWEEN %d AND %d",SKSQLiteHelper.TG_COLUMN_DTIME, starttime, endtime);
+		String where = String.format(Locale.US, "%s BETWEEN %d AND %d",SKSQLiteHelper.TG_COLUMN_DTIME, starttime, endtime);
 		Cursor cursor = database.query(SKSQLiteHelper.TABLE_TESTGROUP, allColumns,
 				where, null, null, null, order);
 		cursor.moveToFirst();
@@ -89,7 +89,7 @@ public class TestBatchDataSource {
 	//if there are no TestGroup after that time returns null 
 	public TestBatch getFirstAfter(long dtime){
 		TestBatch ret = null;
-		String where = String.format("%s >= %d", SKSQLiteHelper.TG_COLUMN_DTIME, dtime);
+		String where = String.format(Locale.US, "%s >= %d", SKSQLiteHelper.TG_COLUMN_DTIME, dtime);
 		String limit ="1";
 		Cursor cursor = database.query(SKSQLiteHelper.TABLE_TESTGROUP, allColumns, 
 				where, null, null, order, limit); 
