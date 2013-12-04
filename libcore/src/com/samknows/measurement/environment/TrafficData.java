@@ -1,5 +1,6 @@
 package com.samknows.measurement.environment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,9 @@ import org.json.JSONObject;
 
 import android.net.TrafficStats;
 
-public class TrafficData implements DCSData {
+public class TrafficData implements DCSData, Serializable {
+
+	private static final long serialVersionUID = 1L;
 	public static final String JSON_TYPE_NETUSAGE	= "net_usage";
 	public static final String JSON_MOBILERXBYTES	= "mobile_rx_bytes";
 	public static final String JSON_MOBILETXBYTES	= "mobile_tx_bytes";
@@ -16,6 +19,7 @@ public class TrafficData implements DCSData {
 	public static final String JSON_TOTALTXBYTES 	= "total_tx_bytes";
 	public static final String JSON_APPRXBYTES	 	= "app_rx_bytes";
 	public static final String JSON_APPTXBYTES 		= "app_tx_bytes";
+	public static final String JSON_DURATION		= "duration";
 	
 	
 	public long mobileRxBytes = 0;
@@ -25,13 +29,12 @@ public class TrafficData implements DCSData {
 	public long appRxBytes = 0;
 	public long appTxBytes = 0;
 	public long time = 0;
+	public long duration = 0;
 	
 	
 	public TrafficData(){}
 		
-	public static TrafficData interval(TrafficData a, TrafficData b){
-		TrafficData end = a.time > b.time ? a : b;
-		TrafficData start = a.time <= b.time ? a : b;
+	public static TrafficData interval(TrafficData start, TrafficData end){
 		TrafficData ret = new TrafficData();
 		
 		ret.mobileRxBytes = statDiff(end.mobileRxBytes, start.mobileRxBytes);
@@ -40,7 +43,8 @@ public class TrafficData implements DCSData {
 		ret.totalTxBytes = statDiff(end.totalTxBytes, start.totalTxBytes);
 		ret.appRxBytes = statDiff(end.appRxBytes, start.appRxBytes);
 		ret.appTxBytes = statDiff(end.appTxBytes, start.appTxBytes);
-		ret.time = start.time;
+		ret.duration = (end.time - start.time) * 1000;
+		ret.time = end.time;
 		return ret;
 	}
 	
@@ -97,15 +101,15 @@ public class TrafficData implements DCSData {
 	
 	@Override
 	public List<String> convert() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new ArrayList<String>();
 	}
 
 	@Override
 	public List<JSONObject> getPassiveMetric() {
-
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<JSONObject>();
+		
+		
 	}
 
 	@Override
@@ -121,6 +125,7 @@ public class TrafficData implements DCSData {
 		jo.put(JSON_TOTALTXBYTES, totalTxBytes);
 		jo.put(JSON_APPRXBYTES, appRxBytes);
 		jo.put(JSON_APPTXBYTES, appTxBytes);
+		jo.put(JSON_DURATION, duration);
 		ret.add(new JSONObject(jo));
 		return ret;
 	}

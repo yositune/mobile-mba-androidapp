@@ -47,4 +47,22 @@ public class SKApplication extends Application{
 	public static SKApplication getAppInstance() {
 		return sAppInstance;
 	}
+	
+
+	// Network type results querying...
+	public enum eNetworkTypeResults {
+		eNetworkTypeResults_Any,
+		eNetworkTypeResults_Mobile,
+		eNetworkTypeResults_WiFi
+	};
+	
+	private static eNetworkTypeResults sNetworkTypeResults = eNetworkTypeResults.eNetworkTypeResults_Mobile;
+	
+	public static eNetworkTypeResults getNetworkTypeResults() {
+		return sNetworkTypeResults;
+	}
+	
+	public static void setNetworkTypeResults(eNetworkTypeResults networkTypeResults) {
+		sNetworkTypeResults = networkTypeResults;
+	}
 }

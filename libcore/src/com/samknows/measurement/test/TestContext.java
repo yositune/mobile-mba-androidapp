@@ -1,5 +1,6 @@
 package com.samknows.measurement.test;
 
+
 import java.util.Vector;
 
 import org.json.JSONObject;
@@ -25,7 +26,7 @@ public class TestContext {
 	
 	public ResultsContainer resultsContainer = null;
 	
-	private static TestContext create(Context ctx, boolean PbIsManualTest) {
+	private static TestContext create(Context ctx, boolean PbIsManualTest) { 
 		Storage storage = CachingStorage.getInstance();
 		ScheduleConfig config = storage.loadScheduleConfig();
 		if (config == null) {

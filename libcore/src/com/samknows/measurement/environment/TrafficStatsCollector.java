@@ -1,5 +1,7 @@
 package com.samknows.measurement.environment;
 
+import java.io.Serializable;
+
 import android.content.Context;
 import android.net.TrafficStats;
 import android.os.Process;
@@ -7,14 +9,20 @@ import android.os.Process;
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
 
-public class TrafficStatsCollector extends BaseDataCollector{
+public class TrafficStatsCollector extends BaseDataCollector implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	public TrafficStatsCollector(Context context) {
 		super(context);
 	}
 
-	TrafficData start = new TrafficData();
-	TrafficData end = new TrafficData();
+	private TrafficData start = new TrafficData();
+	private TrafficData end = new TrafficData();
 	private int uid;
 	
 	
@@ -56,11 +64,12 @@ public class TrafficStatsCollector extends BaseDataCollector{
 		return collectTraffic();
 	}
 	
+	
 	public static TrafficData collectTraffic(){
 		TrafficData ret = new TrafficData();
 		ret.time = System.currentTimeMillis();
-		ret.mobileRxBytes = TrafficStats.getTotalRxBytes();
-		ret.mobileTxBytes = TrafficStats.getTotalTxBytes();
+		ret.mobileRxBytes = TrafficStats.getMobileRxBytes();
+		ret.mobileTxBytes = TrafficStats.getMobileTxBytes();
 		ret.totalRxBytes = TrafficStats.getTotalRxBytes();
 		ret.totalTxBytes = TrafficStats.getTotalTxBytes();
 		int uid = Process.myUid();

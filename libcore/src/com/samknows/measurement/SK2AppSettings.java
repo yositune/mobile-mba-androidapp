@@ -67,9 +67,6 @@ public class SK2AppSettings extends SKAppSettings {
 	//collect net usage data
 	public boolean collect_traffic_data;
 	
-	//interval in millisecond between two collection of traffic_data
-	public long collect_traffic_data_interval;
-
 	//Initialise the AppSettings reading from the properties file located in res/raw
 	private SK2AppSettings(Context c) {
 	    super(c);
@@ -91,11 +88,7 @@ public class SK2AppSettings extends SKAppSettings {
 			user_self_id 			= Boolean.parseBoolean(p.getProperty(SKConstants.PROP_USER_SELF_IDENTIFIER));
 			data_cap_welcome		= Boolean.parseBoolean(p.getProperty(SKConstants.PROP_DATA_CAP_WELCOME));
 			collect_traffic_data	= Boolean.parseBoolean(p.getProperty(SKConstants.PROP_COLLECT_TRAFFIC_DATA));
-			if(collect_traffic_data){
-				collect_traffic_data_interval = Long.parseLong(p.getProperty(SKConstants.PROP_COLLECT_TRAFFIC_DATA_INTERVAL_IN_MILLIS));
-			}
-			
-			
+					
 		} catch (IOException e) {
 			SKLogger.e(TAG, "failed to load properies!");
 		} catch(NullPointerException npe){

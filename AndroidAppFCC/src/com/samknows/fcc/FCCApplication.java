@@ -6,6 +6,7 @@ public class FCCApplication extends SKApplication {
 
 	public FCCApplication() {
 		super();
+	
+   	    setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_Mobile);
 	}
-
 }

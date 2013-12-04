@@ -11,6 +11,4 @@ enterprise_id=FCC_Public
 data_cap_welcome=false
 user_self_identifier=false
 anonymous=true
-collect_traffic_data=false
-collect_traffic_data_interval_in_millis=60000
-submit_traffic_data=600000
+collect_traffic_data=true

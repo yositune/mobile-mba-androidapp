@@ -30,7 +30,6 @@ import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.MainService;
-import com.samknows.measurement.NetUsageService;
 import com.samknows.fcc.R;
 import com.samknows.measurement.activity.BaseLogoutActivity;
 import com.samknows.measurement.activity.components.Util;
@@ -87,10 +86,6 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 				LoginHelper.openMainScreenWithNoTransitionAnimation(ctx, FCCMainResultsActivity.class);;
 			} else {
 				MainService.poke(ctx);
-				if(appSettings.collect_traffic_data){
-					NetUsageService.init(ctx, appSettings.collect_traffic_data_interval);
-				}
-
 				startActivity(new Intent(ctx, FCCActivationActivity.class));
 			}
 		} else {
@@ -220,9 +215,7 @@ public class FCCMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 				e.putString("agreement", version_name);
 				e.commit();
 				SK2AppSettings a = SK2AppSettings.getSK2AppSettingsInstance();
-				if(a.collect_traffic_data){
-					NetUsageService.init(ctx, a.collect_traffic_data_interval);
-				}
+				
 				Intent  intent = new Intent(ctx, FCCActivationActivity.class);
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 					intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK );

@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import com.samknows.libcore.R;
 import com.samknows.libcore.SKLogger;
-import com.samknows.measurement.environment.TrafficStatsCollector;
 import com.samknows.measurement.net.SubmitTestResultsAction;
 import com.samknows.measurement.net.SubmitTestResultsAnonymousAction;
 import com.samknows.measurement.schedule.ScheduleConfig;
@@ -114,7 +113,7 @@ public class ManualTest implements Runnable {
 	@Override
 	public void run() {
 		DBHelper db = new DBHelper(ctx);
-		db.insertDataConsumption(TrafficStatsCollector.collectTraffic());
+	
 		
 		sSetIsExecuting(true);
 		
@@ -232,7 +231,7 @@ public class ManualTest implements Runnable {
 		} catch (Throwable t) {
 			SKLogger.e(this, "Submit result. ", t);
 		}
-		db.insertDataConsumption(TrafficStatsCollector.collectTraffic());
+	
 		if(!SK2AppSettings.getInstance().isServiceEnabled()){
 			MainService.force_poke(ctx);
 		}

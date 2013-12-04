@@ -86,15 +86,15 @@
                             android:src="@drawable/pagedrop" />
 
                         <TextView
-                            android:id="@+id/TextView11"
+                            android:id="@+id/active_metrics_textview"
                             style="@style/h1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:gravity="left"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/active_metrics"
+                            android:text="@string/active_metrics_mobile"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#555555"
                             android:width="160dp" />
@@ -408,7 +408,7 @@
                         <TextView
                             android:id="@+id/TextView01"
                             style="@style/h1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:layout_marginLeft="10dp"

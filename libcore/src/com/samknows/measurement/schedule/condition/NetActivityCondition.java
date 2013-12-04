@@ -46,6 +46,6 @@ public class NetActivityCondition extends Condition{
 
 	@Override
 	public String getConditionStringForReportingFailedCondition() {
-		return "NETACTIVITY";
+		return TYPE_VALUE;
 	}
 }

@@ -60,6 +60,7 @@ public class SKConstants {
 	public static final String EXECUTION_QUEUE_FILE_NAME = "execution_queue";
 	public static final String TEST_PARAMS_MANAGER_FILE_NAME = "test_params";
 	public static final String KEYS_FILE_NAME = "keys";
+	public static final String NETUSAGE_STORAGE = "netusage_storage";
 	
 	
 	//Entries in the properties file
@@ -83,7 +84,7 @@ public class SKConstants {
 	public static final String PROP_USER_SELF_IDENTIFIER					= "user_self_identifier";
 	public static final String PROP_DATA_CAP_WELCOME						= "data_cap_welcome";
 	public static final String PROP_COLLECT_TRAFFIC_DATA					= "collect_traffic_data";
-	public static final String PROP_COLLECT_TRAFFIC_DATA_INTERVAL_IN_MILLIS	= "collect_traffic_data_interval_in_millis";
+
 	//Preferences
 	public static final String PREF_FILE_NAME = "SK_PREFS";
 	public static final String PREF_KEY_STATE = "InitState";

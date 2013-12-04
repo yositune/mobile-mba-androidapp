@@ -14,10 +14,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.samknows.libcore.SKLogger;
+import com.samknows.measurement.SKApplication;
 import com.samknows.measurement.environment.TrafficData;
+import com.samknows.measurement.util.DCSConvertorUtil;
 import com.samknows.measurement.util.OtherUtils;
 
 //Helper class for accessing the data stored in the SQLite DB
@@ -253,7 +256,7 @@ public class DBHelper {
 			ret.put(GRAPHDATA_STARTDATE, startdtime + "");
 			ret.put(GRAPHDATA_ENDDATE, enddtime + "");
 			List<JSONObject> entries = getTestResultByTypeAndInterval(
-					test_type, startdtime, enddtime);
+					test_type, startdtime, enddtime, " AND success <> 0");
 			JSONArray results = new JSONArray();
 			for (JSONObject jo : entries) {
 				results.put(testResultToGraphData(test_type_id, jo));
@@ -289,28 +292,87 @@ public class DBHelper {
 
 	// Return the JSONObject to populate an archive view
 	// index is the position of the archive data in the database
+	
+	// TODO - change this to query ONLY for batches for the current activenetworktype ...!
 	public JSONObject getArchiveData(int index) {
 		synchronized (sync) {
 			open();
 			JSONObject ret = new JSONObject();
-			String limit = index + "," + 1;
-			Cursor cursor = database.query(SKSQLiteHelper.TABLE_TESTBATCH,
-					SKSQLiteHelper.TABLE_TESTBATCH_ALLCOLUMNS, null, null,
-					null, null, SKSQLiteHelper.TEST_BATCH_ORDER, limit);
-			if (cursor == null) {
+			
+	 		// A consequence of the system "collecting" metrics both when we start *and* stop a test, is that 
+	 		// this leads to multiple rows in the passive_metric table, with the same batch_id and metric...!
+			// So, our query needs to cater for this...
+		
+			String metricValue = "";
+			if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_Any) {
+	  		  metricValue = "'mobile', 'WiFi'";
+			} else if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+	  		  metricValue = "'mobile'";
+			} else if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+	  		  metricValue = "'WiFi'";
+			}	
+			
+			/*
+			SELECT _id, dtime, manual 
+			FROM test_batch AS tb 
+			WHERE tb._id IN 
+			(select tb2._id 
+			 from test_batch as tb2,
+			      passive_metric  as pm2 
+			      where pm2.batch_id = tb2._id 
+			      and pm2.metric = 'activenetworktype' 
+			      and pm2.value = 'mobile')
+			ORDER BY dtime DESC;
+			 */
+			
+			StringBuilder MY_QUERY = new StringBuilder();
+			MY_QUERY.append("SELECT _id, dtime, manual ");
+			MY_QUERY.append("FROM test_batch AS tb ");
+			MY_QUERY.append("WHERE tb._id IN ");
+			MY_QUERY.append("(select tb2._id ");
+			MY_QUERY.append(" from test_batch as tb2,");
+			MY_QUERY.append("      passive_metric  as pm2 ");
+			MY_QUERY.append("      where pm2.batch_id = tb2._id ");
+			MY_QUERY.append("      and pm2.metric = 'activenetworktype' ");
+			MY_QUERY.append("      and pm2.value in (" + metricValue + ")) ");
+			MY_QUERY.append("ORDER BY dtime DESC ");
+	  		
+	  		//Log.d("!!", MY_QUERY.toString());
+			
+			Cursor cursor1 = database.rawQuery(MY_QUERY.toString(), new String[]{});
+			
+			if (cursor1 == null) {
+				SKLogger.sAssert(getClass(), false);
 				close();
 				return null;
 			}
-			if (!cursor.moveToFirst()) {
-				cursor.close();
+			if (!cursor1.moveToFirst()) {
+				// Nothing to return!
+				cursor1.close();
 				close();
-				return null;
+				return ret;
 			}
-			long test_batch_id = cursor.getLong(0);
-			long test_batch_time = cursor.getLong(1);
-			cursor.close();
-			String selection = SKSQLiteHelper.TR_COLUMN_BATCH_ID + " = "
-					+ test_batch_id;
+			
+			for (;;) {
+			
+				if (index == 0) {
+					break;
+				}
+				
+    			// Find the indexed item!
+				cursor1.moveToNext();
+    			if (cursor1.isAfterLast()) {
+    				SKLogger.sAssert(getClass(),  false);
+    			}
+    			
+    			index--;
+			}
+			
+			long test_batch_id = cursor1.getLong(0);
+			long test_batch_time = cursor1.getLong(1);
+			cursor1.close();
+			
+			String selection = SKSQLiteHelper.TR_COLUMN_BATCH_ID + " = " + test_batch_id;
 			List<JSONObject> tests = getTestResults(selection);
 			List<JSONObject> passive_metrics = getPassiveMetrics(test_batch_id);
 			JSONArray j_tests = new JSONArray();
@@ -344,49 +406,107 @@ public class DBHelper {
 			open();
 			JSONObject ret = new JSONObject();
 			// test batch counter
-			String counterColumn = "COUNT(*)";
-			String minDate = "MIN(" + SKSQLiteHelper.TB_COLUMN_DTIME + ")";
-			String maxDate = "MAX(" + SKSQLiteHelper.TB_COLUMN_DTIME + ")";
-			String[] columns = { counterColumn, minDate, maxDate };
-			Cursor cursor = database.query(SKSQLiteHelper.TABLE_TESTBATCH,
-					columns, null, null, null, null, null);
-			cursor.moveToFirst();
 			
-			String counter = cursor.getLong(0) + "";
-			String min = cursor.getLong(1) + "";
-			String max = cursor.getLong(2) + "";
-			cursor.close();
-			// test results counter
-			columns = new String[] { SKSQLiteHelper.TR_COLUMN_TYPE,
-					counterColumn };
-			String groupBy = SKSQLiteHelper.TR_COLUMN_TYPE;
-			String selection = getInClause(SKSQLiteHelper.TR_COLUMN_BATCH_ID, batches);
-			cursor = database.query(SKSQLiteHelper.TABLE_TESTRESULT, columns,
-					selection, null, groupBy, null, null);
-			cursor.moveToFirst();
-			JSONObject test_counter = new JSONObject();
-			while (!cursor.isAfterLast()) {
-				try {
-					test_counter
-							.put(TestResult.testStringToId(cursor.getString(0))
-									+ "", cursor.getInt(1) + "");
-				} catch (JSONException je) {
-					SKLogger.e(
-							this,
-							"Error in creating a JSONObject: "
-									+ je.getMessage());
-				}
-				cursor.moveToNext();
+	 		// A consequence of the system "collecting" metrics both when we start *and* stop a test, is that 
+	 		// this leads to multiple rows in the passive_metric table, with the same batch_id and metric...!
+			// So, our query needs to cater for this...
+		
+			String metricValue = "";
+			if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_Any) {
+				// Nothing to append!
+	  		  metricValue = "'mobile', 'WiFi'";
+			} else if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+	  		  metricValue = "'mobile'";
+			} else if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+	  		  metricValue = "'WiFi'";
 			}
-			cursor.close();
+		
+			// Query the number of test batches (only of the required network type!), together with
+			// min/max test dates.
+			/*
+			 SELECT COUNT(*), MIN(tb.dtime), MAX(tb.dtime)
+             FROM test_batch AS tb
+             WHERE tb._id in
+             (select tb2._id
+              from test_batch as tb2,
+                   passive_metric  as pm2
+                   where pm2.batch_id = tb2._id
+                   and pm2.metric = 'activenetworktype'
+                   and pm2.value = 'mobile');
+			 */
+			
+			StringBuilder MY_QUERY = new StringBuilder();
+			MY_QUERY.append("SELECT COUNT(*), MIN(tb.dtime), MAX(tb.dtime) ");
+			MY_QUERY.append("FROM test_batch AS tb ");
+			MY_QUERY.append("WHERE tb._id in ");
+			MY_QUERY.append("(select tb2._id ");
+			MY_QUERY.append(" from test_batch as tb2,");
+			MY_QUERY.append("      passive_metric  as pm2 ");
+			MY_QUERY.append("      where pm2.batch_id = tb2._id ");
+			MY_QUERY.append("      and pm2.metric = 'activenetworktype' ");
+			MY_QUERY.append("      and pm2.value in (" + metricValue + ")) ");
+	  		
+	  		//Log.d("!!", MY_QUERY.toString());
+			
+			Cursor cursor1 = database.rawQuery(MY_QUERY.toString(), new String[]{});
+			
+			String counter = "0";
+			String min = "0";
+			String max = "0";
+			if (cursor1.moveToFirst() == true) {
+				// Got something!
+				counter = cursor1.getLong(0) + "";
+				min = cursor1.getLong(1) + "";
+				max = cursor1.getLong(2) + "";
+			} else {
+				// The first time this query is run, there might be zero rows returned;
+				// do not treat this as a failure.
+			}
+	  		cursor1.close();
+
+	  		/*
+	  		 SELECT tr.type, COUNT(*)
+             FROM  test_result AS tr
+             WHERE tr.batch_id IN
+             (select pm.batch_id
+             FROM passive_metric AS pm
+             WHERE pm.metric = 'activenetworktype' AND pm.value = 'mobile')
+             GROUP BY tr.type;
+	  		 */
+			
+			// test results counter
+			MY_QUERY = new StringBuilder();
+			MY_QUERY.append("SELECT tr.type, COUNT(*) ");
+			MY_QUERY.append("FROM  test_result AS tr ");
+			MY_QUERY.append("WHERE tr.batch_id IN ");
+			MY_QUERY.append("(SELECT pm.batch_id ");
+			MY_QUERY.append("FROM passive_metric AS pm ");
+			MY_QUERY.append("WHERE pm.metric = 'activenetworktype' AND pm.value in (" + metricValue + ")) ");
+			MY_QUERY.append("GROUP BY tr.type ");
+	  		
+	  		// Log.d("!!", MY_QUERY.toString());
+	  		
+			Cursor cursor2 = database.rawQuery(MY_QUERY.toString(), new String[]{});
+			
+			cursor2.moveToFirst();
+			JSONObject test_counter = new JSONObject();
+			while (!cursor2.isAfterLast()) {
+				try {
+					test_counter.put(TestResult.testStringToId(cursor2.getString(0)) + "", cursor2.getInt(1) + "");
+				} catch (JSONException je) {
+					SKLogger.sAssert(getClass(),  false);
+				}
+				cursor2.moveToNext();
+			}
+			cursor2.close();
+			
 			try {
 				ret.put(ARCHIVEDATASUMMARY_COUNTER, counter);
 				ret.put(ARCHIVEDATASUMMARY_STARTDATE, min);
 				ret.put(ARCHIVEDATASUMMARY_ENDDATE, max);
 				ret.put(ARCHIVEDATASUMMARY_TESTCOUNTER, test_counter);
 			} catch (JSONException je) {
-				SKLogger.e(this,
-						"Error in creating a JSONObject: " + je.getMessage());
+				SKLogger.sAssert(getClass(),  false);
 			}
 			close();
 			return ret;
@@ -528,75 +648,35 @@ public class DBHelper {
 		synchronized (sync) {
 			ContentValues values = new ContentValues();
 			open();
+			
+     		// A consequence of the system "collecting" metrics both when we start *and* stop a test, is that 
+     		// this leads to multiple rows in the passive_metric table, with the same batch_id and metric...!
+			if (metric_type.equals("activenetworktype")) {
+				Log.d("activenetworktype", "value=" + value);
+				//Log.d("activenetworktype", Thread.currentThread().getStackTrace().toString());
+			}
+			
+//			if (metric_type.equals("activenetworktype")) {
+//		        if (OtherUtils.isThisDeviceAnEmulator() == true) {
+//		        	if (value.equals(DCSConvertorUtil.convertConnectivityType(ConnectivityManager.TYPE_MOBILE))) {
+//		        		// Can force to save as particular network type, to assist in debugging!
+//		        		value = DCSConvertorUtil.convertConnectivityType(ConnectivityManager.TYPE_WIFI);
+//		        	}
+//        		}
+//			}
+			
 			values.put(SKSQLiteHelper.PM_COLUMN_METRIC, metric_type);
 			values.put(SKSQLiteHelper.PM_COLUMN_TYPE, type);
 			values.put(SKSQLiteHelper.PM_COLUMN_DTIME, dtime);
 			values.put(SKSQLiteHelper.PM_COLUMN_VALUE, value);
 			values.put(SKSQLiteHelper.PM_COLUMN_BATCH_ID, test_batch_id);
+			
 			long id = database.insert(SKSQLiteHelper.TABLE_PASSIVEMETRIC, null,
 					values);
 			close();
 		}
 	}
 
-	public void insertDataConsumption(TrafficData data){
-		synchronized(sync){
-			open();
-			ContentValues values = new ContentValues();
-			values.put(SKSQLiteHelper.DC_COLUMN_DTIME, data.time);
-			values.put(SKSQLiteHelper.DC_COLUMN_MOBILERXBYTES, data.mobileRxBytes);
-			values.put(SKSQLiteHelper.DC_COLUMN_MOBILETXBYTES, data.mobileTxBytes);
-			values.put(SKSQLiteHelper.DC_COLUMN_TOTALRXBYTES, data.totalRxBytes);
-			values.put(SKSQLiteHelper.DC_COLUMN_TOTALTXBYTES, data.totalTxBytes);
-			values.put(SKSQLiteHelper.DC_COLUMN_APPRXBYTES, data.appRxBytes);
-			values.put(SKSQLiteHelper.DC_COLUMN_APPTXBYTES, data.appTxBytes);
-			long id = database.insert(SKSQLiteHelper.TABLE_DATACONSUMPTION, null, values);
-			close();
-		}
-	}
-	
-	public boolean isTrafficDataAvailable(long millis){
-		boolean ret = false;
-		long start = System.currentTimeMillis() - millis;
-		String selection = String.format(Locale.US, "%s < %d", SKSQLiteHelper.DC_COLUMN_DTIME, start);
-		synchronized(sync){
-			open();
-			Cursor cursor = database.query(SKSQLiteHelper.TABLE_DATACONSUMPTION, SKSQLiteHelper.TABLE_DATA_CONSUMPTION_ALLCOLUMNS, selection, null, null, null, null);
-			if(cursor.getCount() > 0){
-				ret = true;
-			}
-			cursor.close();
-			close();
-		}
-		return ret;
-		
-	}
-	
-	public List<TrafficData> getTrafficData(){
-		List<TrafficData> ret = new ArrayList<TrafficData>();
-		synchronized(sync){
-			open();
-			Cursor cursor = database.query(SKSQLiteHelper.TABLE_DATACONSUMPTION, SKSQLiteHelper.TABLE_DATA_CONSUMPTION_ALLCOLUMNS, null, null, null, null, SKSQLiteHelper.DATACONSUMPTION_ORDER);
-			cursor.moveToFirst();
-			while(!cursor.isAfterLast()){
-				TrafficData curr = new TrafficData();
-				curr.time = cursor.getLong(1);
-				curr.mobileRxBytes = cursor.getLong(2);
-				curr.mobileTxBytes = cursor.getLong(3);
-				curr.totalRxBytes = cursor.getLong(4);
-				curr.totalTxBytes = cursor.getLong(5);
-				curr.appRxBytes = cursor.getLong(6);
-				curr.appTxBytes = cursor.getLong(7);
-				cursor.moveToNext();
-				ret.add(curr);
-			}
-			cursor.close();
-			close();
-		}
-		return ret;
-	}
-	
-	
 	// Returns all the TestResult stored in the db
 	public List<JSONObject> getAllTestResults() {
 		return getTestResults();
@@ -610,10 +690,10 @@ public class DBHelper {
 	}
 
 	public List<JSONObject> getTestResultByTypeAndInterval(String type,
-			long starttime, long endtime) {
-		String selection = String.format(Locale.US, "%s = '%s' AND %s BETWEEN %d AND %d",
+			long starttime, long endtime, String extraFilter) {
+		String selection = String.format(Locale.US, "%s = '%s' AND %s BETWEEN %d AND %d %s",
 				SKSQLiteHelper.TR_COLUMN_TYPE, type,
-				SKSQLiteHelper.TR_COLUMN_DTIME, starttime, endtime);
+				SKSQLiteHelper.TR_COLUMN_DTIME, starttime, endtime, extraFilter);
 		List<Integer> batches = getTestBatchesByPassiveMetric(getPassiveMetricsFilter());
 		if (batches == null || batches.size() == 0) {
 			return new ArrayList<JSONObject>();
@@ -729,18 +809,19 @@ public class DBHelper {
 	// When retrieving averages, graph and grid data we have to filter by
 	// Passive metric
 	private String getPassiveMetricsFilter() {
+
 		StringBuilder sb = new StringBuilder();
-		sb.append(SKSQLiteHelper.PM_COLUMN_METRIC);
-		sb.append("= '")
-				.append(PassiveMetric.METRIC_TYPE.ACTIVENETWORKTYPE.metric_name)
-				.append("'");
-		sb.append(" AND ").append(SKSQLiteHelper.PM_COLUMN_VALUE)
-				.append("= 'mobile' ");
-		// The following line could be used as debugging hack, to allow us to display
-		// data captured on WiFi in the UI's graphs!
-		if (OtherUtils.isThisDeviceAnEmulator() == true) {
-		    sb = new StringBuilder(); sb.append("1 = 1"); Log.w(getClass().getName(), "EMULATOR : WARNING: Hack - showing WiFi data in graphs, to make testing easier!");
+		sb.append(" metric = 'activenetworktype' AND value in(");
+
+		if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_Any) {
+	  		sb.append ("'mobile', 'WiFi'");
+		} else if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+			sb.append("'mobile'");
+		} else if (SKApplication.getNetworkTypeResults() == SKApplication.eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+			sb.append("'WiFi'");
 		}
+		sb.append(")");
+		
 		return sb.toString();
 	}
 

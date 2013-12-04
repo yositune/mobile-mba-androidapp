@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.samknows.libcore.SKLogger;
+
 public class ClosestTarget extends Test {
 
 	public static final String TESTSTRING = "CLOSESTTARGET";
@@ -136,6 +138,7 @@ public class ClosestTarget extends Test {
 
 			} catch (InterruptedException ie) {
 				ie.printStackTrace();
+			    SKLogger.sAssert(getClass(),  false);
 			}
 		}
 		int minDist = Integer.MAX_VALUE;

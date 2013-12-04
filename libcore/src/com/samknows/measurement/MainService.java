@@ -125,7 +125,7 @@ public class MainService extends IntentService {
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onBegin - create collector and call start()");
 		collector = new TrafficStatsCollector(this);
 		collector.start();
-		new DBHelper(this).insertDataConsumption(TrafficStatsCollector.collectTraffic());
+		
 		
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onBegin (end)");
 	}
@@ -144,7 +144,6 @@ public class MainService extends IntentService {
 			publish(UIUpdate.completed());
 			isExecuting = false;
 		}
-		new DBHelper(this).insertDataConsumption(TrafficStatsCollector.collectTraffic());
 		
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onEnd... (end)");
 	}

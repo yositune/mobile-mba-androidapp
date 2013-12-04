@@ -18,7 +18,8 @@
 <string name="activation_menu_string">Activation</string>
 <string name="activation_needed">The application needs to be activated</string>
 <string name="active_connection">Active Connection: </string>
-<string name="active_metrics">Active Metrics</string>
+<string name="active_metrics_mobile">Active Metrics (Mobile)</string>
+<string name="active_metrics_wifi">Active Metrics (WiFi)</string>
 <string name="active_network_type">Active network type</string>
 <string name="active_network_type_title">Active Network Type</string>
 <string name="activity_info_name">System Info</string>
@@ -33,6 +34,7 @@
 <string name="already_have_account">Already have an account?</string>
 <string name="app_name">FCC Speed Test</string>
 <string name="archive_result">Archived Result</string>
+<string name="archive_result_of"> of </string>
 <string name="area_code">Area Code</string>
 <string name="auto_testing">Auto Testing</string>
 <string name="available_tests">Available Tests</string>
@@ -76,7 +78,7 @@
 <string name="data_cap_day_summary">Select the day of the month that the mobile data usage counter should be reset. </string>
 <string name="data_cap_day_title">Mobile data usage reset day: </string>
 <string name="data_cap_exceeded">Data Cap Exceeded. Do you wish to continue anyway?  </string>
-<string name="data_cap_explanation">By default the Application is configured to use no more than 100 megabytes of data each month.  Any tests you initiate will also consume between 100 KB for the smallest packet loss test and 40 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the \"Mobile data cap\" in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package\'s data allowance.</string>
+<string name="data_cap_explanation">By default the Application is configured to use no more than 100 megabytes (MB) of data each month.  Any tests you initiate will also consume between 100 kilobytes (kB) for the smallest packet loss test and 40 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the \"Mobile data cap\" in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package\'s data allowance.</string>
 <string name="data_cap_input_text">Please choose the amount of data (in MB) the Application should use each month:</string>
 <string name="data_cap_summary">The maximum amount of mobile data in Mega Bytes (excluding WiFi) that this application can use in a billing month.</string>
 <string name="data_cap_title">Mobile data cap: </string>
@@ -202,7 +204,7 @@
 <string name="no_dialog">No</string>
 <string name="ntf_checking_conditions">Checking test conditions</string>
 <string name="ntf_running_test">Running test: </string>
-<string name="ntf_title">SamKnows</string>
+<string name="ntf_title">FCC Speed Test</string>
 <string name="of">of</string>
 <string name="ok">ok</string>
 <string name="ok_dialog">OK</string>
@@ -246,6 +248,7 @@
 <string name="reset_password_success">Your password has been reset</string>
 <string name="result">Result</string>
 <string name="results_for">Results for</string>
+<string name="results_for_1_week">Results for 1 week</string>
 <string name="roaming_status">Roaming status</string>
 <string name="running_test">Running Test</string>
 <string name="run_now">Run now</string>
@@ -325,4 +328,14 @@
 <string name="wood_background">Wood background</string>
 <string name="year">1 Yr</string>
 <string name="yes">Yes</string>
+<string name="network_type_mobile_results">Showing Mobile results</string>
+<string name="network_type_wifi_results">Showing WiFi results</string>
+<string name="network_type_all_results">Showing all results</string>
+<string name="network_type_choose">Select results to show:</string>
+<string name="network_type_choose_mobile_results">Mobile</string>
+<string name="network_type_choose_wifi_results">WiFi</string>
+<string name="network_type_choose_all_results">All</string>
+<string name="right_arrow">&gt; </string>
+<string name="left_arrow"> &lt;</string>
+<string name="down_arrow">V</string>
 </resources>

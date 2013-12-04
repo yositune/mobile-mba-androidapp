@@ -8,12 +8,15 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -38,6 +41,8 @@ public class FCCRunningTestActivity extends BaseLogoutActivity {
 	private ManualTest mt;
 	int page;
 	int result = 0;
+	
+	private String mActiveNetworkType = "mobile";
 
 	Storage storage;
 	ScheduleConfig config;
@@ -70,8 +75,25 @@ public class FCCRunningTestActivity extends BaseLogoutActivity {
 
 		this.setTitle(R.string.running_test);
 
-		// choose which test to run
+		//
+		// Load the layout!
+		//
 		setContentView(R.layout.fcc_running_test_activity);
+		
+		LinearLayout passiveMetricsLayout = (LinearLayout) findViewById(R.id.passive_metrics);
+    	TextView activeMetricsTextView = (TextView) findViewById(R.id.active_metrics_textview);
+		
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
+		if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+			// Show for Mobile results!
+			passiveMetricsLayout.setVisibility(View.VISIBLE);
+			activeMetricsTextView.setText(getString(R.string.active_metrics_mobile));
+		} else {
+			// Hide for WiFi results!
+			passiveMetricsLayout.setVisibility(View.GONE);
+			activeMetricsTextView.setText(getString(R.string.active_metrics_wifi));
+		}
 
 		Util.initializeFonts(this);
 		Util.overrideFonts(this, findViewById(android.R.id.content));
@@ -270,6 +292,7 @@ public class FCCRunningTestActivity extends BaseLogoutActivity {
 								metric = 22;
 							} else if (metricString.equals("activenetworktype")) { // active network
 								metric = 23;
+                             	mActiveNetworkType = value;
 							} else if (metricString.equals("connectionstatus")) { // connection
 								metric = 24;
 							} else if (metricString.equals("roamingstatus")) { // roaming status
@@ -476,6 +499,7 @@ public class FCCRunningTestActivity extends BaseLogoutActivity {
 	public void finish() {
 
 		Intent returnIntent = new Intent();
+		returnIntent.putExtra("activeneworktype", mActiveNetworkType);
 
 		if (result == 0) {
 			// setResult(RESULT_OK,returnIntent);

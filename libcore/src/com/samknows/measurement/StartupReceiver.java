@@ -1,6 +1,7 @@
 package com.samknows.measurement;
 
 import com.samknows.libcore.SKLogger;
+import com.samknows.measurement.environment.NetUsageCollector;
 import com.samknows.measurement.statemachine.State;
 import com.samknows.measurement.util.OtherUtils;
 
@@ -23,8 +24,10 @@ public class StartupReceiver extends BroadcastReceiver{
 			//in this case we just set the alarm
 			OtherUtils.reschedule(context, nextRunTime - System.currentTimeMillis());
 		}
+		//if the traffic data has to be collected by calling this method we 
+		// refresh the object in cache
 		if(a.collect_traffic_data){
-			NetUsageService.init(context, a.collect_traffic_data_interval);
+			new NetUsageCollector(context).collect();
 		}
 		
 		

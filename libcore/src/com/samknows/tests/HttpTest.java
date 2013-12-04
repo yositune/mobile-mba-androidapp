@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.samknows.libcore.SKLogger;
+
 public class HttpTest extends Test {
 
 	/*
@@ -185,7 +187,8 @@ public class HttpTest extends Test {
 				threads[i].join();
 			}
 		} catch (Exception e) {
-			setErrorIfEmpty("Thread join execption: ", e);
+			setErrorIfEmpty("Thread join exception: ", e);
+			SKLogger.sAssert(getClass(),  false);
 			testStatus = "FAIL";
 		}
 

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -453,6 +454,7 @@ public class SamKnowsGraph {
     //
     // Update the graph, and set the caption text...
     //
+    //Handler handler = new Handler();
     
     private void updateGraphAndCaption(Context context, ViewGroup inContainerViewGroup) {
     	
@@ -465,6 +467,17 @@ public class SamKnowsGraph {
     	// http://stackoverflow.com/questions/1529068/is-it-possible-to-have-multiple-styles-inside-a-textview
         // mCaptionView.setText(mYAxisTitle);
         mCaptionView.setText(Html.fromHtml("<b>" + mYAxisTitle + "</b>"));
+       
+        // TODO: on the simulator, the graph doesn't always display the background properly the first time!
+//        handler.postDelayed(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				containerViewCroup.invalidate();
+//				mGraphicalView.invalidate();
+//
+//			}
+//        }, 100);
     }
     
     Context mContext = null;

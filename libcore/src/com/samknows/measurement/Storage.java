@@ -11,6 +11,7 @@ import android.content.Context;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
+import com.samknows.measurement.environment.TrafficData;
 import com.samknows.measurement.schedule.ScheduleConfig;
 import com.samknows.measurement.test.ScheduledTestExecutionQueue;
 
@@ -57,6 +58,20 @@ public class Storage {
 	public void dropScheduleConfig(){
 		drop(SKConstants.SCHEDULE_CONFIG_FILE_NAME);
 	}
+	
+	public void saveNetUsage(TrafficData netusage){
+		save(SKConstants.NETUSAGE_STORAGE, netusage);
+	}
+	
+	public void dropNetUsage(){
+		drop(SKConstants.NETUSAGE_STORAGE);
+	}
+
+	public TrafficData loadNetUsage(){
+		return (TrafficData) load(SKConstants.NETUSAGE_STORAGE);
+	}
+	
+	
 	
 	protected synchronized void save(String id, Object data) {
 		ObjectOutputStream dos = null;

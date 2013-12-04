@@ -53,3 +53,5 @@ proguard/
 *~
 org.eclipse.jdt.core.prefs
 fcc.keystore
+AndroidAppFCC/tmp
+libcore/tmp

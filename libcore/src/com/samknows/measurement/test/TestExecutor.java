@@ -280,13 +280,22 @@ public class TestExecutor {
 
 	public void stop() {
 		if (startThread != null) {
-			try {
-				startThread.join(1000);
-			} catch (InterruptedException ie) {
-				SKLogger.e(this,
-						"Exception while waiting for the start thread to finish");
+			for (;;) {
+				
+				try {
+					if (!startThread.isAlive()) {
+						break;
+					}
+					
+					startThread.join(100);
+					
+				} catch (InterruptedException ie) {
+					SKLogger.e(this, "Ignore InterruptedException while waiting for the start thread to finish");
+					SKLogger.sAssert(getClass(), false);
+				}
 			}
 		}
+		
 		for (BaseDataCollector collector : tc.config.dataCollectors) {
 			if (collector.isEnabled) {
 				collector.stop(tc);
@@ -295,6 +304,7 @@ public class TestExecutor {
 				rc.addMetric(collector.getJSONOutput());
 			}
 		}
+		
 	}
 
 	public TestResult executeGroup(TestGroup tg) {

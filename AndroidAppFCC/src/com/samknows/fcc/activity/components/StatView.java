@@ -1,12 +1,15 @@
 package com.samknows.fcc.activity.components;
 
 import com.samknows.fcc.R;
+import com.samknows.measurement.SKApplication;
+import com.samknows.measurement.SKApplication.eNetworkTypeResults;
 import com.samknows.measurement.activity.components.StatRecord;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -59,6 +62,24 @@ public class StatView extends ScrollView {
     	setPassiveMetric(R.id.pm_tablerow20,R.id.passivemetric20,sr.passivemetric20,sr.passivemetric20_type);
     	setPassiveMetric(R.id.pm_tablerow21,R.id.passivemetric21,sr.passivemetric21,sr.passivemetric21_type);
     	setPassiveMetric(R.id.pm_tablerow22,R.id.passivemetric22,sr.passivemetric22,sr.passivemetric22_type);
+    	
+		//
+		// Show or hide the passive results, depending on whether
+		// we're looking at mobile (show) or WiFi (hide!)
+		//
+	    TextView activeMetricsTitle = (TextView) findViewById(R.id.active_metric_title);
+		LinearLayout passiveResultsLinearLayout = (LinearLayout)findViewById(R.id.passive_results_linearlayout);
+		//if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+		if (sr.active_network_type.equals("(Mobile)")) {
+			// Show for Mobile results!
+			passiveResultsLinearLayout.setVisibility(View.VISIBLE);
+	        activeMetricsTitle.setText(ctx.getString(R.string.active_metrics_mobile));
+		} else {
+			// Hide for WiFi results!
+			passiveResultsLinearLayout.setVisibility(View.GONE);
+	        activeMetricsTitle.setText(ctx.getString(R.string.active_metrics_wifi));
+		}
+
     	setPassiveMetric(R.id.pm_tablerow23,R.id.passivemetric23,sr.passivemetric23,sr.passivemetric23_type);
     	setPassiveMetric(R.id.pm_tablerow24,R.id.passivemetric24,sr.passivemetric24,sr.passivemetric24_type);
     	setPassiveMetric(R.id.pm_tablerow25,R.id.passivemetric25,sr.passivemetric25,sr.passivemetric25_type);
@@ -96,6 +117,12 @@ public class StatView extends ScrollView {
     
     public void setActiveNetworkType(String text){
     	TextView tv = (TextView) findViewById(R.id.active_metric_title);
+    	
+    	if (text.equals("(Network)")) {
+    		text = "(" + ctx.getString(R.string.wifi) + ")";
+    	} else if (text.equals("Network")) {
+    		text = ctx.getString(R.string.wifi);
+    	}
     	tv.setText(ctx.getString(R.string.active_metrics)+" "+text);
     }
     

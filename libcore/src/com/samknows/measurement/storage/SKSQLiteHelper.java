@@ -80,37 +80,9 @@ public class SKSQLiteHelper extends SQLiteOpenHelper {
 	
 	public static final String TEST_BATCH_ORDER = TB_COLUMN_DTIME + " DESC ";
 	
-	//data consumption table
-	public static final String TABLE_DATACONSUMPTION = "data_consumption";
-	public static final String DC_COLUMN_ID = "_id";
-	public static final String DC_COLUMN_DTIME = "dtime";
-	public static final String DC_COLUMN_MOBILERXBYTES = "mobile_rx_bytes";
-	public static final String DC_COLUMN_MOBILETXBYTES = "mobile_tx_bytes";
-	public static final String DC_COLUMN_TOTALRXBYTES = "total_rx_bytes";
-	public static final String DC_COLUMN_TOTALTXBYTES = "total_tx_bytes";
-	public static final String DC_COLUMN_APPRXBYTES = "app_rx_bytes";
-	public static final String DC_COLUMN_APPTXBYTES = "app_tx_bytes";
-	public static final String[] TABLE_DATA_CONSUMPTION_ALLCOLUMNS = {
-		DC_COLUMN_ID, DC_COLUMN_DTIME, DC_COLUMN_MOBILERXBYTES, DC_COLUMN_MOBILETXBYTES,
-		DC_COLUMN_TOTALRXBYTES, DC_COLUMN_TOTALTXBYTES, DC_COLUMN_APPRXBYTES,
-		DC_COLUMN_APPTXBYTES
-	};
-	
-	public String CREATE_TABLE_DATACONSUMPTION = "CREATE TABLE "
-			+ TABLE_DATACONSUMPTION + " ( "
-			+ DC_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-			+ DC_COLUMN_DTIME + " INTEGER NOT NULL, "
-			+ DC_COLUMN_MOBILERXBYTES + " INTEGER, "
-			+ DC_COLUMN_MOBILETXBYTES + " INTEGER, "
-			+ DC_COLUMN_TOTALRXBYTES + " INTEGER, "
-			+ DC_COLUMN_TOTALTXBYTES + " INTEGER, "
-			+ DC_COLUMN_APPRXBYTES + " INTEGER, "
-			+ DC_COLUMN_APPTXBYTES + " INTEGER "
-			+ " ); ";
-	public static final String DATACONSUMPTION_ORDER = DC_COLUMN_DTIME + " DESC ";
 	
 	public static final String[] TABLES = {TABLE_TESTRESULT, 
-		TABLE_PASSIVEMETRIC,TABLE_TESTBATCH, TABLE_DATACONSUMPTION };
+		TABLE_PASSIVEMETRIC,TABLE_TESTBATCH };
 	
 	
 			
@@ -118,8 +90,7 @@ public class SKSQLiteHelper extends SQLiteOpenHelper {
 	public String[] DATABASE_CREATE = {
 			CREATE_TABLE_TESTRESULT,  
 			CREATE_TABLE_PASSIVEMETRIC,
-			CREATE_TABLE_TESTBATCH, 
-			CREATE_TABLE_DATACONSUMPTION
+			CREATE_TABLE_TESTBATCH
 	};
 	
 	public SKSQLiteHelper(Context context){

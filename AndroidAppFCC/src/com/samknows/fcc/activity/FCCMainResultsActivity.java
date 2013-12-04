@@ -16,7 +16,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -41,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.samknows.fcc.activity.components.StatView;
@@ -50,6 +53,8 @@ import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
 import com.samknows.measurement.DeviceDescription;
 import com.samknows.measurement.MainService;
+import com.samknows.measurement.SKApplication;
+import com.samknows.measurement.SKApplication.eNetworkTypeResults;
 import com.samknows.fcc.R;
 import com.samknows.measurement.SamKnowsLoginService;
 import com.samknows.measurement.SamKnowsResponseHandler;
@@ -141,7 +146,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 	private DBHelper dbHelper;
 	// private DBHelper dbHelperAsync;
 
-	private MyPagerAdapter adapter;
+	private MyPagerAdapter adapter = null;
 	private ViewPager viewPager;
 	private View current_page_view;
 	private int current_page_view_position = 0;
@@ -156,6 +161,8 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 	List<TestDescription> testList;
 	String array_spinner[];
 	int array_spinner_int[];
+	
+	TextView tvHeader = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -182,94 +189,89 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 		dbHelper = new DBHelper(FCCMainResultsActivity.this);
 		//dbHelperAsync = new DBHelper(SamKnowsAggregateStatViewerActivity.this);
-		adapter = new MyPagerAdapter(this);
 
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
-
+	
+		adapter = new MyPagerAdapter(this);
 		viewPager.setAdapter(adapter);
 		// viewPager.setOffscreenPageLimit(3);
 
-		final TextView tvHeader = (TextView) findViewById(R.id.textViewHeader);
+		tvHeader = (TextView) findViewById(R.id.textViewHeader);
 
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int page) {
-
-				tvHeader.setText(getString(R.string.page) + " " + (page + 1));
-
-				if (page == 0) {
-					on_aggregate_page = true;
-					boolean db_refresh = false;
-
-					FCCMainResultsActivity.this.setTitle(getString(R.string.sk2_main_results_activity_title));
-
-					View v = viewPager.findViewWithTag(page);
-
-					if (v == null) {
-						// ... we should trap this where possible in the debugger...
-						SKLogger.sAssert(getClass(), false);
-					} else {
-						TextView timestampView = (TextView) v.findViewById(R.id.average_results_title);
-
-						if (timestampView == null) {
-							// ... we should trap this where possible in the debugger...
-							SKLogger.sAssert(getClass(), false);
-						} else {
-
-							timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
-
-							if (setTotalArchiveRecords()) {
-								viewPager = (ViewPager) findViewById(R.id.viewPager);
-								if (viewPager == null) {
-									// ... we should trap this where possible in the debugger...
-									SKLogger.sAssert(getClass(), false);
-								} else {
-									adapter = new MyPagerAdapter(FCCMainResultsActivity.this);
-									viewPager.setAdapter(adapter);
-								}
-							}
-						}
-					}
-
-				} else {
-					View v = viewPager.findViewWithTag(page);
-					if (v == null) {
-						// ... we should trap this where possible in the debugger...
-						SKLogger.sAssert(getClass(), false);
-					} else {
-						TextView timestampView = (TextView) v.findViewById(R.id.timestamp);
-						if (timestampView == null) {
-							// ... we should trap this where possible in the debugger...
-							SKLogger.sAssert(getClass(), false);
-						} else {
-							timestampView.setContentDescription(getString(R.string.archive_result) + " " + timestampView.getText());
-							timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
-							on_aggregate_page = false;
-							FCCMainResultsActivity.this.setTitle(getString(R.string.archive_result));
-						}
-					}
-				}
+             	handleOnPageSelected(page);
 			}
 
 			@Override
 			public void onPageScrolled(int position, float positionOffset,
 					int positionOffsetPixels) {
-
 			}
 
 			@Override
 			public void onPageScrollStateChanged(int state) {
-				if (state == ViewPager.SCROLL_STATE_SETTLING) {
-
-				}
-
+//				if (state == ViewPager.SCROLL_STATE_SETTLING) {
+//
+//				}
 			}
 		});
+		
 
 		Util.initializeFonts(this);
 		Util.overrideFonts(this, findViewById(android.R.id.content));
 
+	}
+	
+	void handleOnPageSelected(int page) {
+
+		tvHeader.setText(getString(R.string.page) + " " + (page + 1));
+
+		if (page == 0) {
+			on_aggregate_page = true;
+			boolean db_refresh = false;
+
+			FCCMainResultsActivity.this.setTitle(getString(R.string.sk2_main_results_activity_title));
+
+			View v = viewPager.findViewWithTag(page);
+
+			if (v == null) {
+				// ... we should trap this where possible in the debugger...
+				SKLogger.sAssert(getClass(), false);
+			} else {
+				TextView timestampView = (TextView) v.findViewById(R.id.average_results_title);
+
+				if (timestampView == null) {
+					// ... we should trap this where possible in the debugger...
+					SKLogger.sAssert(getClass(), false);
+				} else {
+
+					timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+				}
+			}
+
+		} else {
+			View v = viewPager.findViewWithTag(page);
+			if (v == null) {
+				// ... we should trap this where possible in the debugger...
+				SKLogger.sAssert(getClass(), false);
+			} else {
+				TextView timestampView = (TextView) v.findViewById(R.id.timestamp);
+				timestampView.setContentDescription(getString(R.string.archive_result) + " " + timestampView.getText());
+				timestampView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+				on_aggregate_page = false;
+				FCCMainResultsActivity.this.setTitle(getString(R.string.archive_result));
+				
+				
+				String caption = getString(R.string.archive_result) + " " + page + " " + getString(R.string.archive_result_of) + " " + total_archive_records;
+				// Following line was used for testing that the text will fit...
+				//caption = getString(R.string.archive_result) + " " + 9999 + " " + getString(R.string.archive_result_of) + " " + 9999;
+				TextView captionView = (TextView) v.findViewById(R.id.archived_result_x_of_y);
+				captionView.setText(caption);
+
+			}
+		}
 	}
 	
 	@Override
@@ -277,28 +279,59 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		super.onDestroy();
 		SKLogger.d(this, "+++++DEBUG+++++ SamKnowsAggregateStatViewerActivity onDestroy...");
 	}
+	
+	boolean mbHandlingOnActivityResult = false;
 
 	@Override
 	public void onResume() {
 		super.onResume(); // Always call the superclass method first
+		
+        SKLogger.d(this, "+++++DEBUG+++++ SamKnowsAggregateStatViewerActivity onResume...");
 
-		SKLogger.d(this, "+++++DEBUG+++++ SamKnowsAggregateStatViewerActivity onResume...");
-		if (setTotalArchiveRecords()) {
-			adapter = new MyPagerAdapter(
-					FCCMainResultsActivity.this);
-			viewPager = (ViewPager) findViewById(R.id.viewPager);
-			viewPager.setAdapter(adapter);
-		}
+        if (mbHandlingOnActivityResult == true) {
+        	// Already handled on the activity result... which has taken us to the archived results screen.
+            mbHandlingOnActivityResult = false;
+        } else {
+        	// Resuming from e.g. T&C screen, or About screen.
+        	if (setTotalArchiveRecords()) {
+        		adapter = new MyPagerAdapter(FCCMainResultsActivity.this);
+        		//viewPager = (ViewPager) findViewById(R.id.viewPager);
+				SKLogger.sAssert(getClass(), viewPager == (ViewPager) findViewById(R.id.viewPager));
+        		viewPager.setAdapter(adapter);
+        	}
+        }
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 		if (resultCode == RESULT_OK) {
+			mbHandlingOnActivityResult = true;
+
+			// The returned result might be a mobile result, or a network result.
+			// We must update the filter to match, and then show that result screen...!
+			String activeNetworkType = data.getStringExtra("activeneworktype");
+
+			if (activeNetworkType.equals("mobile")) {
+				if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+    				SKApplication.setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_Any);
+				}
+			} else if (activeNetworkType.equals("WiFi")) {
+				if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+    				SKApplication.setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_Any);
+				}
+			} else {
+				SKLogger.sAssert(getClass(), false);
+			}
+			setNetworkTypeToggleButton();
+
 			// refresh data
-			adapter = new MyPagerAdapter(this);
-			viewPager = (ViewPager) findViewById(R.id.viewPager);
+			adapter = new MyPagerAdapter(FCCMainResultsActivity.this);
+			setTotalArchiveRecords();
+			//viewPager = (ViewPager) findViewById(R.id.viewPager);
+			SKLogger.sAssert(getClass(), viewPager == (ViewPager) findViewById(R.id.viewPager));
 			viewPager.setAdapter(adapter);
-			viewPager.setCurrentItem(1, false);
-			overridePendingTransition(0, 0);
+			viewPager.setCurrentItem(1, true); // true means - perform a smooth scroll!
+			//overridePendingTransition(0, 0);
 		}
 
 		/*
@@ -321,6 +354,14 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		long starting_dtime = now.getTimeInMillis();
 
 		jsonResult = dbHelper.getAverageResults(starting_dtime, current_dtime);
+	
+		// Clear out the results, as there might be no results on first
+		// use, when toggling mobile results <-> network results.
+		((TextView) subview.findViewById(R.id.download_average)).setText("");
+		((TextView) subview.findViewById(R.id.upload_average)).setText("");
+		((TextView) subview.findViewById(R.id.latency_average)).setText("");
+		((TextView) subview.findViewById(R.id.packetloss_average)).setText("");
+		((TextView) subview.findViewById(R.id.jitter_average)).setText("");
 
 		String result = "";
 
@@ -361,6 +402,13 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 	public boolean setTotalArchiveRecords() {
 		boolean result = false;
+		
+		total_archive_records = 0;
+		total_download_archive_records = 0;
+		total_upload_archive_records = 0;
+		total_latency_archive_records = 0;
+		total_packetloss_archive_records = 0;
+		total_jitter_archive_records = 0;
 
 		JSONObject summary = dbHelper.getArchiveDataSummary();
 
@@ -371,10 +419,11 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 		} catch (JSONException e) {
 
-			e.printStackTrace();
+			SKLogger.sAssert(getClass(),  false);
 			
 			return false;
 		}
+		
 
 		try {
 			if (results.has("" + TestResult.DOWNLOAD_TEST_ID)) {
@@ -383,6 +432,11 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+		
+		if (mShowArchivedResultsButton != null) {
+			mShowArchivedResultsButton.setVisibility((total_download_archive_records > 0) ? View.VISIBLE :
+				View.INVISIBLE);
 		}
 
 		try {
@@ -457,6 +511,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		case TestResult.DOWNLOAD_TEST_ID:
 			a1 = (double) total_download_archive_records;
 			pages = (int) Math.ceil(a1 / a2);
+			if (pages == 0) pages = 1;
 
 			tv = (TextView) subview.findViewById(R.id.download_pagenumber);
 			tv.setText(getString(R.string.page) + " " + page_number + " "
@@ -466,6 +521,8 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		case TestResult.UPLOAD_TEST_ID:
 			a1 = (double) total_upload_archive_records;
 			pages = (int) Math.ceil(a1 / a2);
+			if (pages == 0) pages = 1;
+			
 			tv = (TextView) subview.findViewById(R.id.upload_pagenumber);
 			tv.setText(getString(R.string.page) + " " + page_number + " "
 					+ getString(R.string.of) + " " + pages);
@@ -474,6 +531,8 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		case TestResult.LATENCY_TEST_ID:
 			a1 = (double) total_latency_archive_records;
 			pages = (int) Math.ceil(a1 / a2);
+			if (pages == 0) pages = 1;
+			
 			tv = (TextView) subview.findViewById(R.id.latency_pagenumber);
 			tv.setText(getString(R.string.page) + " " + page_number + " "
 					+ getString(R.string.of) + " " + pages);
@@ -482,6 +541,8 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		case TestResult.PACKETLOSS_TEST_ID:
 			a1 = (double) total_packetloss_archive_records;
 			pages = (int) Math.ceil(a1 / a2);
+			if (pages == 0) pages = 1;
+			
 			tv = (TextView) subview.findViewById(R.id.packetloss_pagenumber);
 			tv.setText(getString(R.string.page) + " " + page_number + " "
 					+ getString(R.string.of) + " " + pages);
@@ -490,6 +551,8 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		case TestResult.JITTER_TEST_ID:
 			a1 = (double) total_jitter_archive_records;
 			pages = (int) Math.ceil(a1 / a2);
+			if (pages == 0) pages = 1;
+			
 			tv = (TextView) subview.findViewById(R.id.jitter_pagenumber);
 			tv.setText(getString(R.string.page) + " " + page_number + " "
 					+ getString(R.string.of) + " " + pages);
@@ -498,9 +561,6 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		default:
 
 		}
-
-		addGridItemHeader(getString(R.string.date), getString(R.string.server),
-				getString(R.string.result), grid);
 
 		JSONObject jsonObject;
 
@@ -520,7 +580,10 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		String result;
 		String success;
 
+		int addedRowCount = 0;
+		
 		if (results != null) {
+
 			for (int i = 0; i < results.length(); i++) {
 				location = "";
 				dtime = "";
@@ -555,6 +618,12 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 						e.printStackTrace();
 					}
 				}
+			
+				if (addedRowCount == 0) {
+					// Add the header, just before adding the first row!
+					addGridItemHeader(getString(R.string.date), getString(R.string.server),
+							getString(R.string.result), grid);
+				}
 
 				if (success.equals("1")) {
 					addGridItem(dtime_formatted, location, result, grid);
@@ -562,13 +631,59 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					result = getString(R.string.failed);
 					addGridItemFailed(dtime_formatted, location, result, grid);
 				}
+			
+				addedRowCount++;
 			}
 		}
+		
+		TableLayout table = (TableLayout) findViewById(grid);
+		if (addedRowCount > 0) {
+//			LayoutParams x = new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//			table.setLayoutParams(x);
+			table.setVisibility(View.VISIBLE);
+		} else {
+//			LayoutParams x = new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
+//			table.setLayoutParams(x);
+//			table.setVisibility(View.VISIBLE);
+			table.setVisibility(View.GONE);
+			table.getLayoutParams().height = 0;
+		}
+		table.getParent().requestLayout();
 
 		Util.overrideFonts(this, findViewById(android.R.id.content));
 	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
 
+//	    // Checks the orientation of the screen
+//	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//	        Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+//	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+//	        Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+//	    }
+	}
+
+	Button mNetworkTypeToggleButton = null;
+//	TextView     mNetworkTypeToggleTextView = null;
+	Button       mShowArchivedResultsButton = null;
+	
+	void setNetworkTypeToggleButton() {
+		mNetworkTypeToggleButton = (Button) findViewById(R.id.networkTypeButton);
+		
+		if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+     		mNetworkTypeToggleButton.setText(R.string.network_type_wifi_results);
+		} else if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+     		mNetworkTypeToggleButton.setText(R.string.network_type_mobile_results);
+		} else {
+     		mNetworkTypeToggleButton.setText(R.string.network_type_all_results);
+		}
+	}
+	
 	private void buttonSetup() {
+		
+
 
 		// button setup
 
@@ -616,24 +731,106 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			}
 		});
 
-		LinearLayout timeperiod_button2;
-		timeperiod_button2 = (LinearLayout) findViewById(R.id.timeperiod_header);
-
-		timeperiod_button2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				SingleChoice();
-			}
-		});
+//		LinearLayout timeperiod_button2;
+//		timeperiod_button2 = (LinearLayout) findViewById(R.id.timeperiod_header);
+//
+//		timeperiod_button2.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				SingleChoice();
+//			}
+//		});
 
 		// page turn navigation button
-		ImageView page_right = (ImageView) findViewById(R.id.page_turn_right_agg);
+		mShowArchivedResultsButton = (Button) findViewById(R.id.main_show_archived_results_button);
 
-		page_right.setOnClickListener(new OnClickListener() {
+		mShowArchivedResultsButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				viewPager = (ViewPager) findViewById(R.id.viewPager);
-				viewPager.setCurrentItem(1, true);
+				// This is how you scroll "right" to the next page (we always
+				// start on page "zero"...)
+				viewPager.setCurrentItem(1);
+			}
+		});
+		
+		// When we start-up, the button might be hidden or shown!
+		mShowArchivedResultsButton.setVisibility((total_download_archive_records > 0) ? View.VISIBLE : View.INVISIBLE);
+		
+		
+		// Network type results button, and associated text label.
+     	setNetworkTypeToggleButton();
+		
+		// Set-up the button listener.
+		mNetworkTypeToggleButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				String the_array_spinner[];
+				the_array_spinner = new String[3];
+				the_array_spinner[0] = getString(R.string.network_type_choose_mobile_results);
+				the_array_spinner[1] = getString(R.string.network_type_choose_wifi_results);
+				the_array_spinner[2] = getString(R.string.network_type_choose_all_results);
+
+				Builder builder = new AlertDialog.Builder(FCCMainResultsActivity.this);
+				builder.setTitle(getString(R.string.network_type_choose));
+
+				builder.setItems(the_array_spinner, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						dialog.dismiss();
+				
+						boolean bChanged = false;
+						if (which == 0) {
+    						if (SKApplication.getNetworkTypeResults() != eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+    	  						SKApplication.setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_Mobile);
+    	  						bChanged = true;
+    						}
+						} else if (which == 1) {
+    						if (SKApplication.getNetworkTypeResults() != eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+    							SKApplication.setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_WiFi);
+    	  						bChanged = true;
+    						}
+						} else { // if (which == 2) {
+    						if (SKApplication.getNetworkTypeResults() != eNetworkTypeResults.eNetworkTypeResults_Any) {
+    							SKApplication.setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_Any);
+    	  						bChanged = true;
+    						}
+						}
+						
+    	  				if (bChanged) {
+    	  					setNetworkTypeToggleButton();
+
+    	  					// Update all the graphs etc.!!!
+    	  					// Query average data, and update charts - this might make them invisible, if there is no data!
+    	  					setTotalArchiveRecords();
+    	  					adapter = new MyPagerAdapter(FCCMainResultsActivity.this);
+    	  					//viewPager = (ViewPager) findViewById(R.id.viewPager);
+    	  					SKLogger.sAssert(getClass(), viewPager == (ViewPager) findViewById(R.id.viewPager));
+    	  					viewPager.setAdapter(adapter);
+
+    	  					queryAverageDataAndUpdateTheCharts();
+
+    	  					// And reload the grids!
+    	  					clearGrid(R.id.download_results_tablelayout);
+    	  					clearGrid(R.id.upload_results_tablelayout);
+    	  					clearGrid(R.id.latency_results_tablelayout);
+    	  					clearGrid(R.id.packetloss_results_tablelayout);
+    	  					clearGrid(R.id.jitter_results_tablelayout);
+    	  					adapter.loadGrids();
+    	  				}
+					}
+				});
+				builder.setNegativeButton(getString(R.string.cancel),
+						new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
 			}
 		});
 
@@ -651,11 +848,13 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					download_page_index = download_page_index + ITEMS_PER_PAGE;
 				}
 
-				clearGrid(R.id.agggregate_test1_grid);
+				clearGrid(R.id.download_results_tablelayout);
 				loadDownloadGrid(TestResult.DOWNLOAD_TEST_ID,
-						R.id.agggregate_test1_grid, download_page_index,
+						R.id.download_results_tablelayout, download_page_index,
 						ITEMS_PER_PAGE);
-
+				
+				// And force a relayout, otherwise we get a huge chunk of white space on the screen!
+         		findViewById(R.id.download_panel).requestLayout();
 			}
 		});
 
@@ -669,9 +868,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				if (download_page_index > 0) {
 					download_page_index = download_page_index - ITEMS_PER_PAGE;
 				}
-				clearGrid(R.id.agggregate_test1_grid);
+				clearGrid(R.id.download_results_tablelayout);
 				loadDownloadGrid(TestResult.DOWNLOAD_TEST_ID,
-						R.id.agggregate_test1_grid, download_page_index,
+						R.id.download_results_tablelayout, download_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -689,9 +888,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					upload_page_index = upload_page_index + ITEMS_PER_PAGE;
 				}
 
-				clearGrid(R.id.agggregate_test2_grid);
+				clearGrid(R.id.upload_results_tablelayout);
 				loadDownloadGrid(TestResult.UPLOAD_TEST_ID,
-						R.id.agggregate_test2_grid, upload_page_index,
+						R.id.upload_results_tablelayout, upload_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -707,9 +906,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				if (upload_page_index > 0) {
 					upload_page_index = upload_page_index - ITEMS_PER_PAGE;
 				}
-				clearGrid(R.id.agggregate_test2_grid);
+				clearGrid(R.id.upload_results_tablelayout);
 				loadDownloadGrid(TestResult.UPLOAD_TEST_ID,
-						R.id.agggregate_test2_grid, upload_page_index,
+						R.id.upload_results_tablelayout, upload_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -727,9 +926,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					latency_page_index = latency_page_index + ITEMS_PER_PAGE;
 				}
 
-				clearGrid(R.id.agggregate_test3_grid);
+				clearGrid(R.id.latency_results_tablelayout);
 				loadDownloadGrid(TestResult.LATENCY_TEST_ID,
-						R.id.agggregate_test3_grid, latency_page_index,
+						R.id.latency_results_tablelayout, latency_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -745,9 +944,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				if (latency_page_index > 0) {
 					latency_page_index = latency_page_index - ITEMS_PER_PAGE;
 				}
-				clearGrid(R.id.agggregate_test3_grid);
+				clearGrid(R.id.latency_results_tablelayout);
 				loadDownloadGrid(TestResult.LATENCY_TEST_ID,
-						R.id.agggregate_test3_grid, latency_page_index,
+						R.id.latency_results_tablelayout, latency_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -766,9 +965,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 							+ ITEMS_PER_PAGE;
 				}
 
-				clearGrid(R.id.agggregate_test4_grid);
+				clearGrid(R.id.packetloss_results_tablelayout);
 				loadDownloadGrid(TestResult.PACKETLOSS_TEST_ID,
-						R.id.agggregate_test4_grid, packetloss_page_index,
+						R.id.packetloss_results_tablelayout, packetloss_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -785,9 +984,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					packetloss_page_index = packetloss_page_index
 							- ITEMS_PER_PAGE;
 				}
-				clearGrid(R.id.agggregate_test4_grid);
+				clearGrid(R.id.packetloss_results_tablelayout);
 				loadDownloadGrid(TestResult.PACKETLOSS_TEST_ID,
-						R.id.agggregate_test4_grid, packetloss_page_index,
+						R.id.packetloss_results_tablelayout, packetloss_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -805,9 +1004,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					jitter_page_index = jitter_page_index + ITEMS_PER_PAGE;
 				}
 
-				clearGrid(R.id.agggregate_test5_grid);
+				clearGrid(R.id.jitter_results_tablelayout);
 				loadDownloadGrid(TestResult.JITTER_TEST_ID,
-						R.id.agggregate_test5_grid, jitter_page_index,
+						R.id.jitter_results_tablelayout, jitter_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -823,9 +1022,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				if (jitter_page_index > 0) {
 					jitter_page_index = jitter_page_index - ITEMS_PER_PAGE;
 				}
-				clearGrid(R.id.agggregate_test5_grid);
+				clearGrid(R.id.jitter_results_tablelayout);
 				loadDownloadGrid(TestResult.JITTER_TEST_ID,
-						R.id.agggregate_test5_grid, jitter_page_index,
+						R.id.jitter_results_tablelayout, jitter_page_index,
 						ITEMS_PER_PAGE);
 
 			}
@@ -920,6 +1119,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 	private void clearGrid(int grid) {
 		TableLayout table = (TableLayout) findViewById(grid);
+//		table.setVisibility(View.GONE);
+//		table.getLayoutParams().height = 0;
+		
 		int count = table.getChildCount();
 		for (int i = 0; i < count; i++) {
 			View child = table.getChildAt(i);
@@ -1052,7 +1254,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 	private class MyPagerAdapter extends PagerAdapter {
 
-		private ArrayList<StatRecord> views;
+		private ArrayList<StatRecord> statRecords; // TODO - rename views to statRecords!
 
 		@Override
 		public void setPrimaryItem(ViewGroup container, int position,
@@ -1060,19 +1262,22 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			current_page_view = (View) object;
 			current_page_view_position = position;
 		}
+		
+		FCCMainResultsActivity mMainResultsActivity;
 
-		public MyPagerAdapter(Context context) {
-
-			views = new ArrayList<StatRecord>();
-
-			views.add(new StatRecord());
+		public MyPagerAdapter(FCCMainResultsActivity inMainResultsActivity) {
+			
+			mMainResultsActivity = inMainResultsActivity;
+			
+			statRecords = new ArrayList<StatRecord>();
+			statRecords.add(new StatRecord());
 			// views.get(0) is the aggregate view
 
 			JSONObject summary = dbHelper.getArchiveDataSummary();
 
 			try {
 				total_archive_records = summary.getInt("counter");
-				String last_run_test = summary.getString("startdate");
+				String last_run_test = summary.getString("enddate");
 
 				if (Long.parseLong(last_run_test) != 0) {
 					last_run_test_formatted = new SKDateFormat(context)
@@ -1081,14 +1286,12 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				} else {
 					last_run_test_formatted = "";
 				}
-
 			} catch (JSONException e1) {
 				SKLogger.e(this, "Error in reading from JSONObject.", e1);
 			}
 
-			//
 			for (int i = 0; i < total_archive_records; i++) {
-				views.add(new StatRecord());
+				statRecords.add(new StatRecord());
 				// load blank records ready for populating
 			}
 		}
@@ -1101,6 +1304,12 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 			} catch (Exception e) {
 				SKLogger.e(this, "Error in reading archive item " + archiveItemIndex, e);
+				SKLogger.sAssert(getClass(), false);
+				return;
+			}
+			
+			if (archive == null) {
+				SKLogger.sAssert(getClass(), false);
 				return;
 			}
 
@@ -1112,7 +1321,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 				dtime_formatted = new SKDateFormat(context).UITime(Long
 						.parseLong(datetime));
-				views.get(archiveItemIndex + 1).time_stamp = dtime_formatted;
+				statRecords.get(archiveItemIndex + 1).time_stamp = dtime_formatted;
 
 			} catch (JSONException e1) {
 				e1.printStackTrace();
@@ -1155,33 +1364,33 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 							}
 
 							if (testnumber.equals("" + TestResult.UPLOAD_TEST_ID)) {
-								views.get(archiveItemIndex + 1).tests_location = location;
-								views.get(archiveItemIndex + 1).upload_location = location;
-								views.get(archiveItemIndex + 1).upload_result = hrresult;
+								statRecords.get(archiveItemIndex + 1).tests_location = location;
+								statRecords.get(archiveItemIndex + 1).upload_location = location;
+								statRecords.get(archiveItemIndex + 1).upload_result = hrresult;
 
 							}
 							if (testnumber.equals("" + TestResult.DOWNLOAD_TEST_ID)) {
-								views.get(archiveItemIndex + 1).tests_location = location;
-								views.get(archiveItemIndex + 1).download_location = location;
-								views.get(archiveItemIndex + 1).download_result = hrresult;
+								statRecords.get(archiveItemIndex + 1).tests_location = location;
+								statRecords.get(archiveItemIndex + 1).download_location = location;
+								statRecords.get(archiveItemIndex + 1).download_result = hrresult;
 							}
 
 							if (testnumber.equals("" + TestResult.LATENCY_TEST_ID)) {
-								views.get(archiveItemIndex + 1).tests_location = location;
-								views.get(archiveItemIndex + 1).latency_location = location;
-								views.get(archiveItemIndex + 1).latency_result = hrresult;
+								statRecords.get(archiveItemIndex + 1).tests_location = location;
+								statRecords.get(archiveItemIndex + 1).latency_location = location;
+								statRecords.get(archiveItemIndex + 1).latency_result = hrresult;
 							}
 
 							if (testnumber.equals("" + TestResult.PACKETLOSS_TEST_ID)) {
-								views.get(archiveItemIndex + 1).tests_location = location;
-								views.get(archiveItemIndex + 1).packetloss_location = location;
-								views.get(archiveItemIndex + 1).packetloss_result = hrresult;
+								statRecords.get(archiveItemIndex + 1).tests_location = location;
+								statRecords.get(archiveItemIndex + 1).packetloss_location = location;
+								statRecords.get(archiveItemIndex + 1).packetloss_result = hrresult;
 							}
 
 							if (testnumber.equals("" + TestResult.JITTER_TEST_ID)) {
-								views.get(archiveItemIndex + 1).tests_location = location;
-								views.get(archiveItemIndex + 1).jitter_location = location;
-								views.get(archiveItemIndex + 1).jitter_result = hrresult;
+								statRecords.get(archiveItemIndex + 1).tests_location = location;
+								statRecords.get(archiveItemIndex + 1).jitter_location = location;
+								statRecords.get(archiveItemIndex + 1).jitter_result = hrresult;
 							}
 
 						} catch (JSONException je) {
@@ -1252,119 +1461,120 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				// which resource id to use.
 
 				if (metric.equals("connected")) { // connected
-					views.get(archiveItemIndex + 1).passivemetric1 = value;
-					views.get(archiveItemIndex + 1).passivemetric1_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric1 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric1_type = type;
 				} else if (metric.equals("connectivitytype")) { // connectivity
 					// type
-					views.get(archiveItemIndex + 1).passivemetric2 = value;
-					views.get(archiveItemIndex + 1).passivemetric2_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric2 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric2_type = type;
 				} else if (metric.equals("gsmcelltowerid")) { // cell tower id
 					// TODO - Giancarlo says this isn't displayed in SamKnowsAggregateStatViewerActivity - "Archived Result" (archive_result)
 					// METRIC_TYPE.GSMCID("gsmcelltowerid")
-					views.get(archiveItemIndex + 1).passivemetric3 = value;
-					views.get(archiveItemIndex + 1).passivemetric3_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric3 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric3_type = type;
 				} else if (metric.equals("gsmlocationareacode")) { // cell tower
 					// location area
-					views.get(archiveItemIndex + 1).passivemetric4 = value;
-					views.get(archiveItemIndex + 1).passivemetric4_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric4 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric4_type = type;
 				} else if (metric.equals("gsmsignalstrength")) { // signal strength
-					views.get(archiveItemIndex + 1).passivemetric5 = value;
-					views.get(archiveItemIndex + 1).passivemetric5_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric5 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric5_type = type;
 				} else if (metric.equals("networktype")) { // bearer
-					views.get(archiveItemIndex + 1).passivemetric6 = value;
-					views.get(archiveItemIndex + 1).passivemetric6_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric6 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric6_type = type;
 				} else if (metric.equals("networkoperatorname")) { // network
 					// operator
-					views.get(archiveItemIndex + 1).passivemetric7 = value;
-					views.get(archiveItemIndex + 1).passivemetric7_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric7 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric7_type = type;
 				} else if (metric.equals("latitude")) { // latitude
-					views.get(archiveItemIndex + 1).passivemetric8 = 
+					statRecords.get(archiveItemIndex + 1).passivemetric8 = 
 							SKCommon.sGetDecimalStringAnyLocaleAs1Pt5LocalisedString(value);
-					views.get(archiveItemIndex + 1).passivemetric8_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric8_type = type;
 				} else if (metric.equals("longitude")) { // longitude
-					views.get(archiveItemIndex + 1).passivemetric9 = 
+					statRecords.get(archiveItemIndex + 1).passivemetric9 = 
 							SKCommon.sGetDecimalStringAnyLocaleAs1Pt5LocalisedString(value);
-					views.get(archiveItemIndex + 1).passivemetric9_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric9_type = type;
 				} else if (metric.equals("accuracy")) { // accuracy
-					views.get(archiveItemIndex + 1).passivemetric10 = value;
-					views.get(archiveItemIndex + 1).passivemetric10_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric10 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric10_type = type;
 				} else if (metric.equals("locationprovider")) { // location
 					// provider
-					views.get(archiveItemIndex + 1).passivemetric11 = value;
-					views.get(archiveItemIndex + 1).passivemetric11_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric11 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric11_type = type;
 				} else if (metric.equals("simoperatorcode")) { // sim operator code
-					views.get(archiveItemIndex + 1).passivemetric12 = value;
-					views.get(archiveItemIndex + 1).passivemetric12_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric12 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric12_type = type;
 				} else if (metric.equals("simoperatorname")) { // sim operator name
-					views.get(archiveItemIndex + 1).passivemetric13 = value;
-					views.get(archiveItemIndex + 1).passivemetric13_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric13 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric13_type = type;
 				} else if (metric.equals("imei")) { // imei
-					views.get(archiveItemIndex + 1).passivemetric14 = value;
-					views.get(archiveItemIndex + 1).passivemetric14_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric14 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric14_type = type;
 				} else if (metric.equals("imsi")) { // imsi
-					views.get(archiveItemIndex + 1).passivemetric15 = value;
-					views.get(archiveItemIndex + 1).passivemetric15_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric15 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric15_type = type;
 				} else if (metric.equals("manufactor")) { // manufacturer
-					views.get(archiveItemIndex + 1).passivemetric16 = value;
-					views.get(archiveItemIndex + 1).passivemetric16_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric16 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric16_type = type;
 				} else if (metric.equals("model")) { // model
-					views.get(archiveItemIndex + 1).passivemetric17 = value;
-					views.get(archiveItemIndex + 1).passivemetric17_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric17 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric17_type = type;
 				} else if (metric.equals("ostype")) { // os type
-					views.get(archiveItemIndex + 1).passivemetric18 = value;
-					views.get(archiveItemIndex + 1).passivemetric18_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric18 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric18_type = type;
 				} else if (metric.equals("osversion")) { // os version
-					views.get(archiveItemIndex + 1).passivemetric19 = value;
-					views.get(archiveItemIndex + 1).passivemetric19_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric19 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric19_type = type;
 				} else if (metric.equals("gsmbiterrorrate")) { // gsmbiterrorrate
-					views.get(archiveItemIndex + 1).passivemetric20 = value;
-					views.get(archiveItemIndex + 1).passivemetric20_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric20 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric20_type = type;
 				} else if (metric.equals("cdmaecio")) { // cdmaecio
-					views.get(archiveItemIndex + 1).passivemetric21 = value;
-					views.get(archiveItemIndex + 1).passivemetric21_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric21 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric21_type = type;
 				} else if (metric.equals("phonetype")) { // phone type
 					// TODO - Giancarlo says this isn't displayed in SamKnowsAggregateStatViewerActivity - "Archived Result" (archive_result)
 					// TODO - the phone type is NOT SHOWN! MODEL("model")
-					views.get(archiveItemIndex + 1).passivemetric22 = value;
-					views.get(archiveItemIndex + 1).passivemetric22_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric22 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric22_type = type;
 				} else if (metric.equals("activenetworktype")) { // active network
+					// TODO
 					// type
 					if(value.length() > 0 ){
 						String new_value = value.substring(0, 1).toUpperCase() + value.substring(1);
-						views.get(archiveItemIndex + 1).active_network_type = "("+new_value+")";
+						statRecords.get(archiveItemIndex + 1).active_network_type = "("+new_value+")";
 					}
 
 					//views.get(i + 1).passivemetric23 = value;
 					//views.get(i + 1).passivemetric23_type = type;
 				} else if (metric.equals("connectionstatus")) { // connection
 					// status
-					views.get(archiveItemIndex + 1).passivemetric24 = value;
-					views.get(archiveItemIndex + 1).passivemetric24_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric24 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric24_type = type;
 				} else if (metric.equals("roamingstatus")) { // roaming status
-					views.get(archiveItemIndex + 1).passivemetric25 = value;
-					views.get(archiveItemIndex + 1).passivemetric25_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric25 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric25_type = type;
 				} else if (metric.equals("networkoperatorcode")) { // network
 					// operator code
-					views.get(archiveItemIndex + 1).passivemetric26 = value;
-					views.get(archiveItemIndex + 1).passivemetric26_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric26 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric26_type = type;
 				} else if (metric.equals("cdmasignalstrength")) { // cdmasignalstrength
-					views.get(archiveItemIndex + 1).passivemetric27 = value;
-					views.get(archiveItemIndex + 1).passivemetric27_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric27 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric27_type = type;
 				} else if (metric.equals("cdmabasestationid")) { // cdmabasestationid
-					views.get(archiveItemIndex + 1).passivemetric28 = value;
-					views.get(archiveItemIndex + 1).passivemetric28_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric28 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric28_type = type;
 				} else if (metric.equals("cdmabasestationlatitude")) { // cdmabasestationlatitude
-					views.get(archiveItemIndex + 1).passivemetric29 = value;
-					views.get(archiveItemIndex + 1).passivemetric29_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric29 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric29_type = type;
 				} else if (metric.equals("cdmabasestationlongitude")) { // cdmabasestationlongitude
-					views.get(archiveItemIndex + 1).passivemetric30 = value;
-					views.get(archiveItemIndex + 1).passivemetric30_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric30 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric30_type = type;
 				} else if (metric.equals("cdmanetworkid")) { // cdmanetworkid
-					views.get(archiveItemIndex + 1).passivemetric31 = value;
-					views.get(archiveItemIndex + 1).passivemetric31_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric31 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric31_type = type;
 				} else if (metric.equals("cdmasystemid")) { // cdmasystemid
-					views.get(archiveItemIndex + 1).passivemetric32 = value;
-					views.get(archiveItemIndex + 1).passivemetric32_type = type;
+					statRecords.get(archiveItemIndex + 1).passivemetric32 = value;
+					statRecords.get(archiveItemIndex + 1).passivemetric32_type = type;
 				} else {
 					Log.d("SamKnowsAggregateStatViewerActivity:MyPagerAdapter", "WARNING - unsupported metric (" + metric +")");
 				}
@@ -1396,7 +1606,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 		@Override
 		public int getCount() {
-			return views.size();
+			return statRecords.size();
 		}
 
 		@Override
@@ -1420,7 +1630,6 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				subview.setTag(position);
 
 
-
 				sc.addView(subview);
 
 				((ViewPager) view).addView(sc);
@@ -1428,29 +1637,40 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				//appropriate message
 
 				if (!SK2AppSettings.getSK2AppSettingsInstance().stateMachineStatus()) {
-					TextView tv = (TextView) subview
-							.findViewById(R.id.no_data_message_text);
+					// We are NOT activated!
+					TextView tv = (TextView) subview.findViewById(R.id.no_data_message_text);
 					tv.setText(R.string.activation_needed);
-				} else if (total_archive_records > 0) { // if no data hide no
-					// data icon
-					// & message
-					TextView tv = (TextView) subview
-							.findViewById(R.id.no_data_message_text);
-					ImageView iv = (ImageView) subview
-							.findViewById(R.id.no_data_message_image);
-					tv.setVisibility(View.GONE);
-					iv.setVisibility(View.GONE);
-			
+    				((TextView) subview.findViewById(R.id.test_last_run)).setVisibility(View.INVISIBLE);
+				} else {
+					// We are activated!
+					
+					if (total_archive_records == 0) {
+						// No data!
+        				((TextView) subview.findViewById(R.id.test_last_run)).setVisibility(View.INVISIBLE);
+					} else {
+						// Data!
+						TextView tv = (TextView) subview.findViewById(R.id.no_data_message_text);
+						ImageView iv = (ImageView) subview.findViewById(R.id.no_data_message_image);
+						tv.setVisibility(View.GONE);
+						iv.setVisibility(View.GONE);
+						// data icon
+						// & message
+						((TextView) subview.findViewById(R.id.test_last_run)).setVisibility(View.VISIBLE);
+					}
 				}
 				
 				//in case there are results to display load it
 				//no matter if the state machine status
 				if(total_archive_records > 0){
 
-					adapter.readArchiveItem(position);
+					adapter.readArchiveItem(0);
 				}
-
-				((TextView) subview.findViewById(R.id.test_last_run)).setText(last_run_test_formatted);
+				
+				String caption = getString(R.string.last_run) + " " + last_run_test_formatted;
+				((TextView) subview.findViewById(R.id.test_last_run)).setText(caption);
+				
+				// For FCC app, we ALWAYS hide the display of Jitter results!
+				subview.findViewById(R.id.jitter_panel).setVisibility(View.GONE);
 
 				buttonSetup();
 
@@ -1458,16 +1678,71 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 				graphsSetup();
 
 				loadGrids();
-
 			}
+			
+			subview_archive = inflater.inflate(R.layout.fcc_main_results_activity_single_result, null);
+
+			//
+			// Show or hide the passive results, depending on whether
+			// we're looking at mobile (show) or WiFi (hide!)
+			//
+			LinearLayout passiveResultsLinearLayout = (LinearLayout)subview_archive.findViewById(R.id.passive_results_linearlayout);
+			if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+				// Hide for WiFi results!
+				passiveResultsLinearLayout.setVisibility(View.GONE);
+			} else {
+				// Show for Mobile results!
+				passiveResultsLinearLayout.setVisibility(View.VISIBLE);
+			}
+
+			//
+			// Prepare left/right buttons etc. ..
+			//
+			Button leftButton = (Button) subview_archive.findViewById(R.id.page_turn_left);
+			Button rightButton = (Button) subview_archive.findViewById(R.id.page_turn_right);
+			if (position == total_archive_records) {
+			  rightButton.setVisibility(View.INVISIBLE);
+			} else {
+			  rightButton.setVisibility(View.VISIBLE);
+			}
+			
+			leftButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					int currentPage = viewPager.getCurrentItem();
+           		    //mMainResultsActivity.handleOnPageSelected(currentPage - 1);
+    				// This is how you scroll "left" to the previous page (we always
+    				// start on page "zero"...)
+    				viewPager.setCurrentItem(currentPage - 1);
+				}
+			});
+			
+			rightButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					int currentPage = viewPager.getCurrentItem();
+             		// mMainResultsActivity.handleOnPageSelected(currentPage + 1);
+    				// This is how you scroll "right" to the previous page (we always
+    				// start on page "zero"...)
+					
+					// https://code.google.com/p/android/issues/detail?id=27526
+					int targetPage = currentPage + 1;
+					int pageCount = viewPager.getChildCount();
+					//SKLogger.sAssert(getClass(),  pageCount >= currentPage);
+					
+    				viewPager.setCurrentItem(targetPage);
+					//int testCurrentPage = viewPager.getCurrentItem();
+					//SKLogger.sAssert(getClass(),  testCurrentPage == (currentPage+1));
+				}
+			});
 
 			if (position > 0) {
 
-				subview_archive = inflater.inflate(R.layout.fcc_main_results_activity_single_result, null);
+
 				subview_archive.setTag(position);
 				sc.addView(subview_archive);
 
-				StatRecord sr = views.get(position);
+				StatRecord sr = statRecords.get(position);
 
 				sc.setData(sr);
 
@@ -1477,8 +1752,19 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					sc.setRightPageIndicator(false);
 				}
 
-				// populate view
+				// http://stackoverflow.com/questions/9235374/confusion-on-position-in-instantiateitem-function-in-class-pageradapter-andro
+				// Inside of instantiateItem, the position parameter is the position that is in need of rendering.
+				// It is NOT the position of the currently focused item that the user would see.
+				// The pages to the left and right of the currently displayed view need to be pre rendered in memory
+				// so that the animations to those screens will be smooth.
 				if (position < total_archive_records) {
+					// Position (page number) is:
+					//    0, 1, 2
+					// Archive item index is:
+					//    NA 0  1
+					// It looks like we should pass (position-1) here, but if we do that, we get un-populated
+					// archived results pages!
+					// TODO - figure out why that is the case.
 					adapter.readArchiveItem(position);
 				}
 			}
@@ -1488,37 +1774,37 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 
 		}
 
-		private void loadGrids() {
+		public void loadGrids() {
 
 			loadDownloadGrid(TestResult.DOWNLOAD_TEST_ID,
-					R.id.agggregate_test1_grid, 0, ITEMS_PER_PAGE);
+					R.id.download_results_tablelayout, 0, ITEMS_PER_PAGE);
 			loadDownloadGrid(TestResult.UPLOAD_TEST_ID,
-					R.id.agggregate_test2_grid, 0, ITEMS_PER_PAGE);
+					R.id.upload_results_tablelayout, 0, ITEMS_PER_PAGE);
 			loadDownloadGrid(TestResult.LATENCY_TEST_ID,
-					R.id.agggregate_test3_grid, 0, ITEMS_PER_PAGE);
+					R.id.latency_results_tablelayout, 0, ITEMS_PER_PAGE);
 			loadDownloadGrid(TestResult.PACKETLOSS_TEST_ID,
-					R.id.agggregate_test4_grid, 0, ITEMS_PER_PAGE);
+					R.id.packetloss_results_tablelayout, 0, ITEMS_PER_PAGE);
 			loadDownloadGrid(TestResult.JITTER_TEST_ID,
-					R.id.agggregate_test5_grid, 0, ITEMS_PER_PAGE);
+					R.id.jitter_results_tablelayout, 0, ITEMS_PER_PAGE);
 
 			LinearLayout l = (LinearLayout) findViewById(R.id.download_content);
-			l.setVisibility(View.INVISIBLE);
+			l.setVisibility(View.GONE);
 			l.getLayoutParams().height = 0;
 
 			l = (LinearLayout) findViewById(R.id.upload_content);
-			l.setVisibility(View.INVISIBLE);
+			l.setVisibility(View.GONE);
 			l.getLayoutParams().height = 0;
 
 			l = (LinearLayout) findViewById(R.id.latency_content);
-			l.setVisibility(View.INVISIBLE);
+			l.setVisibility(View.GONE);
 			l.getLayoutParams().height = 0;
 
 			l = (LinearLayout) findViewById(R.id.packetloss_content);
-			l.setVisibility(View.INVISIBLE);
+			l.setVisibility(View.GONE);
 			l.getLayoutParams().height = 0;
 
 			l = (LinearLayout) findViewById(R.id.jitter_content);
-			l.setVisibility(View.INVISIBLE);
+			l.setVisibility(View.GONE);
 			l.getLayoutParams().height = 0;
 		}
 
@@ -1574,17 +1860,12 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 					Log.e(this.getClass().toString(), "onClick - value out of range=" + value);
 				}
 
-				TextView tvHeader = (TextView) findViewById(R.id.timeperiod);
-				tvHeader.setText(array_spinner[which]);
-
-				loadAverage();
-
-				// Update charts - this might make them invisible, if there is no data!
-				setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.DOWNLOAD_TEST_ID);
-				setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.UPLOAD_TEST_ID);
-				setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.LATENCY_TEST_ID);
-				setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.PACKETLOSS_TEST_ID);
-				setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.JITTER_TEST_ID);
+				Button tvHeader = (Button) findViewById(R.id.btn_timeperiod);
+				String caption = getString(R.string.results_for) + " " + array_spinner[which];
+				tvHeader.setText(caption);
+				
+				// Query average data, and update charts - this might make them invisible, if there is no data!
+				queryAverageDataAndUpdateTheCharts();
 
 				dialog.dismiss();
 			}
@@ -1599,6 +1880,18 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
+	
+	// Query average data, and update charts - this might make them invisible, if there is no data!
+	void queryAverageDataAndUpdateTheCharts() {
+		loadAverage();
+
+		// Update charts - this might make them invisible, if there is no data!
+		setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.DOWNLOAD_TEST_ID);
+		setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.UPLOAD_TEST_ID);
+		setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.LATENCY_TEST_ID);
+		setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.PACKETLOSS_TEST_ID);
+		setGraphDataForColumnIdAndHideIfNoResultsFound(TestResult.JITTER_TEST_ID);
+	}
 
 	private void RunChoice() {
 
@@ -1607,7 +1900,6 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		// if config == null the app is not been activate and
 		// no test can be run
 		if (config == null) {
-			// TODO Add an alert that the app has not been init yet
 			config = new ScheduleConfig();
 		}
 		testList = config.manual_tests;
@@ -1678,10 +1970,10 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			}
 		} else {
 			// The app must NOT be closed from this page - change "viewed page" instead.
-			viewPager = (ViewPager) findViewById(R.id.viewPager);
+			//viewPager = (ViewPager) findViewById(R.id.viewPager);
 			// viewPager.setAdapter(adapter);
-			viewPager.setCurrentItem(0, false);
-			overridePendingTransition(0, 0);
+			viewPager.setCurrentItem(0, true); // The true means to perform a smooth scroll!
+			// overridePendingTransition(0, 0);
 			on_aggregate_page = true;
 		}
 	}
@@ -1694,7 +1986,6 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		long startTime = fromCal.getTimeInMillis();
 
 		Calendar upToCal = Calendar.getInstance();
-		//upToCal.add(Calendar.WEEK_OF_YEAR, 1); // TODO - this is a hack, look in the future!
 		long upToTime = upToCal.getTimeInMillis();
 		
 		if (!(startTime < upToTime)) {
@@ -1761,22 +2052,23 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 		if (l == null) {
 			Log.e(this.getClass().toString(), "setGraphDataForColumnIdAndHideIfNoResultsFound - l == null");
 		}
-		
-		if (buttonFound) {
-//			if (PForceVisibleIfThereIsData == false) {
-//				// Button found, but do NOT set visibility to VISIBLE.
-//			} else {
-//				// Set button visibility to VISIBLE.
-//				l.setVisibility(View.VISIBLE);
-//			}
-		} else {
-		    // Not found!
-   		    l.setVisibility(View.GONE);
-		}
+
+		// Changed to NO LONGER HIDE if not visible; as that is unhelpful
+		// behaviour now that we have a network type results toggle!
+//		if (buttonFound) {
+////			if (PForceVisibleIfThereIsData == false) {
+////				// Button found, but do NOT set visibility to VISIBLE.
+////			} else {
+////				// Set button visibility to VISIBLE.
+////				l.setVisibility(View.VISIBLE);
+////			}
+//		} else {
+//		    // Not found!
+//   		    l.setVisibility(View.GONE);
+//		}
 		
 		return buttonFound;
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -1794,7 +2086,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			buttonfound = setGraphDataForColumnIdAndHideIfNoResultsFound(testid);
 			button = (ImageView) findViewById(R.id.btn_download_toggle);
 			l = (LinearLayout) findViewById(R.id.download_content);
-			grid = R.id.agggregate_test1_grid;
+			grid = R.id.download_results_tablelayout;
 		}
 
 		if (id == R.id.upload_header || id == R.id.btn_upload_toggle) {
@@ -1802,7 +2094,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			buttonfound = setGraphDataForColumnIdAndHideIfNoResultsFound(testid);
 			button = (ImageView) findViewById(R.id.btn_upload_toggle);
 			l = (LinearLayout) findViewById(R.id.upload_content);
-			grid = R.id.agggregate_test2_grid;
+			grid = R.id.upload_results_tablelayout;
 		}
 
 		if (id == R.id.latency_header || id == R.id.btn_latency_toggle) {
@@ -1810,7 +2102,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			buttonfound = setGraphDataForColumnIdAndHideIfNoResultsFound(testid);
 			button = (ImageView) findViewById(R.id.btn_latency_toggle);
 			l = (LinearLayout) findViewById(R.id.latency_content);
-			grid = R.id.agggregate_test3_grid;
+			grid = R.id.latency_results_tablelayout;
 		}
 
 		if (id == R.id.packetloss_header || id == R.id.btn_packetloss_toggle) {
@@ -1818,7 +2110,7 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			buttonfound = setGraphDataForColumnIdAndHideIfNoResultsFound(testid);
 			button = (ImageView) findViewById(R.id.btn_packetloss_toggle);
 			l = (LinearLayout) findViewById(R.id.packetloss_content);
-			grid = R.id.agggregate_test4_grid;
+			grid = R.id.packetloss_results_tablelayout;
 		}
 
 		if (id == R.id.jitter_header || id == R.id.btn_jitter_toggle) {
@@ -1826,66 +2118,28 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			buttonfound = setGraphDataForColumnIdAndHideIfNoResultsFound(testid);
 			button = (ImageView) findViewById(R.id.btn_jitter_toggle);
 			l = (LinearLayout) findViewById(R.id.jitter_content);
-			grid = R.id.agggregate_test5_grid;
+			grid = R.id.jitter_results_tablelayout;
 		}
 
 		// actions
 
-		if (buttonfound) {
+		if (l.getVisibility() != View.VISIBLE) {
 
-			if (l.getVisibility() == View.INVISIBLE) {
+			button.setBackgroundResource(R.drawable.btn_open_selector);
+			button.setContentDescription(getString(R.string.close_panel));
+			// graphHandler1.update();
+			clearGrid(grid);
+			loadDownloadGrid(testid, grid, 0, ITEMS_PER_PAGE);
 
-				button.setBackgroundResource(R.drawable.btn_open_selector);
-				button.setContentDescription(getString(R.string.close_panel));
-				// graphHandler1.update();
-				l.measure(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-				target_height = l.getMeasuredHeight();
+			l.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+			l.setVisibility(View.VISIBLE);
 
-				clearGrid(grid);
-				loadDownloadGrid(testid, grid, 0, ITEMS_PER_PAGE);
+		} else {
 
-				l.getLayoutParams().height = 0;
-				l.setVisibility(View.VISIBLE);
+			l.setVisibility(View.GONE);
 
-				ResizeAnimation animation = null;
-
-				animation = new ResizeAnimation(l, target_height, 0, false);
-				animation.setDuration(500);
-				animation.setFillEnabled(true);
-				animation.setFillAfter(true);
-
-				animation
-						.setAnimationListener(new Animation.AnimationListener() {
-							@Override
-							public void onAnimationStart(Animation animation) {
-							}
-
-							@Override
-							public void onAnimationRepeat(Animation animation) {
-							}
-
-							@Override
-							public void onAnimationEnd(Animation animation) {
-							}
-						});
-				l.startAnimation(animation);
-
-			} else {
-
-				ResizeAnimation animation = null;
-				int required_height = l.getMeasuredHeight();
-				animation = new ResizeAnimation(l, 0, target_height, false);
-				animation.setDuration(500);
-				animation.setFillEnabled(true);
-				animation.setFillAfter(true);
-				MyAnimationListener animationListener = new MyAnimationListener();
-				animationListener.setView(l);
-				animation.setAnimationListener(animationListener);
-				l.startAnimation(animation);
-
-				button.setBackgroundResource(R.drawable.btn_closed_selector);
-				button.setContentDescription(getString(R.string.open_panel));
-			}
+			button.setBackgroundResource(R.drawable.btn_closed_selector);
+			button.setContentDescription(getString(R.string.open_panel));
 		}
 
 	}

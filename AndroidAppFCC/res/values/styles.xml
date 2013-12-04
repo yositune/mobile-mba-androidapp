@@ -40,9 +40,7 @@
     </style>
 
     <style name="h1">
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">20dp</item>
-        <item name="android:layout_width">320dip</item>
         <item name="android:textColor">#0591c6</item>
     </style>
 
@@ -131,13 +129,6 @@
     <style name="spinner">
         <item name="android:layout_width">150dp</item>
         <item name="android:textColor">#000000</item>
-    </style>
-
-    <style name="row_metric">
-        <item name="android:layout_height">200dip</item>
-        <item name="android:paddingTop">10dip</item>
-        <item name="android:background">#cccccc</item>
-        <item name="android:gravity">left</item>
     </style>
 
 </resources>
