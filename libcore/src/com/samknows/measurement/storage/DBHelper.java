@@ -115,8 +115,11 @@ public class DBHelper {
 
 	public synchronized boolean isEmpty() {
 		synchronized (sync) {
-			open();
 			boolean ret = false;
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM "
 					+ SKSQLiteHelper.TABLE_TESTRESULT, null);
 			cursor.moveToFirst();
@@ -296,8 +299,11 @@ public class DBHelper {
 	// TODO - change this to query ONLY for batches for the current activenetworktype ...!
 	public JSONObject getArchiveData(int index) {
 		synchronized (sync) {
-			open();
 			JSONObject ret = new JSONObject();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			
 	 		// A consequence of the system "collecting" metrics both when we start *and* stop a test, is that 
 	 		// this leads to multiple rows in the passive_metric table, with the same batch_id and metric...!
@@ -403,8 +409,11 @@ public class DBHelper {
 		synchronized (sync) {
 			List<Integer> batches = getTestBatchesByPassiveMetric(getPassiveMetricsFilter());
 			
-			open();
 			JSONObject ret = new JSONObject();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			// test batch counter
 			
 	 		// A consequence of the system "collecting" metrics both when we start *and* stop a test, is that 
@@ -545,7 +554,10 @@ public class DBHelper {
 
 	public long insertTestBatch(long start_time, int run_manually) {
 		synchronized (sync) {
-			open();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return -1;
+			}
 			ContentValues values = new ContentValues();
 			values.put(SKSQLiteHelper.TB_COLUMN_DTIME, start_time);
 			values.put(SKSQLiteHelper.TB_COLUMN_MANUAL, run_manually);
@@ -593,7 +605,10 @@ public class DBHelper {
 	private void insertTestResult(String type_name, long dtime, long success,
 			double result, String location, long test_batch_id) {
 		synchronized (sync) {
-			open();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return;
+			}
 			ContentValues values = new ContentValues();
 			values.put(SKSQLiteHelper.TR_COLUMN_DTIME, dtime);
 			values.put(SKSQLiteHelper.TR_COLUMN_TYPE, type_name);
@@ -647,7 +662,10 @@ public class DBHelper {
 			long dtime, String value, long test_batch_id) {
 		synchronized (sync) {
 			ContentValues values = new ContentValues();
-			open();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return;
+			}
 			
      		// A consequence of the system "collecting" metrics both when we start *and* stop a test, is that 
      		// this leads to multiple rows in the passive_metric table, with the same batch_id and metric...!
@@ -741,8 +759,11 @@ public class DBHelper {
 	public JSONArray getAverageResults(long starttime, long endtime,
 			List<Integer> test_batches) {
 		synchronized (sync) {
-			open();
 			JSONArray ret = new JSONArray();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			String selection = String.format(Locale.US,
 					"dtime BETWEEN %d AND %d AND success <> 0", starttime,
 					endtime);
@@ -829,8 +850,11 @@ public class DBHelper {
 	// value in the specified period
 	public List<Integer> getTestBatchesByPassiveMetric(String selection) {
 		synchronized (sync) {
-			open();
 			List<Integer> ret = new ArrayList<Integer>();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			String[] columns = { SKSQLiteHelper.PM_COLUMN_BATCH_ID };
 			Cursor cursor = database.query(SKSQLiteHelper.TABLE_PASSIVEMETRIC,
 					columns, selection, null, SKSQLiteHelper.PM_COLUMN_BATCH_ID, null, null);
@@ -864,8 +888,11 @@ public class DBHelper {
 
 	private List<JSONObject> getTestResults(String selection, String limit) {
 		synchronized (sync) {
-			open();
 			List<JSONObject> ret = new ArrayList<JSONObject>();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			Cursor cursor = database.query(SKSQLiteHelper.TABLE_TESTRESULT,
 					SKSQLiteHelper.TABLE_TESTRESULT_ALLCOLUMNS, selection,
 					null, null, null, SKSQLiteHelper.TEST_RESULT_ORDER, limit);
@@ -884,7 +911,10 @@ public class DBHelper {
 	private List<JSONObject> getPassiveMetrics(long test_batch_id) {
 		synchronized (sync) {
 			List<JSONObject> ret = new ArrayList<JSONObject>();
-			open();
+			if (open() == false) {
+				SKLogger.sAssert(getClass(),  false);
+				return ret;
+			}
 			String selection = SKSQLiteHelper.PM_COLUMN_BATCH_ID + " = "
 					+ test_batch_id;
 			Cursor cursor = database.query(SKSQLiteHelper.TABLE_PASSIVEMETRIC,

@@ -131,7 +131,7 @@
                         android:layout_height="50dp" >
 
                         <TextView
-                            android:id="@+id/TextView14"
+                            android:id="@+id/download_label_text_view"
                             style="@style/column_label"
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"

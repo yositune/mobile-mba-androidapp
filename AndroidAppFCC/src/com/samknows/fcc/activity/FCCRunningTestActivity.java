@@ -85,8 +85,8 @@ public class FCCRunningTestActivity extends BaseLogoutActivity {
 		
 		ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
-		if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-			// Show for Mobile results!
+		if ((networkInfo == null) || (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE)) {
+			// Show for Mobile results, or if not known!
 			passiveMetricsLayout.setVisibility(View.VISIBLE);
 			activeMetricsTextView.setText(getString(R.string.active_metrics_mobile));
 		} else {

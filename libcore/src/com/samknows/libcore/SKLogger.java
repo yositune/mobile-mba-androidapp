@@ -44,16 +44,19 @@ public class SKLogger {
 	public static void e(Class clazz, String message) {
 		Log.d(clazz.getName(), message);
 		appendLog(ERROR, clazz.getName(), message);
+		sAssert(clazz,  false);
 	}
 
 	public static void e(Object parent, String message, Throwable t) {
 		Log.e(parent.getClass().getName(), message, t);
 		appendLog(ERROR,parent.getClass().getName(), message+" "+t.getMessage()+" "+getStackTrace(t));
+		sAssert(parent.getClass(),  false);
 	}
 
 	public static void e(Object parent, String message) {
 		Log.e(parent.getClass().getName(), message);
 		appendLog(ERROR,parent.getClass().getName(), message);
+		sAssert(parent.getClass(),  false);
 	}
 
 	public static void w(Class clazz, String message) {
@@ -98,9 +101,9 @@ public class SKLogger {
 	public static void sAssert(Class clazz, String message, final boolean check) {
 		if (check == false) {
 			if (message.length() > 0) {
-    			SKLogger.e(clazz, "sAssertFailed (" + message + "): you can trap with a breakpoint in " + SKLogger.class.getName());
+    			Log.e(clazz.getName(), "sAssertFailed (" + message + "): you can trap with a breakpoint in " + SKLogger.class.getName());
 			} else {
-    			SKLogger.e(clazz, "sAssertFailed: you can trap with a breakpoint in " + SKLogger.class.getName());
+    			Log.e(clazz.getName(), "sAssertFailed: you can trap with a breakpoint in " + SKLogger.class.getName());
 			}
 		}
 	}

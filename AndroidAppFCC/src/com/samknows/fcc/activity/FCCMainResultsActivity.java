@@ -311,7 +311,9 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 			// We must update the filter to match, and then show that result screen...!
 			String activeNetworkType = data.getStringExtra("activeneworktype");
 
-			if (activeNetworkType.equals("mobile")) {
+			if (activeNetworkType == null) {
+				SKLogger.sAssert(getClass(), false);
+			} else if (activeNetworkType.equals("mobile")) {
 				if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
     				SKApplication.setNetworkTypeResults(eNetworkTypeResults.eNetworkTypeResults_Any);
 				}
@@ -671,13 +673,17 @@ public class FCCMainResultsActivity extends BaseLogoutActivity
 	
 	void setNetworkTypeToggleButton() {
 		mNetworkTypeToggleButton = (Button) findViewById(R.id.networkTypeButton);
-		
-		if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
-     		mNetworkTypeToggleButton.setText(R.string.network_type_wifi_results);
-		} else if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_Mobile) {
-     		mNetworkTypeToggleButton.setText(R.string.network_type_mobile_results);
+
+		if (mNetworkTypeToggleButton == null) {
+			SKLogger.sAssert(getClass(), false);
 		} else {
-     		mNetworkTypeToggleButton.setText(R.string.network_type_all_results);
+			if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_WiFi) {
+				mNetworkTypeToggleButton.setText(R.string.network_type_wifi_results);
+			} else if (SKApplication.getNetworkTypeResults() == eNetworkTypeResults.eNetworkTypeResults_Mobile) {
+				mNetworkTypeToggleButton.setText(R.string.network_type_mobile_results);
+			} else {
+				mNetworkTypeToggleButton.setText(R.string.network_type_all_results);
+			}
 		}
 	}
 	

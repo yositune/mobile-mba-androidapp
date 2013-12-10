@@ -37,6 +37,19 @@ public class StatView extends ScrollView {
     	setJitterLocation(sr.jitter_location);
     	setJitterResult(sr.jitter_result);
     	setTimestamp(sr.time_stamp);
+    	
+    	if (   (findViewById(R.id.download_archive_panel).getVisibility() == View.GONE)
+    	    && (findViewById(R.id.upload_archive_panel).getVisibility() == View.GONE)
+    	    && (findViewById(R.id.latency_archive_panel).getVisibility() == View.GONE)
+    	    && (findViewById(R.id.packetloss_archive_panel).getVisibility() == View.GONE)
+    	    && (findViewById(R.id.jitter_archive_panel).getVisibility() == View.GONE)
+    	   )
+    	{
+    		// No results AT ALL to show!
+    	    ((TextView)findViewById(R.id.download_label_text_view)).setText("No results");
+    	    ((TextView)findViewById(R.id.download_result)).setText("No data found");
+    	    findViewById(R.id.download_archive_panel).setVisibility(View.VISIBLE);
+    	}
 
     	setPassiveMetric(R.id.pm_tablerow1,R.id.passivemetric1,sr.passivemetric1,sr.passivemetric1_type);
     	setPassiveMetric(R.id.pm_tablerow2,R.id.passivemetric2,sr.passivemetric2,sr.passivemetric2_type);
