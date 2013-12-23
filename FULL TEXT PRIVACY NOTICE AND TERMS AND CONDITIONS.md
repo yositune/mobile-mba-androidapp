@@ -70,7 +70,7 @@ We may share mobile broadband performance data collected by this Application sub
 ### Data Consumption
 
 
-By default the Application is configured to use no more than 100 megabytes of data each month.  Any additional tests you initiate will also consume between 100 kB for the smallest packet loss test and 40 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the “mobile data cap” in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package’s data allowance.
+By default the Application is configured to use no more than 100 megabytes (MB) of data each month for automated testing.  Any additional tests you initiate will also consume between 100 kB for the smallest packet loss test and 40 MB for a complete suite of tests.  At any time you can change the amount of data the Application uses by increasing or reducing the “mobile data cap” in the settings menu.  You should ensure that your monthly broadband usage, including the data used by the Application and Service during the Program, does not exceed the data allowance included in your mobile broadband package.  Your carrier may charge you for any data used in excess of your package’s data allowance.
 
 
 ### Stopping Your Participation
