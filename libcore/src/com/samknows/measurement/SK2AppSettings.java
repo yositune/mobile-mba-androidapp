@@ -67,6 +67,7 @@ public class SK2AppSettings extends SKAppSettings {
 	//collect net usage data
 	public boolean collect_traffic_data;
 	
+	public boolean run_in_roaming = false;
 	//Initialise the AppSettings reading from the properties file located in res/raw
 	private SK2AppSettings(Context c) {
 	    super(c);
@@ -88,7 +89,12 @@ public class SK2AppSettings extends SKAppSettings {
 			user_self_id 			= Boolean.parseBoolean(p.getProperty(SKConstants.PROP_USER_SELF_IDENTIFIER));
 			data_cap_welcome		= Boolean.parseBoolean(p.getProperty(SKConstants.PROP_DATA_CAP_WELCOME));
 			collect_traffic_data	= Boolean.parseBoolean(p.getProperty(SKConstants.PROP_COLLECT_TRAFFIC_DATA));
-					
+			String roaming = p.getProperty(SKConstants.PROP_RUN_IN_ROAMING);
+			if(roaming != null){
+				run_in_roaming = Boolean.parseBoolean(roaming);
+			}
+			
+			
 		} catch (IOException e) {
 			SKLogger.e(TAG, "failed to load properies!");
 		} catch(NullPointerException npe){
@@ -256,7 +262,16 @@ public class SK2AppSettings extends SKAppSettings {
 		long usedBytes = getUsedBytes();
 		long dataCapBytes = getDataCapBytes();
 		SKLogger.d(this, "Currently used bytes "+usedBytes+", DataCap is "+dataCapBytes+", bytes to be used "+ bytesToBeUsed +"." );
-		return usedBytes + bytesToBeUsed >= dataCapBytes;
+		if (usedBytes + bytesToBeUsed >= dataCapBytes) {
+			if (SKApplication.getAppInstance().getIsDataCapEnabled() == true) {
+				// Datacap Enabled (the default case)
+				return true;
+			} else {
+				// Datacap DISABLED, by user-specific override in Preferences screen.
+				return false;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isDataCapReached() {
@@ -291,8 +306,9 @@ public class SK2AppSettings extends SKAppSettings {
 	//Returns a Map containing all the json entries to be added when submitting the results
 	public Map<String,Object> getJSONExtra(){
 		Map<String, Object> ret= new HashMap<String,Object>();
-		if(!anonymous){
+		if(!anonymous && getUnitId() != null){
 			ret.put(JSON_UNIT_ID, getUnitId());
+			
 		}
 		ret.put(JSON_APP_VERSION_NAME, app_version_name);
 		ret.put(JSON_APP_VERSION_CODE, app_version_code);

@@ -1,7 +1,12 @@
 package com.samknows.measurement.environment;
 
+import java.util.List;
+
 import android.content.Context;
 import android.os.Looper;
+import android.telephony.CellInfo;
+import android.telephony.CellLocation;
+import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -14,6 +19,10 @@ public class CellTowersDataCollector extends BaseDataCollector{
 	public CellTowersDataCollector(Context context) {
 		super(context);
 	}
+	
+	TelephonyManager mTelManager;
+	CellTowersPhoneStateListener mCellTowersPhoneStateListener;
+	
 
 	@Override
 	public CellTowersData collect() {
@@ -52,7 +61,7 @@ public class CellTowersDataCollector extends BaseDataCollector{
 		LooperThread thread = new LooperThread(new Runnable() {
 			@Override
 			public void run() {
-				MyPhoneStateListener listener = new MyPhoneStateListener(manager, data);
+				SyncPhoneStateListener listener = new SyncPhoneStateListener(manager, data);
 				listener.listen();
 			}
 		});
@@ -66,10 +75,54 @@ public class CellTowersDataCollector extends BaseDataCollector{
 		return data;
 	}
 	
-	private class MyPhoneStateListener extends PhoneStateListener {
+	/* 
+	 * receives the status change of the phone listener for the cell tower
+	 */
+	private class CellTowersPhoneStateListener extends PhoneStateListener {
+		
+		CellTowersData mData;
+		
+		public CellTowersPhoneStateListener(){
+			mData = new CellTowersData();
+		}
+		@Override
+		public void onSignalStrengthsChanged(SignalStrength signalStrength){
+			super.onSignalStrengthsChanged(signalStrength);
+			mData.time = System.currentTimeMillis();
+			mData.signal = signalStrength;
+			mData.cellLocation = mTelManager.getCellLocation();
+			addData(mData);
+		}
+		
+		@Override
+		public void onCellLocationChanged(CellLocation location){
+			super.onCellLocationChanged(location);
+			mData.time = System.currentTimeMillis();
+			mData.cellLocation = location;
+			
+			addData(mData);
+		}
+		
+		@Override
+		public void onCellInfoChanged(List<CellInfo> cellInfo){
+			
+			List<NeighboringCellInfo> n = mTelManager.getNeighboringCellInfo();
+			if( n != null && n.size() > 0){
+				CellTowersData neighbours = new CellTowersData();
+				neighbours.time = System.currentTimeMillis();
+				neighbours.setNeighbors(n);
+				addData(neighbours);
+			}
+		}
+	}
+	
+	/*
+	 * performs a synchronous read of the signal strength  
+	 */
+	private class SyncPhoneStateListener extends PhoneStateListener {
 		private TelephonyManager manager;
 		private CellTowersData data;
-		public MyPhoneStateListener(TelephonyManager manager, CellTowersData data) {
+		public SyncPhoneStateListener(TelephonyManager manager, CellTowersData data) {
 			this.manager = manager;
 			this.data = data;
 		}
@@ -83,7 +136,23 @@ public class CellTowersDataCollector extends BaseDataCollector{
 		}
 
 		public void listen() {
-			manager.listen(MyPhoneStateListener.this, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+			manager.listen(SyncPhoneStateListener.this, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 		}
 	}
+
+	
+	@Override
+	public void start() {
+		addData(collect());
+		mTelManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		mCellTowersPhoneStateListener = new CellTowersPhoneStateListener();
+		int mask = PhoneStateListener.LISTEN_CELL_INFO | PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS;
+		mTelManager.listen(mCellTowersPhoneStateListener, mask);
+	}
+
+	@Override
+	public void stop() {
+		mTelManager.listen(mCellTowersPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+	}
+
 }

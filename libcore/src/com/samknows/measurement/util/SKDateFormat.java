@@ -39,6 +39,9 @@ public class SKDateFormat  {
 		return sb.toString();
 	}
 	
+	public static String sGetGraphTimeFormat() {
+		return "HH:mm";
+	}
 	
 	private String dateFormat(){
 		char[] order = DateFormat.getDateFormatOrder(mCtx);
@@ -63,9 +66,39 @@ public class SKDateFormat  {
 		
 	}
 	
+	private String shortDateTimeFormat(){
+		char[] order = DateFormat.getDateFormatOrder(mCtx);
+		StringBuilder sb = new StringBuilder();
+		for(int i =0; i< order.length; i++){
+			if(i!=0){
+				sb.append("/");
+			}
+			switch(order[i]){
+			case DateFormat.DATE:
+				sb.append("dd");
+				break;
+			case DateFormat.MONTH:
+				sb.append("MM");
+				break;
+			case DateFormat.YEAR:
+				sb.append("yy");
+				break;
+			}
+		}
+		sb.append(" HH:mm");
+		return sb.toString();
+		
+	}
+	
+
 	public String UIDate(long millis){
 		return new SimpleDateFormat(dateFormat()).format(millis);
 	}
+	
+	public String UIShortDateTime(long millis){
+		return new SimpleDateFormat(shortDateTimeFormat()).format(millis);
+	}
+	
 	
 	public String UITime(long millis){
 		return UIDate(millis)+" "+DateUtils.formatDateTime(mCtx, millis, DateUtils.FORMAT_SHOW_TIME);

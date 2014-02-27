@@ -33,13 +33,14 @@ public class LocationDataCollector extends BaseDataCollector implements Location
 	private boolean getLastKnown;
 	
 	private transient List<Location> locations;
-	List<DCSData> data = new ArrayList<DCSData>();
+	List<DCSData> data = Collections.synchronizedList(new ArrayList<DCSData>());
+	DCSData mLastLocation = null;
 	private transient LocationManager manager;
 	private boolean gotLastLocation;
 	private LocationType locationType;
 	
 	private String lastKnownLocation;
-	private Location lastKnown;
+	private transient Location lastKnown;
 		
 	@Override
 	public void start(TestContext tc) {
@@ -78,7 +79,7 @@ public class LocationDataCollector extends BaseDataCollector implements Location
 		// On some devices, this can throw an exception, of the form:
 		//   java.lang.IllegalArgumentException: provider doesn't exist: network
 		// or (sic!):
-		//   java.lang.IllegalArgumentException: provider doesn't exisit: null
+		//   java.lang.IllegalArgumentException: provider doesn't exist: null
 		// We must not allow that behavior to cause the app to crash.
 		try {
 			manager.requestLocationUpdates(provider, 0, 0,
@@ -146,7 +147,9 @@ public class LocationDataCollector extends BaseDataCollector implements Location
 			if (lastReceivedTime == -1 || timeDiff > listenerDelay) {
 				lastReceivedTime = System.currentTimeMillis();
 				locations.add(location);
-				data.add(new LocationData(location,locationType));
+				DCSData currLocation = new LocationData(location, locationType);
+				data.add(currLocation);
+				mLastLocation = currLocation;
 				SKLogger.d(this, "received new location");
 				gotLastLocation = true;
 				notifyAll();
@@ -222,6 +225,20 @@ public class LocationDataCollector extends BaseDataCollector implements Location
 		List<JSONObject> ret = new ArrayList<JSONObject>();
 		for(DCSData d:data){
 			ret.addAll(d.convertToJSON());
+		}
+		return ret;
+	}
+	
+	public List<DCSData> getPartialData(){
+		List<DCSData> ret = new ArrayList<DCSData>();
+		synchronized(data){
+			if( data.isEmpty() && mLastLocation != null){
+				ret.add(mLastLocation);
+			}
+			for(DCSData d:data){
+				ret.add(d);
+			}
+			data.clear();
 		}
 		return ret;
 	}

@@ -39,7 +39,7 @@ public class LoginHelper {
 	}
 	
 	public static void openMainScreenWithTransitionAnimation(Activity acc, boolean PWithTransitionAnimation, Class theActivityClass) {
-		//Intent intent = new Intent(acc, FCCMainResultsActivity.class);
+		//Intent intent = new Intent(acc, SKAMainResultsActivity.class);
 		Intent intent = new Intent(acc, theActivityClass);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 		  intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK );

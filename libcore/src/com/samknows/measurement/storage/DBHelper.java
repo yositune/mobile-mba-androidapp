@@ -19,6 +19,8 @@ import android.util.Log;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.SKApplication;
+import com.samknows.measurement.activity.components.SKGraphForResults;
+import com.samknows.measurement.activity.components.SKGraphForResults.DATERANGE_1w1m3m1y;
 import com.samknows.measurement.environment.TrafficData;
 import com.samknows.measurement.util.DCSConvertorUtil;
 import com.samknows.measurement.util.OtherUtils;
@@ -50,6 +52,7 @@ public class DBHelper {
 	public static final String GRIDDATA_RESULTS_RESULT = "result";
 	public static final String GRIDDATA_RESULTS_SUCCESS = "success";
 	public static final String GRIDDATA_RESULTS_HRRESULT = "hrresult";
+	public static final String GRIDDATA_RESULTS_NETWORK_TYPE = "network_type";
 	public static final String[] GRIDDATA_JSON_KEYS = { GRIDDATA_TYPE,
 			GRIDDATA_RESULTS };
 
@@ -249,8 +252,11 @@ public class DBHelper {
 
 	// Returns the JSONObject containing the data to draw a graph for one test
 	// of type test_type_id between startdtime and enddtime
-	public JSONObject getGraphData(int test_type_id, long startdtime,
-			long enddtime) {
+	// Whereas on iOS, the equivalent search would average all data by day;
+	// on Android, this returns all the point data in the specified period.
+	public JSONObject fetchGraphData(int test_type_id, long startdtime,
+			long enddtime, DATERANGE_1w1m3m1y dateRange) {
+
 		JSONObject ret = new JSONObject();
 		String test_type = TestResult.testIdToString(test_type_id);
 		try {
@@ -266,9 +272,17 @@ public class DBHelper {
 
 			}
 			ret.put(GRAPHDATA_RESULTS, results);
+
+			// if (dateRange == DATERANGE_1w1m3m1y.DATERANGE_1w1m3m1y_ONE_DAY) {
+			// 	// No need to specifically extract "24hours" data, c.f. iOS;
+			// 	// as the data returned is single point data on Android
+			// 	// (whereas on iOS, it is returned averaged by day).
+			// }
 		} catch (JSONException je) {
 
 		}
+
+
 		return ret;
 	}
 
@@ -282,9 +296,26 @@ public class DBHelper {
 				offset);
 		try {
 			ret.put(GRIDDATA_TYPE, test_type_id);
+			
 			JSONArray results = new JSONArray();
 			for (JSONObject jo : entries) {
-				results.put(testResultToGridData(jo));
+    			long testId = jo.getLong(SKSQLiteHelper.TR_COLUMN_BATCH_ID);
+				String networkType = "";
+	    		List<JSONObject> passive_metrics = getPassiveMetrics(testId);
+				for (JSONObject pm : passive_metrics) {
+    				String type = pm.getString(SKSQLiteHelper.PM_COLUMN_METRIC);
+	    			if (type.equals("activenetworktype")) {
+    	    			String value = pm.getString(SKSQLiteHelper.PM_COLUMN_VALUE);
+    	    			networkType = value;
+    	    			break;
+	    			}
+				}
+
+				JSONObject theGridData = testResultToGridData(jo);
+				if (networkType != null) {
+				    theGridData.put(GRIDDATA_RESULTS_NETWORK_TYPE, networkType);
+				}
+				results.put(theGridData);
 			}
 			ret.put(GRIDDATA_RESULTS, results);
 		} catch (JSONException je) {

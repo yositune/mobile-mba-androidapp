@@ -7,9 +7,11 @@ import java.util.PriorityQueue;
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
 import com.samknows.measurement.SK2AppSettings;
+import com.samknows.measurement.SKApplication;
 import com.samknows.measurement.schedule.TestGroup;
 import com.samknows.measurement.schedule.condition.DatacapCondition;
 import com.samknows.measurement.schedule.failaction.RetryFailAction;
+import com.samknows.measurement.util.OtherUtils;
 import com.samknows.measurement.util.TimeUtils;
 
 public class ScheduledTestExecutionQueue implements Serializable{
@@ -102,7 +104,10 @@ public class ScheduledTestExecutionQueue implements Serializable{
 				long maximumTestUsage = tc.config == null ? 0: tc.config.maximumTestUsage;
 				//if data cap is going to be breached do not run test
 				//the datacap condition is successful if the datacap is not reached
-				DatacapCondition dc = new DatacapCondition(! SK2AppSettings.getSK2AppSettingsInstance().isDataCapReached(maximumTestUsage));
+				
+				boolean dataCapFlag = SK2AppSettings.getSK2AppSettingsInstance().isDataCapReached(maximumTestUsage);
+				DatacapCondition dc = new DatacapCondition(dataCapFlag);
+				
 				if(dc.isSuccess()){
 					TestResult tr = scheduledTestExecutor.executeGroup(entry.groupId);
 					result = tr.isSuccess;

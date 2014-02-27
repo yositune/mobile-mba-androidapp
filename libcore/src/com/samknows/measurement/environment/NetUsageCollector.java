@@ -24,4 +24,14 @@ public class NetUsageCollector extends BaseDataCollector {
 		return TrafficData.interval(start, now);		
 	}
 
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+	}
+
 }

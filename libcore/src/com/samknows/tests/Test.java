@@ -192,18 +192,18 @@ abstract public class Test implements Runnable {
 		return sb.toString();
 	}
 
-	public synchronized String getResult() {
-		String ret;
-		if (result == null || result.equals("")) {
-			if (finished) {
-				ret = "Done";
-			} else {
-				ret = "Waiting";
-			}
-		} else
-			ret = result;
-		return ret;
-	}
+//	public synchronized String getResult() {
+//		String ret;
+//		if (result == null || result.equals("")) {
+//			if (finished) {
+//				ret = "Done";
+//			} else {
+//				ret = "Waiting";
+//			}
+//		} else
+//			ret = result;
+//		return ret;
+//	}
 
 	public synchronized STATUS getStatus() {
 		return status;
@@ -263,7 +263,7 @@ abstract public class Test implements Runnable {
 
 	protected boolean setErrorIfEmpty(String error) {
 		boolean ret = false;
-		synchronized (errorString) {
+		synchronized (this) {
 			if (errorString.equals("")) {
 				errorString = error;
 				ret = true;
@@ -273,7 +273,7 @@ abstract public class Test implements Runnable {
 	}
 
 	protected void setError(String error) {
-		synchronized (errorString) {
+		synchronized (this) {
 			errorString = error;
 		}
 	}

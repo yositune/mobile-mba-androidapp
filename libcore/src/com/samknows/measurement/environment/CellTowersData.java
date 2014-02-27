@@ -180,7 +180,8 @@ public class CellTowersData implements DCSData{
 
 		if(cellLocation instanceof GsmCellLocation){
 			GsmCellLocation l = (GsmCellLocation) cellLocation;
-			Map<String, Object> gsm = new HashMap<String, Object>();				gsm.put(JSON_TYPE, JSON_TYPE_GSM_CELL_LOCATION);
+			Map<String, Object> gsm = new HashMap<String, Object>();				
+			gsm.put(JSON_TYPE, JSON_TYPE_GSM_CELL_LOCATION);
 			gsm.put(JSON_TIMESTAMP, time/1000);
 			gsm.put(JSON_DATETIME, new java.util.Date(time).toString());
 			gsm.put(JSON_CELL_TOWER_ID, l.getCid());

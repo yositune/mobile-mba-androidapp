@@ -211,7 +211,18 @@ public class SKAppSettings {
 	}
 
 	public boolean isDataCapReached() {
-		return getDataCapBytes() <= getUsedBytes();
+		boolean reached = getDataCapBytes() <= getUsedBytes();
+		
+		if (reached) {
+			if (SKApplication.getAppInstance().getIsDataCapEnabled() == true) {
+				return true;
+			} else {
+				// Datacap DISABLED, by user-specific override in Preferences screen.
+				return false;
+			}
+		}
+		
+		return false;
 	}
 
 	public boolean isWakeUpEnabled() {

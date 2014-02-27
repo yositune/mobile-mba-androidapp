@@ -38,7 +38,7 @@ public class ScheduledTestStateMachine {
 			SKLogger.d(this, "executing state: " + state);
 			StateResponseCode code;
 			try {
-			  code = createState(state).executeState();
+			  code = Transition.createState(state, ctx).executeState();
 			} catch (Exception e) {
 				SKLogger.d(this, "+++++DEBUG+++++ error calling executeState !" + e.toString());
 				// do NOT rethrow the exception!
@@ -69,24 +69,7 @@ public class ScheduledTestStateMachine {
 		
 	}
 	
-	public BaseState createState(State state) {
-		switch (state) {
-		case NONE: return new NoneState(ctx);
-		case INITIALISE : return new InitialiseState(ctx);
-		case INITIALISE_ANONYMOUS: return new InitialiseAnonymousState(ctx);
-		case ACTIVATE : return new ActivateState(ctx);
-		case ASSOCIATE : return new AssociateState(ctx);
-		case CHECK_CONFIG_VERSION : return new CheckConfigVersionState(ctx);
-		case DOWNLOAD_CONFIG : return new DownloadConfigState(ctx);
-		case DOWNLOAD_CONFIG_ANONYMOUS: return new DownloadConfigAnonymousState(ctx);
-		case RUN_INIT_TESTS : return new RunInitTestsState(ctx);
-		case EXECUTE_QUEUE : return new ExecuteScheduledTestQueueState(ctx);
-		case SUBMIT_RESULTS : return new SubmitResultsState(ctx);
-		case SUBMIT_RESULTS_ANONYMOUS : return new SubmitResultsAnonymousState(ctx);
-		case SHUTDOWN:
-		}
-		throw new RuntimeException("unimplemented state: " + state);
-	}
+	
 	
 	//used to set the service activate according to the state
 	private void activation(State state){

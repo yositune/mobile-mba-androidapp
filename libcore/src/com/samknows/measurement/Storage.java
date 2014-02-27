@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import org.apache.commons.io.IOUtils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
@@ -93,7 +94,7 @@ public class Storage {
 			dis = new ObjectInputStream(is);
 			return dis.readObject();
 		} catch (Exception e) {
-			SKLogger.e(this, "failed to load data for id: " + id);
+			Log.w(getClass().getName(), "failed to load data for id: " + id);
 		} finally {
 			IOUtils.closeQuietly(dis);
 		}

@@ -55,6 +55,7 @@ public class ScheduleConfig implements Serializable {
 	public static final String TESTS 				= "tests";
 	public static final String TEST 				= "test";
 	public static final String SCHEDULED_TESTS 		= "scheduled-tests";
+	public static final String CONTINUOUS_TESTS		= "continuous-tests";
 	public static final String BATCH 				= "batch";
 	public static final String MANUAL_TESTS 		= "manual-tests";
 	
@@ -72,6 +73,7 @@ public class ScheduleConfig implements Serializable {
 	public List<TestDescription> tests = new ArrayList<TestDescription>();
 	public List<TestGroup> testGroups = new ArrayList<TestGroup>();
 	public List<TestDescription> manual_tests = new ArrayList<TestDescription>();
+	public List<TestDescription> continuous_tests = new ArrayList<TestDescription>();
 	public String manual_test_condition_group_id ;
 	public List<String> initTestTypes = new ArrayList<String>();
 	public List<BaseDataCollector> dataCollectors = new ArrayList<BaseDataCollector>();
@@ -242,6 +244,19 @@ public class ScheduleConfig implements Serializable {
 			}
 		}
 		
+		//continuous tests 
+		NodeList continuous_tests = node.getElementsByTagName(CONTINUOUS_TESTS);
+		if(continuous_tests != null && continuous_tests.getLength() == 1){
+			NodeList c_tests = ((Element) continuous_tests.item(0)).getElementsByTagName(TEST);
+			for(int i = 0; i < c_tests.getLength(); i++ ){
+				int testId = Integer.parseInt(((Element)c_tests.item(i)).getAttribute(ID));
+				for(TestDescription td: c.tests){
+					if(td.testId == testId){
+						c.continuous_tests.add(td);
+					}
+				}
+			}
+		}
 		
 		//tests run manually 
 		NodeList manual_tests = node.getElementsByTagName(MANUAL_TESTS);

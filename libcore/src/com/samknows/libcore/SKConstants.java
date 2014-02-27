@@ -56,11 +56,11 @@ public class SKConstants {
 	
 	public static final String TEST_RESULTS_TO_SUBMIT_FILE_NAME = "test_results_to_submit";
 	public static final String TEST_RESULTS_SUBMITTED_FILE_NAME = "test_results_submited";
-	public static final String SCHEDULE_CONFIG_FILE_NAME = "schedule_config";
-	public static final String EXECUTION_QUEUE_FILE_NAME = "execution_queue";
-	public static final String TEST_PARAMS_MANAGER_FILE_NAME = "test_params";
-	public static final String KEYS_FILE_NAME = "keys";
-	public static final String NETUSAGE_STORAGE = "netusage_storage";
+	public static final String SCHEDULE_CONFIG_FILE_NAME 		= "schedule_config";
+	public static final String EXECUTION_QUEUE_FILE_NAME 		= "execution_queue";
+	public static final String TEST_PARAMS_MANAGER_FILE_NAME 	= "test_params";
+	public static final String KEYS_FILE_NAME 					= "keys";
+	public static final String NETUSAGE_STORAGE 				= "netusage_storage";
 	
 	
 	//Entries in the properties file
@@ -84,7 +84,7 @@ public class SKConstants {
 	public static final String PROP_USER_SELF_IDENTIFIER					= "user_self_identifier";
 	public static final String PROP_DATA_CAP_WELCOME						= "data_cap_welcome";
 	public static final String PROP_COLLECT_TRAFFIC_DATA					= "collect_traffic_data";
-
+	public static final String PROP_RUN_IN_ROAMING							= "run_in_roaming";
 	//Preferences
 	public static final String PREF_FILE_NAME = "SK_PREFS";
 	public static final String PREF_KEY_STATE = "InitState";
@@ -103,6 +103,7 @@ public class SKConstants {
 	
 	public static final String PREF_SERVICE_ENABLED = "enable_testing";
 	public static final String PREF_KEY_DATA_CAP_DAY_IN_MONTH_RESET = "data_cap_reset_day";
+	public static final String PREF_DATA_CAP_ENABLED = "data_cap_enabled";
 	public static final String PREF_DATA_CAP_USER_DEFINED = "data_cap_user_defined";
 	public static final String PREF_ENABLE_WAKEUP = "enable_wakeup";
 	public static final String PREF_LOCATION_TYPE = "location_type";

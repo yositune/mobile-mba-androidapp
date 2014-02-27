@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -14,27 +15,44 @@ import com.samknows.libcore.SKConstants;
 import com.samknows.measurement.activity.components.UIUpdate;
 import com.samknows.measurement.environment.TrafficStatsCollector;
 import com.samknows.measurement.schedule.ScheduleConfig;
+import com.samknows.measurement.statemachine.ContinuousTesting;
 import com.samknows.measurement.statemachine.State;
 import com.samknows.measurement.statemachine.ScheduledTestStateMachine;
-import com.samknows.measurement.storage.DBHelper;
 import com.samknows.measurement.util.OtherUtils;
 
 public class MainService extends IntentService {
 	public static final String FORCE_EXECUTION_EXTRA	= "force_execution";		
+	public static final String EXECUTE_CONTINUOUS_EXTRA	= "execute_continuous";
 	private PowerManager.WakeLock wakeLock;
 	private TrafficStatsCollector collector;
 	private SK2AppSettings appSettings;
 	private static boolean isExecuting;
+	private static boolean isExecutingContinuous;
 	private static Handler mActivationHandler = null;
+	private static Handler mContinuousHandler = null;
 	private static Object sync = new Object();
 	public MainService() {
 		super(MainService.class.getName());
 	}
 	
+	
+	
+	
+	//the binder is used by the continuous testing in order to stop
+	//the testing.
+	private final IBinder mMainServiceBinder = new MainServiceBinder();
+	
+	public class MainServiceBinder extends Binder{
+		public MainService getService(){
+			return MainService.this;
+		}
+	}
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onBind");
-		return super.onBind(intent);
+		return mMainServiceBinder;
+		
 	}
 
 	@Override
@@ -46,7 +64,6 @@ public class MainService extends IntentService {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onDestroy");
 	}
 
@@ -58,6 +75,7 @@ public class MainService extends IntentService {
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onHandleIntent" + intent.toString());
 		
 		boolean force_execution = intent.getBooleanExtra(FORCE_EXECUTION_EXTRA, false);
+		isExecutingContinuous = intent.getBooleanExtra(EXECUTE_CONTINUOUS_EXTRA, false);
 		
 		try {
 			appSettings = SK2AppSettings.getSK2AppSettingsInstance();
@@ -65,16 +83,21 @@ public class MainService extends IntentService {
 			ScheduleConfig config = CachingStorage.getInstance().loadScheduleConfig();
 			boolean backgroundTest = config == null ? true : config.backgroundTest;
 			onBegin();
-			
 			/* 
 			 * The state machine has to be executed when background test is set in the config file and the service
 			 * is enabled in the app settings.
 			 * Moreover the state machine has to be executed whenever the user force the activation (force_execution = true)
 			 * In case the device is in roaming the state machine shouldn't run any test
+			 * 
+			 * if the intent contains the EXECUTE_CONTINUOUS_EXTRA  run the continuous testing procedure and ignore the rest.
+			 * 
 			 */
-			
-			if((backgroundTest && appSettings.isServiceEnabled()) || force_execution ) {
-				if (!OtherUtils.isRoaming(this)) {
+			if(isExecutingContinuous){
+				continuousStarted();
+				new ContinuousTesting(this).execute();
+			}
+			else if((backgroundTest && appSettings.isServiceEnabled()) || force_execution ) {
+				if (appSettings.run_in_roaming || !OtherUtils.isRoaming(this)) {
 					new ScheduledTestStateMachine(this).executeRoutine();
 				} else {
 					SKLogger.d(this, "+++++DEBUG+++++ Service disabled(roaming), exiting.");
@@ -125,15 +148,16 @@ public class MainService extends IntentService {
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onBegin - create collector and call start()");
 		collector = new TrafficStatsCollector(this);
 		collector.start();
-		
-		
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onBegin (end)");
 	}
 
 	private void onEnd() {
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onEnd (begin)");
+	
+		if (wakeLock != null) {
+			wakeLock.release();
+		}
 		
-		wakeLock.release();
 		long bytes = collector.finish();
 		appSettings.appendUsedBytes(bytes);
 		if(!appSettings.isServiceEnabled()){
@@ -144,9 +168,16 @@ public class MainService extends IntentService {
 			publish(UIUpdate.completed());
 			isExecuting = false;
 		}
-		
+		continuousStopped();
 		SKLogger.d(this, "+++++DEBUG+++++ MainService onEnd... (end)");
 	}
+	
+	//methods to get and modify the execution status of continuous testing
+	public boolean isExecutingContinuous(){
+		return isExecutingContinuous;
+	}
+	
+	
 	
 	//Start service
 	public static void poke(Context ctx) {
@@ -158,6 +189,55 @@ public class MainService extends IntentService {
 		intent.putExtra(FORCE_EXECUTION_EXTRA,true);
 		ctx.startService(intent);
 	}
+	
+	
+	public enum  ContinuousState{ STOPPED, STARTING, EXECUTING, STOPPING};
+	//start continuous testing
+	public static void poke_continuous(Context ctx){
+		SKLogger.d(MainService.class, "poke_continous");
+		Intent intent = new Intent(ctx, MainService.class);
+		intent.putExtra(EXECUTE_CONTINUOUS_EXTRA, true);
+		ctx.startService(intent);
+	}
+	
+	public static void registerContinuousHandler(Context ctx, Handler handler){
+		synchronized(sync){
+			mContinuousHandler = handler;
+			poke_continuous(ctx);
+			
+		}
+	}
+	
+	public static void unregisterContinuousHandler(){
+		synchronized(sync){
+			mContinuousHandler = null;
+		}
+	}
+	
+	public void continuousStarted(){
+		synchronized(sync){
+			if(mContinuousHandler !=null){
+				Message msg = new Message();
+				msg.obj = ContinuousState.EXECUTING;
+				mContinuousHandler.sendMessage(msg);
+			}
+		}
+	}
+	
+	private void continuousStopped(){
+		synchronized(sync){
+			if(mContinuousHandler !=null){
+				Message msg = new Message();
+				msg.obj = ContinuousState.STOPPED;
+				mContinuousHandler.sendMessage(msg);
+			}
+		}
+	}
+	
+	public static void stopContinuousExecution(){
+		isExecutingContinuous = false;
+	}
+	
 	
 	//Register the handler to update the UI
 	public static boolean registerActivationHandler(Context ctx, Handler handler){
@@ -190,5 +270,5 @@ public class MainService extends IntentService {
 			}
 		}
 	}
-
+	
 }

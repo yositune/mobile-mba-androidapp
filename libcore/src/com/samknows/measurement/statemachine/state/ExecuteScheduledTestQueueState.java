@@ -1,6 +1,8 @@
 package com.samknows.measurement.statemachine.state;
 
 
+import android.util.Log;
+
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.CachingStorage;
@@ -28,7 +30,7 @@ public class ExecuteScheduledTestQueueState extends BaseState{
 		
 		ScheduledTestExecutionQueue queue = storage.loadQueue();
 		if (queue == null) {
-			SKLogger.e(this, "fail to load execution queue, creating new...");
+			Log.w(getClass().getName(), "fail to load execution queue, creating new...");
 			queue = new ScheduledTestExecutionQueue(tc);
 		} else {
 			queue.setTestContext(tc);

@@ -11,6 +11,10 @@
 			android:title="@string/data_used_preference_title" 
 			android:summary="@string/data_used_preference_summary" />
 
+		<CheckBoxPreference android:defaultValue="true"
+			android:key="data_cap_enabled" android:summary="@string/data_cap_enabled_summary"
+			android:title="@string/data_cap_enabled_title" />
+		
 		<EditTextPreference android:title="@string/data_cap_title"
 			android:key="data_cap_pref" android:dialogTitle="@string/data_cap_title"
 			android:dialogMessage="@string/data_cap_summary" android:summary="@string/data_cap_summary"

@@ -66,7 +66,10 @@ public abstract class Condition implements Serializable{
 			e.printStackTrace();
 			//skip it
 		}
-		c.failQuiet = fail_quiet;
+		
+		if (c != null) {
+			c.failQuiet = fail_quiet;
+		}
 		return c;
 	}
 }

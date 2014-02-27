@@ -10,14 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
 import org.apache.commons.io.IOUtils;
-
 import android.content.Context;
 import android.util.Log;
 
 import com.samknows.libcore.SKLogger;
 import com.samknows.libcore.SKConstants;
+import com.samknows.measurement.storage.ExportFile;
 import com.samknows.measurement.storage.ResultsContainer;
 
 public class TestResultsManager {
@@ -29,8 +28,8 @@ public class TestResultsManager {
 	}
 
 	public static void saveResult(Context c, ResultsContainer rc){
+		ExportFile.saveResults(rc.getJSON());
 		saveResult(c, rc.getJSON().toString());
-		
 	}
 	
 	public static void saveResult(Context c, List<String> results) {
@@ -98,7 +97,7 @@ public class TestResultsManager {
 			is = c.openFileInput(SKConstants.TEST_RESULTS_TO_SUBMIT_FILE_NAME);
 			return IOUtils.toByteArray(is);
 		} catch (Exception e) {
-			SKLogger.e(TestResultsManager.class, "no tests result file available");
+			Log.w(TestResultsManager.class.getName(), "no tests result file available");
 			return null;
 		} finally {
 			IOUtils.closeQuietly(is);

@@ -3,10 +3,10 @@ package com.samknows.fcc;
 import java.util.Date;
 
 import com.samknows.fcc.FCCApplication;
-import com.samknows.fcc.activity.FCCMainResultsActivity;
 import com.samknows.libcore.*;
 import com.samknows.libcore.SKServiceDataCache.CachedValue;
 import com.samknows.measurement.*;
+import com.samknows.ska.activity.SKAMainResultsActivity;
 
 
 import org.robolectric.Robolectric;
@@ -53,7 +53,7 @@ public class FirstTest {
     @Test
     public void testGraphHandlerAssigned() throws Exception {
     	// http://robolectric.org/activity-lifecycle.html
-    	FCCMainResultsActivity activity = (FCCMainResultsActivity) Robolectric.buildActivity(FCCMainResultsActivity.class).create().get();
+    	SKAMainResultsActivity activity = (SKAMainResultsActivity) Robolectric.buildActivity(SKAMainResultsActivity.class).create().get();
       
         assert(activity.getDownloadGraphHandler() != null);
 	}

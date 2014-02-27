@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.samknows.fcc"
-    android:versionCode="171"
-	android:versionName="1.71">
-	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
+    android:versionCode="180"
+	android:versionName="1.80">
+	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
@@ -13,7 +13,7 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.GET_TASKS" />
 	<uses-permission android:name="android.permission.INTERNET" />
-    <!--  <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -39,7 +39,7 @@
 		android:icon="@drawable/icon" android:theme="@style/ApplicationStyle"
 		android:label="@string/app_name">
 
-		<activity android:name="com.samknows.fcc.activity.FCCSystemInfoActivity"
+		<activity android:name="com.samknows.ska.activity.SKASystemInfoActivity"
 			android:label="@string/activity_info_name"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
@@ -63,7 +63,7 @@
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 
-		<activity android:name="com.samknows.fcc.activity.FCCMainAndTermsAndConditionsActivity"
+		<activity android:name="com.samknows.ska.activity.SKAMainAndTermsAndConditionsActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -94,32 +94,32 @@
 
 		<activity
 		    android:launchMode="singleTask"
-			android:name="com.samknows.fcc.activity.FCCMainResultsActivity"
+			android:name="com.samknows.ska.activity.SKAMainResultsActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 
 		<activity
-			android:name="com.samknows.fcc.activity.FCCRunningTestActivity"
+			android:name="com.samknows.ska.activity.SKARunningTestActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 
-		<activity android:name="com.samknows.fcc.activity.FCCAboutActivity"
+		<activity android:name="com.samknows.ska.activity.SKAAboutActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 		
-		<activity android:name="com.samknows.fcc.activity.FCCTermsOfUseActivity"
+		<activity android:name="com.samknows.ska.activity.SKATermsOfUseActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 
-		<activity android:name="com.samknows.fcc.activity.FCCActivationActivity"
+		<activity android:name="com.samknows.ska.activity.SKAActivationActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 
-		<activity android:name="com.samknows.fcc.activity.FCCMapActivityUnused"
+		<activity android:name="com.samknows.ska.activity.SKAMapActivityUnused"
 			android:configChanges="orientation|keyboardHidden|screenSize">
 		</activity>
 
-		<activity android:name="com.samknows.fcc.activity.FCCPreferenceActivity"
+		<activity android:name="com.samknows.ska.activity.SKAPreferenceActivity"
 			android:label="@string/activity_pref_name"
 			android:screenOrientation="portrait">
 			<!--  the preferences theme looks wrong in the top area for Android 2.3.3 - so rely on the preferences style supplied by the system... -->

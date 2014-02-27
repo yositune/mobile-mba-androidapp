@@ -78,5 +78,11 @@ public class TrafficStatsCollector extends BaseDataCollector implements Serializ
 		return ret;
 	}
 
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
 		
 }

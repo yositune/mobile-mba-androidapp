@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="about">About</string>
+<string name="about">About FCC Speed Test</string>
 <string name="about_browsing">Visiting a web page is one of the most common tasks people perform on the Internet. This test emulates that process and shows the average time in seconds of how long a selection of popular web sites took to load. Note that results may vary according to changes in the websites being visited. Times are recorded in seconds (lower is better).</string>
 <string name="about_download">This should be indicative of the maximum speed your broadband connection will be able to download data from the Internet.  Results are recorded in Mbps (higher is better).</string>
 <string name="about_jitter">Jitter is............</string>
@@ -85,7 +85,7 @@
 <string name="data_usage_title">Mobile data usage: </string>
 <string name="data_used_preference_summary">The amount of mobile data (excluding WiFi) used by this application since the start of this billing month.</string>
 <string name="data_used_preference_title">Data Used</string>
-<string name="date">Date</string>
+<string name="results_table_header_datetime">Date / Time</string>
 <string name="day_of_month">Day of Month: </string>
 <string name="device">Device</string>
 <string name="disabled">Disabled</string>
@@ -174,6 +174,7 @@
 <string name="manufacturer">Manufacturer</string>
 <string name="max_data_cap_message">Maximum amount limited to </string>
 <string name="mb">MB</string>
+<string name="menu_export_file_string">Export results</string>
 <string name="menu_terms_and_condition">Terms of Use</string>
 <string name="min_data_cap_message">Minimum amount limited to </string>
 <string name="mobile">mobile</string>
@@ -246,14 +247,14 @@
 <string name="reset_password">Reset Password</string>
 <string name="reset_password_error">There was an error resetting your password: </string>
 <string name="reset_password_success">Your password has been reset</string>
-<string name="result">Result</string>
+<string name="results_table_header_result">Result</string>
 <string name="results_for">Results for</string>
 <string name="results_for_1_week">Results for 1 week</string>
 <string name="roaming_status">Roaming status</string>
 <string name="running_test">Running Test</string>
 <string name="run_now">Run now</string>
 <string name="schedule_version">Schedule Version</string>
-<string name="server">Server</string>
+<string name="results_table_header_location">Location</string>
 <string name="service_info">Service Info</string>
 <string name="settings">Settings</string>
 <string name="setting_up">Setting up</string>
@@ -302,6 +303,7 @@
 <string name="time_period_1year">1 Year</string>
 <string name="time_period_2week">2 Weeks</string>
 <string name="time_period_3months">3 Months</string>
+<string name="time_period_1day">1 Day</string>
 <string name="title">Title</string>
 <string name="true_string">True</string>
 <string name="try_again">Try Again</string>
@@ -338,4 +340,7 @@
 <string name="right_arrow">&gt; </string>
 <string name="left_arrow"> &lt;</string>
 <string name="down_arrow">V</string>
+
+<string name="data_cap_enabled_title">Enable mobile data cap</string>
+<string name="data_cap_enabled_summary">Set this checkbox if you wish to enable the use of the mobile data cap. Uncheck the checkbox if you wish to disable the use of the mobile data cap.</string>
 </resources>
