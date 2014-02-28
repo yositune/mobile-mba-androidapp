@@ -36,6 +36,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -119,6 +120,7 @@ public class SKGraphForResults {
         multipleSeriesRenderer.setShowLabels(true);
         multipleSeriesRenderer.setZoomButtonsVisible(false);
         multipleSeriesRenderer.setZoomEnabled(false);
+        multipleSeriesRenderer.setZoomEnabled(false, false);
         multipleSeriesRenderer.setAxisTitleTextSize(16);
         multipleSeriesRenderer.setMargins(new int[]{20,40,15,5}); // Pixels: top/left/bottom/right
         multipleSeriesRenderer.setChartTitleTextSize(20);
@@ -705,6 +707,15 @@ public class SKGraphForResults {
 			// as they flash-up momentarily and are unsightly!
 			((WebView)inViewGroup).setVerticalScrollBarEnabled(false);
 			((WebView)inViewGroup).setHorizontalScrollBarEnabled(false);
+		
+			// http://stackoverflow.com/questions/2527899/disable-scrolling-in-webview
+			// breakingart.com: This prevents the webview being scrolled by dragging!
+			inViewGroup.setOnTouchListener(new View.OnTouchListener() {
+						@Override
+			            public boolean onTouch(View v, MotionEvent event) {
+			                return(event.getAction() == MotionEvent.ACTION_MOVE);
+			            }
+			        });
 		}
 		
         // Make the Y Axis Label appear manually - the one build into the library always
