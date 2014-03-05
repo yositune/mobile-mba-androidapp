@@ -45,7 +45,7 @@ public class SKASystemInfoActivity extends BaseLogoutActivity{
 	}
 	
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		populateInfo();
 		super.onResume();
 	}

@@ -1,5 +1,7 @@
 package com.samknows.ska.activity;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.CrashManagerListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +24,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ScrollView;
 
-import com.crittercism.app.Crittercism;
 import com.samknows.libcore.SKLogger;
 import com.samknows.measurement.SK2AppSettings;
 import com.samknows.measurement.MainService;
@@ -45,11 +46,38 @@ public class SKAMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Log.d(this.getClass().toString(), "*** onCreate ***");
+
 		if (OtherUtils.isDebuggable(this)) {
-			Log.d(this.getClass().toString(), "OtherUtils.isDebuggable(), not running Crittercism");
+			Log.d(this.getClass().toString(),
+					"OtherUtils.isDebuggable(), not using crash reporting");
 		} else {
-			Log.d(this.getClass().toString(), "This app is NOT debuggable, so setting-up Crittercism!");
-			Crittercism.init(getApplicationContext(), "51f7c8b4d0d8f76787000003");
+			Log.d(this.getClass().toString(),
+					"This app is NOT debuggable, so setting-up crash reporting!");
+			CrashManager.register(this, "3d13669fc03f8ace6693934bc9922c65",
+					new CrashManagerListener() {
+				@Override
+				public boolean shouldAutoUploadCrashes() {
+					//Log.d(this.getClass().toString(), "*** CrashManagerListener shouldAutoUploadCrashes ***");
+					return true;
+				}
+				@Override
+				public void onConfirmedCrashesFound() {
+					Log.d(this.getClass().toString(), "*** CrashManagerListener onConfirmedCrashesFound ***");
+				}
+				@Override
+				public void onCrashesNotSent() {
+					Log.d(this.getClass().toString(), "*** CrashManagerListener onCrashesNotSent ***");
+				}
+				@Override
+				public void onCrashesSent() {
+					Log.d(this.getClass().toString(), "*** CrashManagerListener onCrashesSent ***");
+				}
+				@Override
+				public void onNewCrashesFound() {
+					Log.d(this.getClass().toString(), "*** CrashManagerListener onNewCrashesFound ***");
+				}
+			});
 		}
 
 		PackageInfo pInfo;
@@ -116,7 +144,7 @@ public class SKAMainAndTermsAndConditionsActivity extends BaseLogoutActivity {
 	}
 
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
 	}
 

@@ -102,42 +102,42 @@ public class SamKnowsBaseActivity extends Activity {
 	}
 	
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		
 		Log.d(this.getClass().toString(), ">>> onResume " + this.getClass().toString());
 	}
 
 	@Override
-	protected void onStart() {
+	public void onStart() {
 		super.onStart();
 		
 		Log.d(this.getClass().toString(), ">>> onStart " + this.getClass().toString());
 	}
 	
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
 		
 		Log.d(this.getClass().toString(), ">>> onDestroy " + this.getClass().toString());
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
 		
 		Log.d(this.getClass().toString(), ">>> onPause " + this.getClass().toString());
 	}
 
 	@Override
-	protected void onRestart() {
+	public void onRestart() {
 		super.onRestart();
 		
 		Log.d(this.getClass().toString(), ">>> onRestart " + this.getClass().toString());
 	}
 
 	@Override
-	protected void onStop() {
+	public void onStop() {
 		super.onStop();
 		
 		Log.d(this.getClass().toString(), ">>> onStop " + this.getClass().toString());

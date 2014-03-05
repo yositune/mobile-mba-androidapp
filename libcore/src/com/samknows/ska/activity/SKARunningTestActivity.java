@@ -523,7 +523,7 @@ public class SKARunningTestActivity extends BaseLogoutActivity {
 	}
 
 	@Override
-	protected void onStart() {
+	public void onStart() {
 		super.onStart();
 
 		// make passive metrics invisible

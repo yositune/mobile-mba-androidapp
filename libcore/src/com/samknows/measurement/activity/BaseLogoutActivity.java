@@ -15,7 +15,7 @@ public class BaseLogoutActivity extends SamKnowsBaseActivity {
 	}
 	
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
 	}
 }

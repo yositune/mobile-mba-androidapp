@@ -285,7 +285,7 @@ public class SKAMainResultsActivity extends BaseLogoutActivity
 	}
 	
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
 		SKLogger.d(this, "+++++DEBUG+++++ SamKnowsAggregateStatViewerActivity onDestroy...");
 	}
@@ -837,6 +837,8 @@ public class SKAMainResultsActivity extends BaseLogoutActivity
 		timeperiod_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+        //// This can be be used to prove crash reporting...
+        //throw new RuntimeException("Deliberate test of crash reporting - do not put in live code!");
 				SingleChoice();
 			}
 		});
