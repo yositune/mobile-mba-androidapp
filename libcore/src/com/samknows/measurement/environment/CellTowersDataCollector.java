@@ -2,7 +2,10 @@ package com.samknows.measurement.environment;
 
 import java.util.List;
 
+import com.samknows.libcore.SKLogger;
+
 import android.content.Context;
+import android.os.Build;
 import android.os.Looper;
 import android.telephony.CellInfo;
 import android.telephony.CellLocation;
@@ -11,148 +14,101 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
-import com.samknows.libcore.SKLogger;
-import com.samknows.measurement.util.LooperThread;
-
 public class CellTowersDataCollector extends BaseDataCollector{
 
 	public CellTowersDataCollector(Context context) {
 		super(context);
 	}
 	
-	TelephonyManager mTelManager;
-	CellTowersPhoneStateListener mCellTowersPhoneStateListener;
-	
+	/*
+	 * performs a synchronous read of the signal strength  
+	 */
+	static TelephonyManager mTelManager = null;
+	static CellTowersData mData = new CellTowersData();
+	static AndroidPhoneStateListener phoneStateListener = null;
+	static CellTowersData neighbours = new CellTowersData();
 
 	@Override
-	public CellTowersData collect() {
-		final TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+	synchronized public CellTowersData collect() {
+		//final TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		final CellTowersData data = new CellTowersData();
 		data.time = System.currentTimeMillis();
-		data.cellLocation = manager.getCellLocation();
+		data.cellLocation = mTelManager.getCellLocation();
 		
 		// Note: the following call might return NULL
-		data.setNeighbors(manager.getNeighboringCellInfo());
 		
-		// getAllCellInfo only supported in API version 17 and in some 
-		// devices running the that version returns null
-		/*  List<CellInfo> cellInfoList = manager.getAllCellInfo();
-		if(cellInfoList != null){
-			Logger.d(this, "CellInfo  Available");
-			for(CellInfo ci: cellInfoList){
-				if(ci instanceof CellInfoGsm){
-					Logger.d(this, "Cell is Gsm");
-					CellInfoGsm cig = (CellInfoGsm) ci;
-					Logger.d(this, "ASU level: " +cig.getCellSignalStrength().getAsuLevel()+" dBm: " +cig.getCellSignalStrength().getDbm());
-				}
-				else if(ci instanceof CellInfoCdma){
-					CellInfoCdma cic = (CellInfoCdma) ci;
-					Logger.d(this, "Cell is CDMA");
-					Logger.d(this, "ASU level: "+ cic.getCellSignalStrength().getAsuLevel() + " dBm "+ cic.getCellSignalStrength().getCdmaDbm());
-				}
-				else if(ci instanceof CellInfoLte){
-					CellInfoLte cil = (CellInfoLte) ci;
-					Logger.d(this, "Cell is LTE");
-					Logger.d(this, "ASU level: "+ cil.getCellSignalStrength().getAsuLevel() + " dBm "+ cil.getCellSignalStrength().getDbm());
-				}
-			}
-		}*/
-		//that's the only way in android to make sync api call instead of async
-		LooperThread thread = new LooperThread(new Runnable() {
-			@Override
-			public void run() {
-				SyncPhoneStateListener listener = new SyncPhoneStateListener(manager, data);
-				listener.listen();
-			}
-		});
-		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		//data.setNeighbors(mTelManager.getAllCellInfo());
+		data.setNeighbors(mTelManager.getNeighboringCellInfo());
+	
+		SKLogger.sAssert(CellTowersDataCollector.class, mData.signal != null);
+		// This following line is actually essential!
+		data.signal = mData.signal;
+		addData(mData);
+		addData(neighbours);
 		
 		return data;
 	}
 	
-	/* 
-	 * receives the status change of the phone listener for the cell tower
-	 */
-	private class CellTowersPhoneStateListener extends PhoneStateListener {
-		
-		CellTowersData mData;
-		
-		public CellTowersPhoneStateListener(){
-			mData = new CellTowersData();
+	synchronized static void sOnSignalStrengthsChanged(SignalStrength signalStrength) {
+		mData.time = System.currentTimeMillis();
+		mData.signal = signalStrength;
+		SKLogger.sAssert(CellTowersDataCollector.class, mData.signal != null);
+		mData.cellLocation = mTelManager.getCellLocation();		
+	}
+	
+	synchronized static	void sOnCellLocationChanged(CellLocation location){
+		mData.time = System.currentTimeMillis();
+		mData.cellLocation = location;
+	}
+	
+	synchronized static void sOnCellInfoChanged(List<CellInfo> cellInfo){
+		List<NeighboringCellInfo> n = mTelManager.getNeighboringCellInfo();
+		if( n != null && n.size() > 0){
+			neighbours.time = System.currentTimeMillis();
+			neighbours.setNeighbors(n);
 		}
+	}
+	
+	static class AndroidPhoneStateListener extends PhoneStateListener {
+		
 		@Override
 		public void onSignalStrengthsChanged(SignalStrength signalStrength){
 			super.onSignalStrengthsChanged(signalStrength);
-			mData.time = System.currentTimeMillis();
-			mData.signal = signalStrength;
-			mData.cellLocation = mTelManager.getCellLocation();
-			addData(mData);
+
+			CellTowersDataCollector.sOnSignalStrengthsChanged(signalStrength);
 		}
 		
 		@Override
 		public void onCellLocationChanged(CellLocation location){
 			super.onCellLocationChanged(location);
-			mData.time = System.currentTimeMillis();
-			mData.cellLocation = location;
-			
-			addData(mData);
+			CellTowersDataCollector.sOnCellLocationChanged(location);
 		}
 		
 		@Override
 		public void onCellInfoChanged(List<CellInfo> cellInfo){
-			
-			List<NeighboringCellInfo> n = mTelManager.getNeighboringCellInfo();
-			if( n != null && n.size() > 0){
-				CellTowersData neighbours = new CellTowersData();
-				neighbours.time = System.currentTimeMillis();
-				neighbours.setNeighbors(n);
-				addData(neighbours);
-			}
+			//super.onCellInfoChanged(cellInfo);
+			CellTowersDataCollector.sOnCellInfoChanged(cellInfo);
 		}
 	}
 	
-	/*
-	 * performs a synchronous read of the signal strength  
-	 */
-	private class SyncPhoneStateListener extends PhoneStateListener {
-		private TelephonyManager manager;
-		private CellTowersData data;
-		public SyncPhoneStateListener(TelephonyManager manager, CellTowersData data) {
-			this.manager = manager;
-			this.data = data;
-		}
+	// This is called just once, to start monitoring for cell tower signal strength...
+	// We need to do this, as Android does not allow us to query this information synchronously!
+	static public void sStartToCaptureCellTowersData(Context context) {
+		phoneStateListener = new AndroidPhoneStateListener ();  
 
-		@Override
-		public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-			super.onSignalStrengthsChanged(signalStrength);
-			data.signal = signalStrength;
-			manager.listen(this, PhoneStateListener.LISTEN_NONE);
-			Looper.myLooper().quit();
-		}
-
-		public void listen() {
-			manager.listen(SyncPhoneStateListener.this, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-		}
+		mTelManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		int mask = PhoneStateListener.LISTEN_CELL_INFO | PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS;
+		//int mask = PhoneStateListener.LISTEN_SIGNAL_STRENGTHS;
+		mTelManager.listen(phoneStateListener, mask);
 	}
-
 	
 	@Override
 	public void start() {
 		addData(collect());
-		mTelManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-		mCellTowersPhoneStateListener = new CellTowersPhoneStateListener();
-		int mask = PhoneStateListener.LISTEN_CELL_INFO | PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS;
-		mTelManager.listen(mCellTowersPhoneStateListener, mask);
 	}
 
 	@Override
 	public void stop() {
-		mTelManager.listen(mCellTowersPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 	}
 
 }

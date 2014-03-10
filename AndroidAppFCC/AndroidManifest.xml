@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.samknows.fcc"
-    android:versionCode="183"
-	android:versionName="1.83">
+    android:versionCode="187"
+	android:versionName="1.87">
 	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -13,7 +13,6 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.GET_TASKS" />
 	<uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -149,7 +148,7 @@
 			android:value="AIzaSyDn7BqOmJxn6WBiao32nbrCKxpoS_tfh7w" />
 		
 		<meta-data android:name="com.crashlytics.ApiKey" android:value="dd477e7baf9c47c9aadb6e29bb7ac545c607c0a5"/>
-
+    
 	</application>
 
 </manifest>

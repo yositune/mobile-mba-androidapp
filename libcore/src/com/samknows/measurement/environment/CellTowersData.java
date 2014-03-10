@@ -187,8 +187,13 @@ public class CellTowersData implements DCSData{
 			gsm.put(JSON_CELL_TOWER_ID, l.getCid());
 			gsm.put(JSON_LOCATION_AREA_CODE, l.getLac());
 			gsm.put(JSON_UMTS_PSC, Build.VERSION.SDK_INT >= 9 ? l.getPsc() : -1);
-			if(signal.isGsm()){
-				gsm.put(JSON_SIGNAL_STRENGTH, SKGsmSignalStrength.getGsmSignalStrength(signal));
+			
+			if (signal == null) {
+				SKLogger.sAssert(getClass(), false);
+			} else {
+				if(signal.isGsm()){
+					gsm.put(JSON_SIGNAL_STRENGTH, SKGsmSignalStrength.getGsmSignalStrength(signal));
+				}
 			}
 			ret.add(new JSONObject(gsm));
 

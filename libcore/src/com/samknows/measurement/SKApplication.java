@@ -5,6 +5,7 @@ import java.io.File;
 import com.samknows.libcore.R;
 import com.samknows.libcore.SKConstants;
 import com.samknows.libcore.SKLogger;
+import com.samknows.measurement.environment.CellTowersDataCollector;
 import com.samknows.measurement.storage.ExportFile;
 import com.samknows.measurement.test.TestResultsManager;
 
@@ -17,7 +18,7 @@ import android.preference.PreferenceManager;
 public class SKApplication extends Application{
 
 	static private SKApplication sAppInstance = null;
-
+	
 	public SKApplication() {
 		super();
 
@@ -36,6 +37,7 @@ public class SKApplication extends Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
 		File storage = getExternalCacheDir();
 		if (storage == null) {
 			storage = getCacheDir();
@@ -46,6 +48,10 @@ public class SKApplication extends Application{
 		ExportFile.setStorage(storage);
 		SK2AppSettings.create(this);
 		CachingStorage.create(this);
+		
+		// Start monitoring for cell tower signal strength etc....
+		// We need to do this, as Android does not allow us to query this information synchronously.
+		CellTowersDataCollector.sStartToCaptureCellTowersData(this);
 	}
 
 
@@ -120,5 +126,9 @@ public class SKApplication extends Application{
 		// The value is saved/restored automatically through PreferenceManager.
 		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		return p.getBoolean(SKConstants.PREF_DATA_CAP_ENABLED, true);
+	}
+	
+	public boolean isSocialMediaExportSupported() {
+		return false;
 	}
 }
