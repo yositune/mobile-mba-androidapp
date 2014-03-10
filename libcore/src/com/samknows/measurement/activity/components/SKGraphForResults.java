@@ -252,6 +252,11 @@ public class SKGraphForResults {
 
 			long daysBetween = (Long.valueOf(theEndDateString) - Long.valueOf(theStartDateString)) / (1000L * 60L * 60L * 24L);
 			daysBetween++;
+			
+			if (daysBetween <= 0) {
+				SKLogger.sAssert(getClass(),  false);
+				daysBetween = 1;
+			}
 
 	     	//Log.d(getClass().getName(), "daysBetween=" + daysBetween);
 		
@@ -279,8 +284,6 @@ public class SKGraphForResults {
 			// For example, for one week: start date might be 01 Aug, end date might be 08 Aug ...
 			// 01 02 03 04 05 06 07 08
 			//   ^  ^  ^  ^  ^  ^  ^   = 7 days!!!
-
-			// TODO - how do we get the test name?! "tests"
 
 			JSONArray theResults = jsonData.getJSONArray("results");
 
@@ -312,7 +315,7 @@ public class SKGraphForResults {
 				c.set(Calendar.SECOND, 0);
 				c.set(Calendar.MILLISECOND, 0);
 				
-				Date theCDate = c.getTime();
+				//Date theCDate = c.getTime();
 				
 				int dayIndex = 0;
 				
@@ -331,8 +334,19 @@ public class SKGraphForResults {
 //				} else {
 //       	     	    Log.e(getClass().getName(), "ERROR: did NOT find date/day match");
     				long diff = c.getTimeInMillis() - cForStartDate.getTimeInMillis();
-    	            float fDayIndex = (float) diff / (24 * 60 * 60 * 1000);
-    				dayIndex = (int)fDayIndex;
+    				dayIndex = (int) (diff / (24L * 60L * 60L * 1000L));
+
+    				// Debug / testing - could enable one of the following lines to verify that array bounds are handled appropriately.
+    				// dayIndex = -1;
+    				// dayIndex = 10011;
+    				
+    				if (dayIndex < 0) {
+    					SKLogger.sAssert(getClass(),  false);
+    					dayIndex = 0;
+    				} else if (dayIndex >= theNewArray.size()) {
+    					SKLogger.sAssert(getClass(),  false);
+    					dayIndex = theNewArray.size() - 1;
+    				}
 //				}
 				
 				//SimpleDateFormat format = new SimpleDateFormat("dd/MM");
@@ -343,13 +357,13 @@ public class SKGraphForResults {
     		    
     		    if (theNewArray.get(dayIndex) == null) {
     		    	// Nothing there yet!
-    				theNewArray.set((int) dayIndex, doubleValue);
-    				theCountArray.set((int) dayIndex, 1);
+    				theNewArray.set(dayIndex, doubleValue);
+    				theCountArray.set(dayIndex, 1);
     		    } else {
     		    	// Something there already found for this day - add up, and we convert to an average in a moment...
     		    	double currentTotal = theNewArray.get(dayIndex);
-    		    	theNewArray.set((int) dayIndex, currentTotal + doubleValue);
-    				theCountArray.set((int) dayIndex, 1 + theCountArray.get(dayIndex));
+    		    	theNewArray.set(dayIndex, currentTotal + doubleValue);
+    				theCountArray.set(dayIndex, 1 + theCountArray.get(dayIndex));
     		    }
 			}
 			
@@ -360,7 +374,8 @@ public class SKGraphForResults {
 						theNewArray.set(lIndex,  (theNewArray.get(lIndex) / (double)theCountArray.get(lIndex)));
 					}
 				}
-        // achartengine displays weird values if they are too small...
+				
+				// achartengine displays weird values if they are too small...
 				if (theNewArray.get(lIndex) != null) {
 					if (theNewArray.get(lIndex) < 0.01) {
 						theNewArray.set(lIndex,  0.01);
